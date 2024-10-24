@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class ExpirationMails extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,15 +42,14 @@ class ExpirationMails extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-user-big-el-subscription-expire-reminder
-        //system-user-el-courses-no-sub-expire-reminder
         $emailEvent = 'ExpirationMailsInWeek';
         if ($this->data['template'] === 'emails.user.courses.masterclass_expiration') {
             $emailEvent = 'ExpirationMailsMasterClass';
         }
-        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'], [
+        //$this->data['subject']
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'ExpirationDate'=>$this->data['expirationDate'],

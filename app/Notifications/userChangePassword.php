@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
@@ -34,10 +34,10 @@ class userChangePassword extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
-    public function toMailchimp(object $notifiable)
+    public function toBrevo(object $notifiable)
     {
         //system-user-all-courses-password-reset
         $token = Str::random(64);
@@ -49,7 +49,7 @@ class userChangePassword extends Notification
         ]);
         $subject = 'Knowcrunch - ' . $this->user->firstname . ' change your password';
         $fullName = $this->user->firstname . ' ' . $this->user->lastname;
-        SendEmail::dispatch('userChangePassword', $this->user->toArray(), $subject, [
+        SendEmail::dispatch('userChangePassword', $this->user->toArray(), null, [
             'FNAME'=> $this->user->firstname, 'LINK' => \URL::to("myaccount/reset/{$this->user->id}/{$token}"),
         ], []);
 

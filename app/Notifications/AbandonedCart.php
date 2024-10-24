@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -34,7 +34,7 @@ class AbandonedCart extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -43,11 +43,10 @@ class AbandonedCart extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-user-abandoned-cart-general
         $subject = $this->data['firstName'] . ' - do you need help with your enrollment';
-        SendEmail::dispatch('AbandonedCart', $this->user->toArray(), $subject, [
+        SendEmail::dispatch('AbandonedCart', $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'FAQ_LINK'=>$this->data['faqs'],

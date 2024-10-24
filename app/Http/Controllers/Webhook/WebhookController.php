@@ -709,13 +709,13 @@ class WebhookController extends BaseWebhookController
             $job = isset($user['job_title']) ? $user['job_title'] : '-';
             $amount = $transaction->amount;
 
-            SendEmail::dispatch('AdminInfoNewRegistration', [
+            SendEmail::dispatch('AdminInfoNewSubscription', [
                 'email' =>$adminemail,
                 'firstname'=>$user->firstname,
                 'lastname'=>$user->lastname,
-            ], 'Knowcrunch - New Registration', [
-                'Name'=> $user->firstname,
-                'Lastname'=> $user->lastname,
+            ], null, [
+                'FNAME'=> $user->firstname,
+                'LNAME'=> $user->lastname,
                 'ParticipantEmail'=>$user->email,
                 'ParticipantPhone'=>$mob,
                 'ParticipantPosition'=>$job,
@@ -948,17 +948,12 @@ class WebhookController extends BaseWebhookController
                     $data['template'] = 'emails.user.failed_payment';
                     $data['userLink'] = url('/') . '/admin/user/' . $user->id . '/edit';
 
-                    $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail, $data) {
-                        $sub = $data['subject'];
-                        $m->from('info@knowcrunch.com', 'Knowcrunch');
-                        $m->to($adminemail, $data['firstName']);
-                        $m->subject($sub);
-                    });
-                    // SendEmail::dispatch('FailedPayment', ['email'=>$adminemail,'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $sub, [
-                    //     'FNAME'=> $this->data['firstName'],
-                    //     'CourseName'=>$this->data['eventTitle'],
-                    //     'Amount'=>$this->data['amount'],
-                    // ], ['event_id'=>$this->data['eventId']]);
+                    SendEmail::dispatch('AdminFailedStripePayment', ['email'=>$adminemail, 'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $data['subject'], [
+                        'FNAME'=> $this->data['name'],
+                        'CourseName'=>$this->data['eventTitle'],
+                        'Amount'=>$this->data['amount'],
+                        'LINK'=> $data['userLink'],
+                    ], ['event_id'=>$this->data['eventId']]);
 
                     $user->events_for_user_list()->wherePivot('event_id', $eventId)->updateExistingPivot($eventId, [
                         'paid' => 0,

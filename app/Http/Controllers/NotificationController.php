@@ -6,9 +6,7 @@ namespace App\Http\Controllers;
 use App\Model\Activation;
 use App\Model\Notification;
 use App\Model\User;
-use App\Notifications\userActivationLink;
 use App\Notifications\userChangePassword;
-use App\Notifications\userStatusChange;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -98,13 +96,6 @@ class NotificationController extends Controller
         //
     }
 
-    public function userStatusChange($user)
-    {
-        $user->notify(new userStatusChange($user));
-
-        return true;
-    }
-
     public function userChangePassword($user_id = 0)
     {
         //$user = User::where('id', $user_id)->with('activation')->first();
@@ -116,20 +107,6 @@ class NotificationController extends Controller
             return 1;
         } else {
             return 0;
-        }
-    }
-
-    public function userActivationLink($user_id = 0)
-    {
-        $user = User::find($user_id);
-        //echo $user['email'];
-        //User::where('id', $user_id)->with('activation')->first();
-        if ($user) {
-            $user->notify(new userActivationLink($user, 're-activate'));
-
-            return true;
-        } else {
-            return false;
         }
     }
 }

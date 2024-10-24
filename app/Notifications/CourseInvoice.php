@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Jobs\SendEmail;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -30,7 +30,7 @@ class CourseInvoice extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -39,11 +39,11 @@ class CourseInvoice extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
         //system-user-admin-all-courses-payment-receipt
         $subject = 'Knowcrunch | ' . $this->data['firstName'] . ' - download your receipt';
-        SendEmail::dispatch('CourseInvoice', $this->data['user'], $subject, [
+        SendEmail::dispatch('CourseInvoice', $this->data['user'], null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'LINK'=>$this->data['slugInvoice'],

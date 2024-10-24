@@ -407,7 +407,7 @@ class HomeController extends Controller
         return redirect('/thankyou');
     }
 
-    public function enrollToWaitingList(Event $content)
+    public function enrollToWaitingList(Request $request, Event $content)
     {
         $published = $content->published;
         $status = $content->status;
@@ -431,7 +431,6 @@ class HomeController extends Controller
 
         if (!($user = Auth::user()) && !($user = User::where('email', request()->email[0])->first())) {
             $data['user']['createAccount'] = true;
-
             $input = [];
             $formData = request()->all();
             unset($formData['_token']);
@@ -493,8 +492,7 @@ class HomeController extends Controller
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['', '', $content->title];
-        $data['duration'] = ''; //$content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
-        //$data['template'] = 'join_activation';
+        $data['duration'] = '';
         $data['template'] = 'waiting_list_welcome';
         $data['subject'] = 'Knowcrunch - Welcome ' . $user->firstname;
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
@@ -541,7 +539,10 @@ class HomeController extends Controller
         $data['eventTitle'] = $content->title;
         $data['eventId'] = $content->id;
 
-        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id,
+            'jobtitle' => isset($user->job_title) ? $user->job_title : implode(',', $request->jobtitle),
+            'company' => isset($user->company) ? $user->company : implode(',', $request->company),
+            'mobile' => isset($user->mobile) ? $user->mobile : implode(',', $request->mobile)];
 
         $transdata['user'] = $muser;
         $transdata['helperdetails'] = $helperdetails;
@@ -563,14 +564,15 @@ class HomeController extends Controller
             'email'=>'info@knowcrunch.com',
             'firstname'=>$user->firstname,
             'lastname'=>$user->lastname,
-        ], 'Knowcrunch - New Registration', [
+        ], 'Knowcrunch - New Registration Waiting List', [
             'Name'=> $user->firstname,
+            'CourseStatus'=>'Waiting list',
             'Lastname'=> $user->lastname,
             'ParticipantEmail'=>$user->email,
             'ParticipantPhone'=>$mob,
             'ParticipantPosition'=>$job,
             'ParticipantCompany'=>$com,
-            'SubscriptionAmountPaid'=>$amount,
+            'TransData'=>'',
             'CourseName'=>$data['eventTitle'],
             'LINK'=>$link,
         ], ['event_id'=>$data['eventId']]);
@@ -583,7 +585,6 @@ class HomeController extends Controller
         Session::forget('transaction_id');
         Session::forget('cardtype');
         Session::forget('installments');
-        //Session::forget('pay_invoice_data');
         Session::forget('pay_bill_data');
         Session::forget('deree_user_data');
         Session::forget('user_id');
@@ -879,16 +880,16 @@ class HomeController extends Controller
         $giveAway->save();
         $data = $request->all();
 
-        Mail::send('emails.admin.give_away', $data, function ($m) use ($data, $request) {
-            $fullname = $data['cname'] . ' ' . $data['csurname'];
-            $adminemail = $request->recipient ?? 'info@knowcrunch.com';
-            $subject = 'Knowcrunch - Giveaway participant';
-
-            $m->subject($subject);
-            $m->from($adminemail, 'Knowcrunch');
-            $m->replyTo($data['cemail'], $fullname);
-            $m->to($adminemail, 'Knowcrunch');
-        });
+        $adminemail = $request->recipient ?? 'info@knowcrunch.com';
+        $fullname = $request->cname . ' ' . $request->csurname;
+        SendEmail::dispatch('AdminGiveaway', ['email'=>$adminemail, 'firstname'=>'Knowcunch', 'lastname'=>'Inc'], 'Knowcrunch - Giveaway participant', [
+            'FNAME'=> $giveAway->firstname,
+            'LNAME'=> $giveAway->lastname,
+            'Email'=> $giveAway->email,
+            'Phone'=> $giveAway->phone,
+            'Company'=> $giveAway->company,
+            'Title'=> $giveAway->position,
+        ], [], ['email'=>$data['cemail'], 'name'=>$fullname]);
 
         return [
             'success' => true,

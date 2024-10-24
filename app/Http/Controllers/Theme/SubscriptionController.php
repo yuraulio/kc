@@ -408,18 +408,15 @@ class SubscriptionController extends Controller
             \Session::put('dperror', $e->getMessage());
 
             return response()->json([], 404);
-            //return redirect('/info/order_error');
         } catch (\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return response()->json([], 404);
         } catch (\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return response()->json([], 404);
         } catch (\Stripe\Exception\CardException $e) {
             \Session::put('dperror', $e->getMessage());
@@ -438,7 +435,6 @@ class SubscriptionController extends Controller
             \Session::put('dperror', $e->getMessage());
 
             return response()->json([], 404);
-            // return redirect('/info/order_error');
         }
     }
 
@@ -743,18 +739,15 @@ class SubscriptionController extends Controller
             \Session::put('dperror', $e->getMessage());
 
             return back();
-            //return redirect('/info/order_error');
         } catch (\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return back();
         } catch (\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return back();
         } catch (\Stripe\Exception\CardException $e) {
             \Session::put('dperror', $e->getMessage());
@@ -773,7 +766,6 @@ class SubscriptionController extends Controller
             \Session::put('dperror', $e->getMessage());
 
             return back();
-            // return redirect('/info/order_error');
         }
     }
 

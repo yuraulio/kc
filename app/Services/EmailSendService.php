@@ -9,56 +9,60 @@ use App\Model\Event;
 use App\Model\MessagingActivity;
 use App\Model\User;
 use Carbon\Carbon;
-use MailchimpTransactional;
+use Illuminate\Support\Facades\Http;
 use Storage;
 
 class EmailSendService
 {
-    private function convertPayloadToMergeFields($payload)
+    private function convertToTags($payload)
     {
-        $mergeFields = [];
+        $tags = [];
         foreach ($payload as $key => $value) {
-            $mergeFields[] = [
-                'name'    => $key,
-                'content' => $value,
-            ];
+            $tags[] = $key . '#' . $value;
         }
 
-        return $mergeFields;
+        return $tags;
     }
 
-    public function sendEmail(string $event, array $to, string $subject, array $payload, array $metaData)
+    public function sendEmail(string $event, array $to, $subject = null, array $payload, array $metaData = [], array $replyTo = [])
     {
         $email = Email::where(['predefined_trigger' => $event, 'status' => 1])->first();
-        $mergeFields = $this->convertPayloadToMergeFields($payload);
-
         if ($email) {
-            $mailchimp = new MailchimpTransactional\ApiClient();
-            $mailchimp->setApiKey(env('MAILCHIMP_TRANSACTIONAL_API_KEY'));
             try {
-                $response = $mailchimp->messages->sendTemplate([
-                    'template_name'    => $email->template['label'],
-                    'template_content' => [[]],
-                    'message'          => [
-                        'track_opens'       => true,
-                        'track_clicks'      => true,
-                        'to'                => [
-                            [
-                                'email' => $to['email'],
-                                'name'  => $to['firstname'] . ' ' . $to['lastname'],
-                                'type'  => 'to',
-                            ],
+                $metaData = $this->convertToTags($metaData);
+                $emailPayload = [
+                    'params' => $payload,
+                    'to' => [
+                        [
+                            'email' => $to['email'],
+                            'name'  => $to['firstname'] . ' ' . $to['lastname'],
                         ],
-                        'from_email'        => env('MAIL_FROM_ADDRESS'),
-                        'from_name'         => env('MAIL_FROM_NAME'),
-                        'subject'           => $subject,
-                        'global_merge_vars' => $mergeFields,
-                        'metadata'          => $metaData,
                     ],
-                ]);
+                    'templateId' => $email->template['id'],
+                ];
+                if (isset($replyTo['email'])) {
+                    $emailPayload['replyTo'] = $replyTo;
+                }
+                if (isset($subject) && !empty($subject)) {
+                    $emailPayload['subject'] = $subject;
+                }
+                if (count($metaData) > 0) {
+                    $emailPayload['tags'] = $metaData;
+                }
+                $response = Http::withHeaders([
+                    'accept' => 'application/json',
+                    'api-key' => env('BREVO_API_KEY'),
+                    'content-type' => 'application/json',
+                ])->post('https://api.brevo.com/v3/smtp/email', $emailPayload);
+                $emailResponse = $response->json();
+                if (isset($emailResponse['messageId'])) {
+                    return ['status'=>'success'];
+                }
+                throw new \Exception($emailResponse['message']);
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                // dd($e->getMessage());
-                \Log::error('Mailchimp error', $e->getMessage());
+                \Log::error('Brevo error : ' . $e->getMessage());
+            } catch (\Exception $e) {
+                \Log::error('Brevo error : ' . $e->getMessage());
             }
         }
     }
@@ -66,8 +70,6 @@ class EmailSendService
     public function sendAgain(array $formData)
     {
         $activityLog = MessagingActivity::where('id', $formData['id'])->first();
-        $mailchimp = new MailchimpTransactional\ApiClient();
-        $mailchimp->setApiKey(env('MAILCHIMP_TRANSACTIONAL_API_KEY'));
 
         return ['status' => 'success'];
     }
@@ -83,40 +85,60 @@ class EmailSendService
         return response()->noContent();
     }
 
-    public function recordWebhook(array $payload)
+    public function recordWebhook(array $event)
     {
         try {
-            foreach ($payload as $event) {
-                $user = User::where(['email' => $event['msg']['email']])->first();
-                if ($user) {
-                    $messagingActivity = MessagingActivity::updateOrCreate([
-                        'event_id' => $event['_id'],
-                    ], [
-                        'event_id'     => $event['_id'],
-                        'type'         => 'email',
-                        'email'        => $user->email,
-                        'status'       => $event['event'],
-                        'opened'       => count($event['msg']['opens']),
-                        'clicked'      => count($event['msg']['clicks']),
-                        'activity_log' => $event,
-                        'subject'      => $event['msg']['subject'],
-                    ]);
-                    if (!count($messagingActivity->user)) {
-                        $messagingActivity->user()->save($user);
-                    }
-                    if (count($event['msg']['opens']) === 1) {
-                        (new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['msg']['subject'] . Carbon::now()->format('d F Y')));
+            $user = User::where(['email' => $event['email']])->first();
+            if ($user) {
+                $messagingActivity = MessagingActivity::updateOrCreate([
+                    'event_id' => $event['message-id'],
+                ], [
+                    'event_id'     => $event['message-id'],
+                    'type'         => 'email',
+                    'email'        => $user->email,
+                    'status'       => ($event['event'] === 'unique_opened') ? 'open' : ucwords($event['event']),
+                    'opened'       => ($event['event'] === 'unique_opened') ? 1 : 0,
+                    'clicked'      => ($event['event'] === 'click') ? 1 : 0,
+                    'activity_log' => $event,
+                    'subject'      => $event['subject'],
+                ]);
+                //Creating user's relationship
+                if (!count($messagingActivity->user)) {
+                    $messagingActivity->user()->save($user);
+                }
+                if ($event['event'] === 'unique_opened') {
+                    (new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                }
+            }
+            //Creating event relationship
+            if (count($event['tags'])) {
+                foreach ($event['tags'] as $tag) {
+                    if (strpos($tag, 'event_id') !== false) {
+                        $event_id = explode('#', $tag)[1];
                     }
                 }
-                if (isset($event['msg']['metadata']) && isset($event['msg']['metadata']['event_id'])) {
-                    $event = Event::find($event['msg']['metadata']['event_id']);
-                    if ($event && !count($messagingActivity->event)) {
-                        $messagingActivity->event()->save($event);
-                    }
+                $event = Event::find($event_id);
+                if ($event && !count($messagingActivity->event)) {
+                    $messagingActivity->event()->save($event);
                 }
             }
         } catch (\Exception $e) {
             \Log::info($e->getMessage());
         }
+    }
+
+    public function getBrevoTransactionalTemplates() :array
+    {
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'api-key' => env('BREVO_API_KEY'),
+        ])->get('https://api.brevo.com/v3/smtp/templates', [
+            'limit' => 100,
+            'offset' => 0,
+            'templateStatus'=>'true',
+            'sort' => 'desc',
+        ]);
+
+        return $response->json();
     }
 }

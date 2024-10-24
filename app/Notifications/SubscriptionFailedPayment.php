@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class InstructorsMail extends Notification
+class SubscriptionFailedPayment extends Notification
 {
     use Queueable;
 
@@ -45,11 +45,10 @@ class InstructorsMail extends Notification
     public function toBrevo($notifiable)
     {
         //$this->data['subject']
-        SendEmail::dispatch('InstructorsMail', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstname'],
-            'CourseName'=>$this->data['title'],
-            'DATE'=>$this->data['data'],
-            'LOCATION'=>$this->data['location'],
-        ]);
+        SendEmail::dispatch('SubscriptionFailedPayment', $this->user->toArray(), null, [
+            'FNAME'=> $this->data['firstName'],
+            'CourseName'=>$this->data['eventTitle'],
+            'Amount'=>$this->data['amount'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }

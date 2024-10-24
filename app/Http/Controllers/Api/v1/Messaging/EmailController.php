@@ -6,10 +6,11 @@ use App\Enums\Email\EmailTriggersEnum;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Resources\Api\v1\Messaging\EmailResource;
 use App\Model\Email;
+use App\Services\EmailSendService;
 use App\Services\Messaging\EmailService;
+use Artisan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use MailchimpMarketing;
 use Symfony\Component\HttpFoundation\Response;
 
 class EmailController extends ApiBaseController
@@ -56,13 +57,35 @@ class EmailController extends ApiBaseController
         return response()->noContent();
     }
 
-    public function getTemplates(EmailService $emailService)
+    public function getTemplates(EmailSendService $emailSendService)
     {
-        return ['templates' => $emailService->getMailchimpTransactionalTemplates()];
+        return $emailSendService->getBrevoTransactionalTemplates();
     }
 
     public function getEmailTriggers()
     {
         return ['data'=>EmailTriggersEnum::getEmailTriggers()];
+    }
+
+    public function runCommand(Request $request, $command)
+    {
+        try {
+            // Get any additional parameters from the request
+            $params = $request->all();
+
+            // Prepare the command with its parameters
+            $output = Artisan::call($command, $params);
+
+            // Return the output of the Artisan command
+            return response()->json([
+                'status' => 'success',
+                'output' => Artisan::output(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

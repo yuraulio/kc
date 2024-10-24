@@ -61,7 +61,6 @@ class CardController extends Controller
 
             ]);
             //\Session::flash('stripe-error',$e->getMessage());
-            // return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
@@ -69,7 +68,6 @@ class CardController extends Controller
 
             ]);
             // \Session::flash('stripe-error',$e->getMessage());
-            //return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
@@ -153,7 +151,6 @@ class CardController extends Controller
 
             ]);
             //\Session::flash('stripe-error',$e->getMessage());
-            // return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
@@ -161,7 +158,6 @@ class CardController extends Controller
 
             ]);
             // \Session::flash('stripe-error',$e->getMessage());
-            //return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
@@ -199,7 +195,6 @@ class CardController extends Controller
 
             ]);
             //\Session::flash('stripe-error',$e->getMessage());
-            // return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
@@ -207,7 +202,6 @@ class CardController extends Controller
 
             ]);
             // \Session::flash('stripe-error',$e->getMessage());
-            //return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
@@ -246,7 +240,6 @@ class CardController extends Controller
 
             ]);
             //\Session::flash('stripe-error',$e->getMessage());
-            // return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
@@ -254,7 +247,6 @@ class CardController extends Controller
 
             ]);
             // \Session::flash('stripe-error',$e->getMessage());
-            //return redirect('/info/order_error');
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
@@ -279,7 +271,6 @@ class CardController extends Controller
             //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/cart';
         }
     }

@@ -63,8 +63,6 @@ class InfoController extends Controller
     public function orderSuccess()
     {
         $data = [];
-        //$data['lang'] = $_ENV['LANG'];
-        //$data['website'] = $_ENV['WEBSITE'];
 
         $data['pay_methods'] = [];
         $data['pay_methods'] = PaymentMethod::whereIn('status', [1, 2])->get();
@@ -105,7 +103,6 @@ class InfoController extends Controller
                 $data['event']['facebook'] = url('/') . '/' . $thisevent->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $thisevent->title . ' by Knowcrunch.');
                 $data['event']['twitter'] = urlencode('Proudly participating in ' . $thisevent->title . ' ' . url('/') . '/' . $thisevent->slugable->slug . ' by Knowcrunch. 💙');
                 $data['event']['linkedin'] = urlencode(url('/') . '/' . $thisevent->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $thisevent->title . ' by Knowcrunch. 💙');
-                //$data['event']['linkedin'] = urlencode('https://knowcrunch.com/' . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by Knowcrunch. 💙");
 
                 $stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
                 $newstock = $stockHelper->pivot->quantity - $item->qty;
@@ -127,7 +124,6 @@ class InfoController extends Controller
                     }
 
                     //Update event status to soldout if no ticket stock
-                    //$newstock == 0
                     if ($globalSoldOut == 1) {
                         $thisevent->status = 2;
                         $thisevent->save();
@@ -146,7 +142,6 @@ class InfoController extends Controller
                 $categoryScript = $thisevent->delivery->first() && $thisevent->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; // $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
                 $userEmail = isset($this->transaction['status_history'][0]['pay_seats_data']['emails'][0]) ? $this->transaction['status_history'][0]['pay_seats_data']['emails'][0] : null;
 
-                //hash('sha256', $userEmail)
                 $data['tigran'] = [
                     'OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' => $tr_price, 'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
                     'Product_SKU'     => $thisevent->id, 'ProductCategory' => $categoryScript, 'ProductName' => $thisevent->title, 'Quantity' => $item->qty, 'TicketType' => $stockHelper->type, 'Event_ID' => 'kc_' . time(),
@@ -226,9 +221,6 @@ class InfoController extends Controller
                     'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
                 ];
 
-                /*$data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
-                                    'items' => ['item_name' => $thisevent->title, 'item_id' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, 'item_category' =>  $categoryScript] ];*/
-
                 $data['ecommerce'] = [
                     'actionField' => ['id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code],
                     'products'    => [
@@ -272,7 +264,6 @@ class InfoController extends Controller
             if ($existingcheck) {
                 $existingcheck->delete($user->id);
             }
-            //$user->cart->delete();
         }
 
         $this->fbp->sendPurchaseEvent($data);
@@ -291,7 +282,6 @@ class InfoController extends Controller
         Session::forget('coupon_price');
         Session::forget('priceOf');
         Session::forget('payment_method_is_sepa');
-        ///dd($data);
 
         if (isset($this->transaction['payment_response'])) {
             Session::put('thankyouData', $data);
@@ -307,107 +297,6 @@ class InfoController extends Controller
         } else {
             return Redirect::to('/');
         }
-    }
-
-    public function orderError()
-    {
-        $data = [];
-
-        $data['pay_methods'] = [];
-
-        $cart = Cart::content();
-
-        $data['eventId'] = '';
-        $data['categoryScript'] = '';
-
-        foreach ($cart as $cart) {
-            $ev = Event::find($cart->options['event']);
-            if ($ev->category->first()) {
-                $data['categoryScript'] = 'Event > ' . $ev->category->first()->name;
-            }
-
-            $data['eventId'] = $cart->options['event'];
-        }
-
-        $data['eventtickets'] = $ev->ticket;
-        $data['hours'] = $ev->hours;
-        $data['pay_methods'] = $ev->paymentMethod->first();
-
-        if (Session::has('transaction_id')) {
-            $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
-
-            if ($transaction) {
-                $this->transaction = $transaction->toArray();
-            } else {
-                $this->transaction = [];
-            }
-        } else {
-            $this->transaction = [];
-        }
-
-        if (Session::has('transaction_id')) {
-            $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
-
-            if ($transaction) {
-                $this->transaction = $transaction->toArray();
-            } else {
-                $this->transaction = [];
-            }
-        //dd($transaction);
-        } else {
-            $this->transaction = ['payment_response' => 'Card is not valid'];
-        }
-
-        $data['info']['success'] = false;
-        $data['info']['title'] = '<h3>It seems something went wrong..</h3>';
-        $data['info']['message'] = "Your payment didn't go through. Please check your credit or debit card limit or just contact us.";
-        $data['info']['transaction'] = $this->transaction;
-        $data['info']['statusClass'] = 'danger';
-        //return view('admin.info.order_error', $data);
-
-        if (Session::has('pay_seats_data')) {
-            $data['pay_seats_data'] = Session::get('pay_seats_data');
-        } else {
-            $data['pay_seats_data'] = [];
-        }
-
-        /*if (Session::has('pay_invoice_data')) {
-            $data['pay_invoice_data'] = Session::get('pay_invoice_data');
-        }
-        else {
-            $data['pay_invoice_data'] = [];
-        }*/
-
-        if (Session::has('pay_bill_data')) {
-            $data['pay_bill_data'] = Session::get('pay_bill_data');
-        } else {
-            $data['pay_bill_data'] = [];
-        }
-
-        if (Session::has('deree_user_data')) {
-            $data['deree_user_data'] = Session::get('deree_user_data');
-        } else {
-            $data['deree_user_data'] = [];
-        }
-
-        if (Session::has('cardtype')) {
-            $data['cardtype'] = Session::get('cardtype');
-        } else {
-            $data['cardtype'] = [];
-        }
-
-        if (Session::has('installments')) {
-            $data['installments'] = Session::get('installments');
-        } else {
-            $data['installments'] = [];
-        }
-
-        Session::forget('deree_user_data');
-
-        $data['city'] = '';
-        $data['duration'] = '';
-
-        return view('theme.cart.cart', $data);
     }
 
     public function createUsersFromTransaction($transaction, $sepa = false)
@@ -515,7 +404,6 @@ class InfoController extends Controller
 
         //Collect all users from seats
         $newmembersdetails = [];
-        //dd($pay_seats_data['emails']);
         foreach ($pay_seats_data['emails'] as $key => $value) {
             $thismember = [];
             $thismember['firstname'] = $pay_seats_data['names'][$key];
@@ -553,16 +441,11 @@ class InfoController extends Controller
             $checkemailuser = User::where('email', '=', $thismember['email'])->first();
             $expiration_date = '';
             if ($checkemailuser) {
-                //if(!$elearning){
                 $transaction->user()->save($checkemailuser);
-                //}
-
-                //if($elearning){
                 $invoice = $transaction->invoice()->first();
                 if ($invoice) {
                     $invoice->user()->save($checkemailuser);
                 }
-                //}
 
                 if ($evid && $evid > 0) {
                     $today = date('Y/m/d');
@@ -571,14 +454,11 @@ class InfoController extends Controller
                         $monthsExp = '+' . $thisevent->getAccessInMonths() . 'months';
                         $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                     }
-                    //$thisevent->users()->where('id',$checkemailuser)->detach();
                     $thisevent->users()->wherePivot('user_id', $checkemailuser->id)->detach();
                     if ($tickettypedrop == 7) {
-                        //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
                         $thisevent->users()->save($checkemailuser, ['comment' => 'unilever', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                     } else {
                         if ($transaction->coupon_code != '') {
-                            //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
                             $thisevent->users()->save($checkemailuser, ['comment' => 'coupon', 'expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
                         } else {
                             $thisevent->users()->save($checkemailuser, ['expiration' => $expiration_date, 'paid' => !$sepa, 'payment_method' => $paymentMethodId]);
@@ -843,7 +723,6 @@ class InfoController extends Controller
                 if ($user->cart) {
                     $user->cart->delete();
                 }
-
                 $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()
                     ? 'waiting_list_welcome' : 'welcome';
 
@@ -1015,16 +894,15 @@ class InfoController extends Controller
                         $com = isset($user['company']) ? $user['company'] : '-';
                         $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
                     }
-                    $amount = ($trans->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
-
+                    $transParam = getTransactionStringForAdminEmail($transaction, $extrainfo, $transdata['installments']);
                     SendEmail::dispatch(
                         'AdminInfoNewRegistration',
                         [
-                            'email'=>'info@knowcrunch.com',
+                            'email'=>'s.usama.noman@gmail.com',
                             'firstname'=>$user->firstname,
                             'lastname'=>$user->lastname,
                         ],
-                        'Knowcrunch - New Registration',
+                        null,
                         [
                             'Name'=> $user->firstname,
                             'Lastname'=> $user->lastname,
@@ -1032,7 +910,7 @@ class InfoController extends Controller
                             'ParticipantPhone'=>$mob,
                             'ParticipantPosition'=>$job,
                             'ParticipantCompany'=>$com,
-                            'SubscriptionAmountPaid'=>$amount,
+                            'TransData'=>$transParam,
                             'CourseName'=>$data['eventTitle'],
                             'LINK'=>$link,
                         ],

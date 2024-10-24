@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,13 +37,11 @@ class AfterSepaPaymentEmail extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
-    public function toMailchimp(object $notifiable)
+    public function toBrevo(object $notifiable)
     {
-        //system-user-all-courses-sepa-payment
-        //system-user-waiting-list-welcome-email
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
@@ -55,7 +53,7 @@ class AfterSepaPaymentEmail extends Notification
 
         $this->data['slug'] = url(config('app.url')) . '/myaccount';
 
-        SendEmail::dispatch('AfterSepaPaymentEmail', $this->user->toArray(), $subject, [
+        SendEmail::dispatch('AfterSepaPaymentEmail', $this->user->toArray(), null, [
             'FNAME'=> $this->user->firstname,
             'CourseName'=>$this->data['eventTitle'],
             'DurationDescription'=>$this->data['duration'],

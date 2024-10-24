@@ -4,13 +4,13 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 
-class SendMailchimpMail
+class SendBrevoMail
 {
     /**
      * Send the given notification.
      */
     public function send(object $notifiable, Notification $notification): void
     {
-        $message = $notification->toMailchimp($notifiable);
+        $message = $notification->toBrevo($notifiable);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class CertificateAvaillable extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,10 +42,10 @@ class CertificateAvaillable extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-user-all-courses-certification-available
-        SendEmail::dispatch('CertificateAvaillable', $this->user->toArray(), $this->data['subject'], [
+        //$this->data['subject']
+        SendEmail::dispatch('CertificateAvaillable', $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'LINK'=>$this->data['certUrl'],

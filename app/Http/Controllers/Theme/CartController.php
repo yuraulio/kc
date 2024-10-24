@@ -43,10 +43,8 @@ class CartController extends Controller
         $this->fbp = $fbp;
 
         $this->middleware('cart')->except('cartIndex', 'completeRegistration', 'validation', 'checkCode', 'add');
-        //$this->middleware('cart')->except('cartIndex','validation','checkCode');
         $this->middleware('code.event')->only('completeRegistration');
         $this->middleware('registration.check')->except('cartIndex', 'completeRegistration', 'validation', 'checkCode', 'add');
-        //$this->middleware('registration.check');
         $this->middleware('billing.check')->only('billingIndex', 'billing', 'checkoutIndex');
 
         $fbp->sendPageViewEvent();
@@ -113,7 +111,6 @@ class CartController extends Controller
                 $data['duration'] = '';
 
                 $categoryScript = $ev->delivery->first() && $ev->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //'Event > ' . $ev->category->first()->name;
-                //dd($categoryScript);
 
                 $data['stripe_key'] = '';
                 $data['paywithstripe'] = 0;
@@ -128,8 +125,6 @@ class CartController extends Controller
                 }
                 $data['pay_methods'] = $ev->paymentMethod->first();
 
-                //$data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
-                //$data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
                 $eventInfo = $ev->event_info();
                 if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
                     $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
@@ -608,14 +603,6 @@ class CartController extends Controller
         } else {
             $data['pay_seats_data'] = [];
         }
-
-        /* if (Session::has('pay_invoice_data')) {
-             $data['pay_invoice_data'] = Session::get('pay_invoice_data');
-         }
-         else {
-             $data['pay_invoice_data'] = [];
-         }*/
-
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         } else {
@@ -697,8 +684,6 @@ class CartController extends Controller
         $this->fbp->sendCompleteRegistrationEvent($data);
 
         return view('theme.cart.new_cart.billing', $data);
-
-        //return view('theme.cart.cart', $data);
     }
 
     public function billing(Request $request)
@@ -748,13 +733,6 @@ class CartController extends Controller
             $data['pay_seats_data'] = [];
         }
 
-        /* if (Session::has('pay_invoice_data')) {
-             $data['pay_invoice_data'] = Session::get('pay_invoice_data');
-         }
-         else {
-             $data['pay_invoice_data'] = [];
-         }*/
-
         if (Session::has('pay_bill_data')) {
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         } else {
@@ -774,12 +752,9 @@ class CartController extends Controller
         }
 
         $data = $this->initCartDetails($data);
-        //$this->fbp->sendAddPaymentInfoEvent($data);
         $this->fbp->sendAddBillingInfoEvent($data);
 
         return view('theme.cart.new_cart.checkout', $data);
-
-        //return view('theme.cart.cart', $data);
     }
 
     /**
@@ -913,19 +888,6 @@ class CartController extends Controller
             if ($user->cart) {
                 $user->cart->delete();
             }
-
-            //$cartCache = new CartCache;
-
-            //$cartCache->ticket_id = $ticket->id;
-            //$cartCache->product_title = $product->title;
-            //$cartCache->quantity = $quantity;
-            //$cartCache->price = $price;
-            //$cartCache->type = $type;
-            //$cartCache->event = $eventid;
-            //$cartCache->user_id = $user->id;
-            //$cartCache->slug =  base64_encode($ticket->id. $user->id . $eventid);
-
-            //$cartCache->save();
         }
 
         return $item;
@@ -944,8 +906,6 @@ class CartController extends Controller
         $item = Cart::add($ticket, $product->title, $quantity, $price, ['type' => $ticket, 'event' => $eventid])->associate(Ticket::class);
 
         return $item;
-
-        //return redirect('cart')->withSuccessMessage('Item was added to your cart!');
     }
 
     public function walletGetTotal(Request $request)
@@ -982,7 +942,6 @@ class CartController extends Controller
     public function walletPay(Request $request)
     {
         $input = $request->all();
-        //dd($input);
 
         $payment_method_id = intval($input['payment_method_id']);
         $data = [];
@@ -1040,8 +999,6 @@ class CartController extends Controller
         Session::forget('dperror');
         Session::forget('error');
 
-        //$current_user = Auth::user();
-
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
         $ev_title = '';
@@ -1049,11 +1006,11 @@ class CartController extends Controller
         $eventId = 0;
         $qty = 1;
         $ticket_id = 0;
+
         foreach ($cart as $item) {
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
             $eventInfo = $ev->event_info();
             if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
                 $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
@@ -1067,10 +1024,7 @@ class CartController extends Controller
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;
-            //$item->id  <-ticket id
         }
-        //dd($cart['CartItem']->CartItemOptions);
-        //dd($ev_title . $ev_date_help);
         $data = [];
         if (Session::has('pay_seats_data')) {
             $pay_seats_data = Session::get('pay_seats_data');
@@ -1170,12 +1124,9 @@ class CartController extends Controller
                         $st_postal_code = $temp['billpostcode'];
                         $address['postal_code'] = $st_postal_code;
                     }
-
-                //$st_phone = $temp['billmobile'];
                 } else {
                     $temp['billing'] = 'Invoice requested';
                     //generate array for stripe billing
-                    //   $st_desc = $temp['companyname'] . ' ' . $temp['companyprofession'];
                     $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
                     $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
                     $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
@@ -1210,22 +1161,11 @@ class CartController extends Controller
             if ($installments > 1) {
                 $instamount = round($namount / $installments, 2);
 
-                /*if($instamount - floor($instamount)>0){
-                    $planAmount = str_replace('.','',$instamount);
-                }else{
-                    $planAmount  = $instamount . '00';
-                }*/
                 $planAmount = $instamount * 100;
-                //$dpuser->subscription()->syncWithStripe();
-                // dd("Entity ready to be billed!");
-                // Check if the entity has any active subscription
-
-                //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                 // Create the plan to subscribe
                 $desc = $installments . ' installments';
                 $planid = 'plan_' . $dpuser->id . '_E_' . $ev->id . '_T_' . $ticket_id . '_x' . $installments . '_' . date('his');
                 $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-                //dd(str_replace('.','',$instamount) . '00');
 
                 $plan = Plan::create([
                     'id'                   => $planid,
@@ -1236,15 +1176,8 @@ class CartController extends Controller
                     'amount'               => $planAmount,
                     'currency'             => 'eur',
                     'interval'             => 'month',
-                    //'statement_descriptor' => $desc,
 
                 ]);
-
-                /*$sub = $dpuser
-                    ->subscription()
-                    ->onPlan($planid)
-                    ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                ;*/
 
                 $payment_method_id = -1;
                 if ($ev->paymentMethod->first()) {
@@ -1264,7 +1197,6 @@ class CartController extends Controller
 
                     // assign user to the event only if payment is complete.
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
                 } catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     $payment_method_id = -1;
                     if ($ev->paymentMethod->first()) {
@@ -1272,7 +1204,6 @@ class CartController extends Controller
                     }
 
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $instamount;
@@ -1284,12 +1215,8 @@ class CartController extends Controller
                     session()->put('input', $input);
                     session()->put('noActionEmail', true);
 
-                    //return '/';
-                    //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
                     return 'summary/' . $exception->payment->id . '/' . $input;
                 }
-
-                //$namount = $instamount;
             }
 
             if ($dpuser && $installments > 1) {
@@ -1304,9 +1231,6 @@ class CartController extends Controller
                 $nevent = $ev_title . ' ' . $ev_date_help;
 
                 try {
-                    //$ev->users()->where('id',$dpuser->id)->detach();
-                    //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
-
                     $charge = $dpuser->charge(
                         $stripeAmount,
                         $input['payment_method'],
@@ -1314,21 +1238,16 @@ class CartController extends Controller
                             'currency' => 'eur',
                             'amount' => $stripeAmount,
                             'description' => $nevent,
-                            //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
                             'customer' => $dpuser->stripe_id,
-                            //'metadata' => $temp,
                         ],
                     );
                 } catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
-                    //dd('gfds3')
-
                     $payment_method_id = -1;
                     if ($ev->paymentMethod->first()) {
                         $payment_method_id = $ev->paymentMethod->first()->id;
                     }
 
                     $ev->users()->wherePivot('user_id', $dpuser->id)->detach();
-//                    $ev->users()->save($dpuser, ['paid'=>false, 'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $namount;
@@ -1337,21 +1256,17 @@ class CartController extends Controller
 
                     $input = encrypt($input);
 
-                    //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
                     return 'summary/' . $exception->payment->id . '/' . $input;
-                    //return '/stripe/payment/'.$exception->payment->id;
                 } catch (\Exception $e) {
                     Log::error($e);
                 }
             }
-
             if ((isset($charge) && is_array($charge) && $charge['status'] == 'succeeded') || (isset($charge) && $charge->status == 'succeeded')) {
                 $ev->users()->save($dpuser, ['paid' => true, 'payment_method' => $ev->paymentMethod->first()?->id]);
                 /**
                  * Write Here Your Database insert logic.
                  */
                 $status_history = [];
-                //$payment_cardtype = intval($input["cardtype"]);
                 $status_history[] = [
                     'datetime' => Carbon::now()->toDateTimeString(),
                     'status' => 1,
@@ -1362,14 +1277,13 @@ class CartController extends Controller
                     'pay_seats_data' => $pay_seats_data,
                     'pay_bill_data' => $pay_bill_data,
                     'deree_user_data' => [$dpuser->email => ''],
-                    //'cardtype' => $payment_cardtype,
                     'installments' => $installments,
                     'cart_data' => $cart,
 
                 ];
                 $transaction_arr = [
 
-                    'payment_method_id' => 100, //$input['payment_method_id'],
+                    'payment_method_id' => 100,
                     'account_id' => 17,
                     'payment_status' => 2,
                     'billing_details' => $bd,
@@ -1391,20 +1305,8 @@ class CartController extends Controller
                 $transaction = Transaction::create($transaction_arr);
 
                 if ($transaction) {
-                    //$transaction->user()->save($dpuser);
                     $transaction->event()->save($ev);
-
                     if ($installments <= 1) {
-                        /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-                        //if(!Invoice::has('event')->latest()->first()){
-                            $invoiceNumber = sprintf('%04u', 1);
-                        }else{
-                            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-                            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-                            $invoiceNumber = (int) $invoiceNumber + 1;
-                            $invoiceNumber = sprintf('%04u', $invoiceNumber);
-                        }*/
-
                         $elearningInvoice = new Invoice;
                         $elearningInvoice->name = json_decode($transaction->billing_details, true)['billname'];
                         $elearningInvoice->amount = round($namount / $installments, 2);
@@ -1415,82 +1317,56 @@ class CartController extends Controller
 
                         $elearningInvoice->save();
 
-                        //$elearningInvoice->user()->save($dpuser);
                         $elearningInvoice->event()->save($ev);
                         $elearningInvoice->transaction()->save($transaction);
-                    } else {
-                        //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
                     }
 
                     \Session::put('transaction_id', $transaction->id);
                 }
 
                 return '/order-success';
-            //return '/info/order_success';
             } else {
-                //dd('edwww1');
                 \Session::put('dperror', 'Cannot complete the payment!!');
 
-                //return redirect('/info/order_error');
                 return '/checkout';
             }
         } catch (Exception $e) {
-            //dd('edwww2');
             \Session::put('dperror', $e->getMessage());
 
             return '/checkout';
-            // return redirect('/info/order_error');
         } catch(\Stripe\Exception\CardErrorException $e) {
-            //dd('edwww3');
             \Session::put('dperror', $e->getMessage());
 
             return '/checkout';
-            //return redirect('/info/order_error');
         } catch(\Stripe\Exception\InvalidRequestException $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/checkout';
         } catch(\Stripe\Exception\MissingParameterException $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/checkout';
         } catch(\Stripe\Api\Exception\ServerErrorException $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/checkout';
         } catch(\Stripe\Exception\CardException $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/checkout';
         } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
-            //return redirect('/info/order_error');
             return '/checkout';
         }
     }
 
     private function createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev, $couponCode, $namount, $pay_bill_data, $charge, $eventC, $status, $sepa = false)
     {
-        //$dpuser->updateDefaultPaymentMethod($input['payment_method']);
-        // if ($dpuser->hasPaymentMethod()) {
-        //     $dpuser->addPaymentMethod($input['payment_method']);
-        // }
-
         /**
          * Write Here Your Database insert logic.
          */
         $status_history = [];
-        //$payment_cardtype = intval($input["cardtype"]);
         $status_history[] = [
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => 1,
@@ -1501,7 +1377,6 @@ class CartController extends Controller
             'pay_seats_data' => $pay_seats_data,
             'pay_bill_data' => $pay_bill_data,
             'deree_user_data' => [$dpuser->email => ''],
-            //'cardtype' => $payment_cardtype,
             'installments' => $installments,
             'cart_data' => $cart,
 
@@ -1530,19 +1405,7 @@ class CartController extends Controller
         $transaction = Transaction::create($transaction_arr);
 
         if ($transaction) {
-            //$transaction->user()->save($dpuser);
             $transaction->event()->save($ev);
-
-            //if($installments <= 1){
-            /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-            //if(!Invoice::has('event')->latest()->first()){
-                $invoiceNumber = sprintf('%04u', 1);
-            }else{
-                //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-                $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-                $invoiceNumber = (int) $invoiceNumber + 1;
-                $invoiceNumber = sprintf('%04u', $invoiceNumber);
-            }*/
 
             if (!$sepa) {
                 $elearningInvoice = new Invoice;
@@ -1820,7 +1683,6 @@ class CartController extends Controller
 
     public function createSepa(Request $request)
     {
-        Log::info('createSepa');
         $input = $request->all();
         $data = [];
 
@@ -1840,7 +1702,6 @@ class CartController extends Controller
         Log::info(json_encode($data));
         Session::forget('dperror');
         Session::forget('error');
-        //$current_user = Auth::user();
 
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
@@ -1853,7 +1714,6 @@ class CartController extends Controller
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
             $eventInfo = $ev->event_info();
             if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
                 $ev_date_help = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
@@ -1867,11 +1727,8 @@ class CartController extends Controller
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;
-            //$item->id  <-ticket id
         }
         Log::info(json_encode($cart));
-        //dd($cart['CartItem']->CartItemOptions);
-        //dd($ev_title . $ev_date_help);
         $data = [];
         if (Session::has('pay_seats_data')) {
             $pay_seats_data = Session::get('pay_seats_data');
@@ -1961,12 +1818,9 @@ class CartController extends Controller
                         $st_postal_code = $temp['billpostcode'];
                         $address['postal_code'] = $st_postal_code;
                     }
-
-                //$st_phone = $temp['billmobile'];
                 } else {
                     $temp['billing'] = 'Invoice requested';
                     //generate array for stripe billing
-                    //   $st_desc = $temp['companyname'] . ' ' . $temp['companyprofession'];
                     $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
                     $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
                     $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
@@ -2004,17 +1858,7 @@ class CartController extends Controller
 
                 $instamount = round($namount / $installments, 2);
 
-                /*if($instamount - floor($instamount)>0){
-                    $planAmount = str_replace('.','',$instamount);
-                }else{
-                    $planAmount  = $instamount . '00';
-                }*/
                 $planAmount = $instamount * 100;
-                //$dpuser->subscription()->syncWithStripe();
-                // dd("Entity ready to be billed!");
-                // Check if the entity has any active subscription
-
-                //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                 // Create the plan to subscribe
                 $desc = $installments . ' installments';
                 $planid = 'plan_' . $dpuser->id . '_E_' . $ev->id . '_T_' . $ticket_id . '_x' . $installments . '_' . date('his');
@@ -2053,12 +1897,6 @@ class CartController extends Controller
                         ]
                     );
                     //after new subscription payment is incomplete because pay with SEPA
-
-                    //dd($charge);
-
-                    // $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
-                    // $charge->price = $instamount;
-                    // $charge->save();
                 } catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
                     Bugsnag::notifyException($exception);
 
@@ -2083,8 +1921,6 @@ class CartController extends Controller
 
                     return json_encode($output);
                 }
-
-                //$namount = $instamount;
             }
 
             Log::info('here');
@@ -2151,416 +1987,16 @@ class CartController extends Controller
                 }
             }
 
-            /*
-            if( (isset($charge) && $charge['status'] == 'succeeded')) {
-
-
-                $status = 2;
-                $this->createTransaction($dpuser, $pay_seats_data, $installments, $cart, $bd, $ev,$couponCode,$namount, $pay_bill_data, $charge,$eventC,$status);
-
-                Session::put('payment_method_is_sepa',true);
-
-                dd($charge);
-
-                $output = [
-                    'clientSecret' => $charge->client_secret,
-                    'return_url' => '/order-success',
-                    'status' => ''
-                ];
-
-                echo json_encode($output);
-
-            } else {
-                //dd('edwww1');
-                 \Session::put('dperror','Cannot complete the payment!!');
-                //return redirect('/info/order_error');
-                  return '/checkout';
-            }
-            */
-
-            //endddddddddd
-
             Log::info('end');
         } catch(Error $e) {
             Bugsnag::notifyException($e);
         }
     }
 
-    public function completeRegistration(Request $request)
-    {
-        $data = [];
-        $option = Option::where('abbr', 'deree-codes')->first();
-        //$dereelist = json_decode($option->settings, true);
-        $code = 0;
-
-        //dd($dereelist);
-
-        $c = Cart::content()->count();
-
-        if ((!$user = User::where('email', $request->email[0])->first())) {
-            $input = [];
-            $formData = $request->all();
-            unset($formData['_token']);
-            unset($formData['terms_condition']);
-            unset($formData['update']);
-            unset($formData['type']);
-
-            foreach ($formData as $key => $value) {
-                $input[$key] = $value[0];
-            }
-
-            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
-
-            $user = User::create($input);
-
-            $code = Activation::create([
-                'user_id' => $user->id,
-                'code' => Str::random(40),
-                'completed' => false,
-            ]);
-            $user->role()->attach(7);
-
-            $connow = Carbon::now();
-            $clientip = '';
-            $clientip = \Request::ip();
-            $user->terms = 1;
-            $consent['ip'] = $clientip;
-            $consent['date'] = $connow;
-            $consent['firstname'] = $user->firstname;
-            $consent['lastname'] = $user->lastname;
-            if ($user->afm) {
-                $consent['afm'] = $user->afm;
-            }
-
-            $billing = json_decode($user->receipt_details, true);
-
-            if (isset($billing['billafm']) && $billing['billafm']) {
-                $consent['billafm'] = $billing['billafm'];
-            }
-
-            $user->consent = json_encode($consent);
-        }
-
-        if ($c > 0) {
-            $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) {
-                $event_id = $item->options->event;
-                $event_type = $item->options->type;
-                $codeId = $item->options->code_id;
-
-                break;
-            }
-            $content = Event::find($event_id);
-        }
-
-        $payment_method_id = 1; //intval($input["payment_method_id"]);
-        $payment_cardtype = 9; //free;
-        $amount = 0;
-        $namount = (float) $amount;
-
-        $code = $content->coupons->where('id', $codeId)->first();
-
-        if ($code) {
-            $code = $code->code_coupon;
-        }
-
-        $transaction_arr = [
-
-            'payment_method_id' => $payment_method_id,
-            'account_id' => 17,
-            'payment_status' => 1,
-            'billing_details' => json_encode([]),
-            'placement_date' => Carbon::now()->toDateTimeString(),
-            'ip_address' => '127.0.0.1',
-            'type' => $payment_cardtype, //((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
-            'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-            'coupon_code' =>  $code,
-            'is_bonus' => 0, //$input['is_bonus'],
-            'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
-            'surcharge_amount' => 0,
-            'discount_amount' => 0,
-            'amount' => $namount, //$input['credit'],
-            'total_amount' => $namount,
-            'trial' => false,
-        ];
-
-        $transaction = Transaction::create($transaction_arr);
-
-        if ($transaction) {
-            // set transaction id in session
-
-            $pay_seats_data = ['names' => [$request->firstname[0]], 'surnames' => [$request->lastname[0]], 'emails' => [$request->email[0]],
-                'mobiles' => [$request->mobile[0]], 'addresses' => [$user->address], 'addressnums' => [$user->address_num],
-                'postcodes' => [$user->postcode], 'cities' => [$user->city], 'jobtitles' => [$user->job_title],
-                'companies' => [$user->company], 'students' => [''], 'afms' => [$user->afm]];
-
-            $deree_user_data = [$user->email => $user->partner_id];
-
-            //dd($ticket->event->title);
-            $cart_data = ['manualtransaction' => ['rowId' => 'manualtransaction', 'id' => 'coupon code ' . $content->id, 'name' => $content->title, 'qty' => '1', 'price' => $amount, 'options' => ['type' => '9', 'event'=> $content->id], 'tax' => 0, 'subtotal' => $amount]];
-
-            $status_history[] = [
-                'datetime' => Carbon::now()->toDateTimeString(),
-                'status' => 1,
-                'user' => [
-                    'id' => $user->id, //0, $this->current_user->id,
-                    'email' => $user->email, //$this->current_user->email
-                ],
-                'pay_seats_data' => $pay_seats_data, //$data['pay_seats_data'],
-                'pay_bill_data' => [],
-                'cardtype' => 9,
-                'installments' => 1,
-                'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-                'cart_data' => $cart_data, //$cart
-            ];
-
-            //Transaction::where('id', $transaction['id'])
-            $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
-
-            $user->events()->attach($content->id, ['comment' => 'upon coupon', 'paid' => true]);
-
-            if ($user->cart) {
-                $user->cart->delete();
-            }
-            Cart::instance('default')->destroy();
-            $content->coupons->where('id', $codeId)->first()->update(['used' => true]);
-
-            $data['event']['title'] = $content->title;
-            $data['event']['slug'] = $content->slugable->slug;
-            $data['event']['facebook'] = url('/') . '/' . $content->slugable->slug . '?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote=' . urlencode('Proudly participating in ' . $content->title . ' by Knowcrunch.');
-            $data['event']['twitter'] = urlencode('Proudly participating in ' . $content->title . ' ' . url('/') . '/' . $content->slugable->slug . ' by Knowcrunch. 💙');
-            $data['event']['linkedin'] = urlencode(url('/') . '/' . $content->slugable->slug . '?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title=' . 'Proudly participating in ' . $content->title . ' by Knowcrunch. 💙');
-
-            $categoryScript = $content->delivery->first() && $content->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //'Event > ' . $content->category->first()->name;
-
-            $KC = 'KC-';
-            $time = strtotime($transaction->placement_date);
-            $MM = date('m', $time);
-            $YY = date('y', $time);
-
-            $option = Option::where('abbr', 'website_details')->first();
-            //next number available up to 9999
-            $next = $option->value;
-
-            if ($user->kc_id == '') {
-                $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
-                $knowcrunch_id = $KC . $YY . $MM . $next_kc_id;
-                $user->kc_id = $knowcrunch_id;
-
-                $user->save();
-
-                if ($next == 9999) {
-                    $next = 1;
-                } else {
-                    $next += 1;
-                }
-                $option->value = $next;
-                $option->save();
-            }
-            $this->sendEmails($transaction, $content, $user);
-
-            $data['info']['success'] = true;
-            $data['info']['title'] = __('thank_you_page.title');
-            $data['info']['message'] = __('thank_you_page.message');
-            $data['info']['transaction'] = $transaction;
-            $data['info']['statusClass'] = 'success';
-
-            $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => 0.00, 'Price' => 0.00, 'Product_id' => $content->id, 'Product_SKU' => $content->id,
-                'ProductCategory' => $categoryScript, 'ProductName' =>  $content->title, 'Quantity' => $item->qty, 'TicketType'=>'Upon Coupon', 'Event_ID' => 'kc_' . time(),
-                'Encrypted_email' => hash('sha256', $user->email),
-            ];
-
-            $customerBillingFirstName = '';
-            $customerBillingLastName = '';
-            $customerBillingCompany = '';
-            $customerBillingAddress1 = '';
-            $customerBillingAddress2 = '';
-            $customerBillingCity = '';
-            $customerBillingPostcode = '';
-            $customerBillingEmail = '';
-            try {
-                $receipt_details = json_decode($user->receipt_details);
-                if (isset($receipt_details->billname)) {
-                    $customerBillingFirstName = $receipt_details->billname;
-                }
-                if (isset($receipt_details->billsurname)) {
-                    $customerBillingLastName = $receipt_details->billsurname;
-                }
-                if (isset($receipt_details->billemail)) {
-                    $customerBillingEmail = $receipt_details->billemail;
-                }
-                if (isset($receipt_details->billaddress)) {
-                    $customerBillingAddress1 = $receipt_details->billaddress;
-                }
-                if (isset($receipt_details->billaddressnum)) {
-                    $customerBillingAddress2 = $receipt_details->billaddressnum;
-                }
-                if (isset($receipt_details->billpostcode)) {
-                    $customerBillingPostcode = $receipt_details->billpostcode;
-                }
-                if (isset($receipt_details->billcity)) {
-                    $customerBillingCity = $receipt_details->billcity;
-                }
-                if (isset($receipt_details->billemail)) {
-                    $customerBillingEmail = $receipt_details->billemail;
-                }
-            } catch(\Exception $e) {
-            }
-
-            $data['customer'] = [
-                'customerTotalOrders' => '',
-                'customerTotalOrderValue' => '',
-                'customerFirstName' => $user->firstname,
-                'customerLastName' => $user->lastname,
-                'customerMobile' => $user->mobile,
-                'customerStreet' => $user->address,
-                'customerBillingFirstName' => $customerBillingFirstName,
-                'customerBillingLastName' => $customerBillingLastName,
-                'customerBillingCompany' => $user->company,
-                'customerBillingAddress1' => $customerBillingAddress1,
-                'customerBillingAddress2' => $customerBillingAddress2,
-                'customerBillingCity' => $customerBillingCity,
-                'customerBillingPostcode' => $customerBillingPostcode,
-                'customerBillingCountry' => '',
-                'customerBillingEmail' => $customerBillingEmail,
-                'customerBillingEmailHash' => hash('sha256', $customerBillingEmail),
-            ];
-        }
-        //$this->fbp->sendPurchaseEvent($data);
-
-        Session::put('thankyouData', $data);
-        try {
-            session_start();
-            $_SESSION['thankyouData'] = $data;
-        } catch(\Exception $ex) {
-            Bugsnag::notifyException($ex);
-        }
-
-        return redirect('/thankyou');
-    }
-
-    public function sendEmails($transaction, $content, $user)
-    {
-        $muser = [];
-        $muser['name'] = $user->first_name . ' ' . $user->last_name;
-        $muser['id'] = $user->id;
-        $muser['first'] = $user->first_name;
-        $muser['email'] = $user->email;
-        $muser['createAccount'] = false;
-
-        $tickettypedrop = 'Upon Coupon';
-        $tickettypename = 'Upon Coupon';
-        $eventname = $content->title;
-        $date = '';
-        $eventcity = '';
-
-        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity];
-        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
-
-        $adminemail = 'info@knowcrunch.com';
-
-        $data = [];
-        $data['user'] = $muser;
-        $data['trans'] = $transaction;
-        $data['extrainfo'] = $extrainfo;
-        $data['helperdetails'] = $helperdetails;
-        $data['eventSlug'] = url('/') . '/' . $content->getSlug();
-        $data['duration'] = '';
-        $data['eventTitle'] = $content->title;
-        $data['eventId'] = $content->id;
-
-        $eventInfo = $content ? $content->event_info() : [];
-
-        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
-            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
-                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
-                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
-        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
-            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
-                                        $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
-        }
-
-        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
-                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
-
-        $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
-
-        $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
-                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
-
-        $eventStudents = get_sum_students_course($content->category->first());
-        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
-
-        $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
-                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
-
-        //send elearning Invoice
-        $transdata = [];
-        $transdata['trans'] = $transaction;
-
-        $transdata['user'] = $muser;
-        $transdata['trans'] = $transaction;
-        $transdata['extrainfo'] = $extrainfo;
-        $transdata['helperdetails'] = $helperdetails;
-        $transdata['coupon'] = $transaction->coupon_code;
-
-        //system-admin-all-courses-new-subscription
-        $link = "http://www.knowcrunch.com/admin/user/{$user['id']}/edit";
-        if (isset($helperdetails[$user['email']])) {
-            $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';
-            $com = $helperdetails[$user['email']]['company'] ? $helperdetails[$user['email']]['company'] : '';
-            $job = $helperdetails[$user['email']]['jobtitle'] ? $helperdetails[$user['email']]['jobtitle'] : '';
-        } else {
-            $mob = isset($user['mobile']) ? $user['mobile'] : '-';
-            $com = isset($user['company']) ? $user['company'] : '-';
-            $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
-        }
-        $amount = ($trans->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
-
-        SendEmail::dispatch('AdminInfoNewRegistration', [
-            'email'=>'info@knowcrunch.com',
-            'firstname'=>$user->first_name,
-            'lastname'=>$user->last_name,
-        ], 'Knowcrunch - New Registration', [
-            'Name'=> $user->first_name,
-            'Lastname'=> $user->last_name,
-            'ParticipantEmail'=>$user->email,
-            'ParticipantPhone'=>$mob,
-            'ParticipantPosition'=>$job,
-            'ParticipantCompany'=>$com,
-            'SubscriptionAmountPaid'=>$amount,
-            'CourseName'=>$data['eventTitle'],
-            'LINK'=>$link,
-        ], ['event_id'=>$data['eventId']]);
-
-        if (!$user->statusAccount->completed) {
-            $data['user']['createAccount'] = true;
-            $cookieValue = base64_encode($user->id . date('H:i'));
-            setcookie('auth-' . $user->id, $cookieValue, time() + (1 * 365 * 86400), '/'); // 86400 = 1 day
-
-            $coockie = new CookiesSMS;
-            $coockie->coockie_name = 'auth-' . $user->id;
-            $coockie->coockie_value = $cookieValue;
-            $coockie->user_id = $user->id;
-            $coockie->sms_code = -1;
-            $coockie->sms_verification = true;
-
-            $coockie->save();
-
-            $user->statusAccount->completed = true;
-            $user->statusAccount->save();
-        }
-
-        $user->notify(new WelcomeEmail($user, $data));
-        event(new EmailSent($user->email, 'WelcomeEmail'));
-    }
-
     public function update(Request $request)
     {
-        //return $request->all();
         $updates = $request->get('update');
         foreach ($updates as $key => $value) {
-            //dd($value['quantity']);
             Cart::update($key, $value['quantity']);
         }
 
@@ -2572,7 +2008,6 @@ class CartController extends Controller
                 $user->cart->delete();
             }
 
-            //Cart::restore($user->id
             if ($existingcheck) {
                 $existingcheck->delete($user->id);
                 Cart::store($user->id);
@@ -2614,7 +2049,6 @@ class CartController extends Controller
 
     public function securePayment(Request $request)
     {
-        //dd($request->all());
         Session::forget('dperror');
         Session::forget('error');
 
@@ -2633,7 +2067,6 @@ class CartController extends Controller
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            //$ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
 
             $eventInfo = $ev->event_info();
             if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
@@ -2648,7 +2081,6 @@ class CartController extends Controller
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;
-            //$item->id  <-ticket id
         }
 
         $data = [];
@@ -2705,12 +2137,9 @@ class CartController extends Controller
                     $st_postal_code = $temp['billpostcode'];
                     $address['postal_code'] = $st_postal_code;
                 }
-
-           //     $st_phone = $temp['billmobile'];
             } else {
                 $temp['billing'] = 'Invoice requested';
                 //generate array for stripe billing
-                //   $st_desc = $temp['companyname'] . ' ' . $temp['companyprofession'];
                 $st_name = $temp['companyname'] . ' ' . $temp['companyprofession'];
                 $st_tax_id = $temp['companyafm'] . ' ' . $temp['companydoy'];
                 $st_line1 = $temp['companyaddress'] . ' ' . $temp['companyaddressnum'];
@@ -2723,7 +2152,6 @@ class CartController extends Controller
 
         if ((is_array($charge) && $charge['status'] == 'succeeded') || (isset($charge) && $charge->status == 'succeeded')) {
             $status_history = [];
-            //$payment_cardtype = intval($input["cardtype"]);
             $status_history[] = [
                 'datetime' => Carbon::now()->toDateTimeString(),
                 'status' => 1,
@@ -2734,14 +2162,13 @@ class CartController extends Controller
                 'pay_seats_data' => $pay_seats_data,
                 'pay_bill_data' => $pay_bill_data,
                 'deree_user_data' => [$dpuser->email => ''],
-                //'cardtype' => $payment_cardtype,
                 'installments' => $installments,
                 'cart_data' => $cart,
 
             ];
             $transaction_arr = [
 
-                'payment_method_id' => 100, //$input['payment_method_id'],
+                'payment_method_id' => 100,
                 'account_id' => 17,
                 'payment_status' => 2,
                 'billing_details' => $bd,
@@ -2763,20 +2190,9 @@ class CartController extends Controller
             $transaction = Transaction::create($transaction_arr);
 
             if ($transaction) {
-                //$transaction->user()->save($dpuser);
                 $transaction->event()->save($ev);
 
                 if ($installments <= 1) {
-                    /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-                    //if(!Invoice::has('event')->latest()->first()){
-                        $invoiceNumber = sprintf('%04u', 1);
-                    }else{
-                        //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-                        $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-                        $invoiceNumber = (int) $invoiceNumber + 1;
-                        $invoiceNumber = sprintf('%04u', $invoiceNumber);
-                    }*/
-
                     $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
                     $elearningInvoice = new Invoice;
                     $elearningInvoice->name = json_decode($transaction->billing_details, true)['billname'];
@@ -2788,11 +2204,8 @@ class CartController extends Controller
 
                     $elearningInvoice->save();
 
-                    //$elearningInvoice->user()->save($dpuser);
                     $elearningInvoice->event()->save($ev);
                     $elearningInvoice->transaction()->save($transaction);
-                } else {
-                    //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
                 }
 
                 \Session::put('transaction_id', $transaction->id);

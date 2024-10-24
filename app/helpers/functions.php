@@ -47,18 +47,12 @@ if (!function_exists('failedPaymentEmail')) {
         $data['template'] = 'emails.user.failed_payment';
         $data['userLink'] = url('/') . '/admin/user/' . $user->id . '/edit';
 
-        // SendEmail::dispatch('FailedPayment', ['email'=>$adminemail,'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $sub, [
-        //     'FNAME'=> $this->data['firstName'],
-        //     'CourseName'=>$this->data['eventTitle'],
-        //     'Amount'=>$this->data['amount'],
-        // ], ['event_id'=>$this->data['eventId']]);
-
-        $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail, $data) {
-            $sub = $data['subject'];
-            $m->from('info@knowcrunch.com', 'Knowcrunch');
-            $m->to($adminemail, $data['firstName']);
-            $m->subject($sub);
-        });
+        SendEmail::dispatch('AdminFailedStripePayment', ['email'=>$adminemail, 'firstname'=>$user->firstname, 'lastname'=>$user->lastname], $data['subject'], [
+            'FNAME'=> $this->data['name'],
+            'CourseName'=>$this->data['eventTitle'],
+            'Amount'=>$this->data['amount'],
+            'LINK'=> $data['userLink'],
+        ], ['event_id'=>$this->data['eventId']]);
     }
 }
 
@@ -160,9 +154,6 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
                     $user->cart->delete();
                 }
 
-                $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()
-                    ? 'waiting_list_welcome' : 'welcome';
-
                 $data['firstName'] = $user->firstname;
 
                 $user->notify(new AfterSepaPaymentEmail($user, $data));
@@ -170,6 +161,35 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
                 event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
             }
         }
+    }
+}
+
+if (!function_exists('getTransactionStringForAdminEmail')) {
+    function getTransactionStringForAdminEmail($transaction, $extrainfo, $installments = 1)
+    {
+        $tickettype = isset($extrainfo[1]) ? $extrainfo[1] : null;
+
+        if (isset($transaction->status_history[0]['pay_seats_data']['student_type_id'])) {
+            $stId = $transaction->status_history[0]['pay_seats_data']['student_type_id'][0];
+        } else {
+            $stId = null;
+        }
+
+        $ticketType = $tickettype;
+        if ($transaction->total_amount == 0) {
+            $tickettype .= ', Free';
+        } else {
+            $tickettype .= ', ' . round($transaction->total_amount, 2);
+        }
+
+        if ($stId) {
+            $tickettype .= ', ' . $stId;
+        }
+
+        $amount = ($transaction->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
+        $transParam = 'Ticket Type: ' . $tickettype . ', Amount: ' . $amount . ', Coupon: ' . $transaction->coupon_code;
+
+        return $transParam;
     }
 }
 

@@ -26,6 +26,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('profile_status');
+            $table->dropColumn('account_status');
         });
     }
 };

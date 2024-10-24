@@ -57,23 +57,20 @@ class ContactUsController extends Controller
                 'message' => '',
             ];
         } else {
-            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $email, $request) {
-                $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
+            $adminemail = $request->recipient ?? 'info@knowcrunch.com';
+            if (isset($mail_data['eventtitle'])) {
+                $subject = 'Knowcrunch – information about ' . $mail_data['eventtitle'];
+            } else {
+                $subject = 'Knowcrunch - Website Contact';
+            }
 
-                $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
-
-                $adminemail = $request->recipient ?? 'info@knowcrunch.com';
-                if (isset($mail_data['eventtitle'])) {
-                    $subject = 'Knowcrunch – information about ' . $mail_data['eventtitle'];
-                } else {
-                    $subject = 'Knowcrunch - Website Contact';
-                }
-
-                $m->subject($subject);
-                $m->from($adminemail, 'Knowcrunch');
-                $m->replyTo($email, $fullname);
-                $m->to($adminemail, 'Knowcrunch');
-            });
+            SendEmail::dispatch('AdminContact', ['email'=>$adminemail, 'firstname'=>'Knowcrunch', 'lastname'=>'Inc'], $subject, [
+                'FNAME'=> $mail_data['cname'],
+                'LNAME'=> $mail_data['csurname'],
+                'Email'=> $mail_data['cemail'],
+                'Phone'=> $mail_data['ctel'],
+                'Message'=> $mail_data['cmessage'],
+            ], [], ['email'=>$email, 'name'=>$fullname]);
 
             $this->fbp->sendContactEvent();
 
@@ -204,17 +201,16 @@ class ContactUsController extends Controller
                 'message' => '',
             ];
         } else {
-            Mail::send('theme.emails.contact.corporate', $mail_data, function ($m) use ($mail_data, $fullname, $email, $request) {
-                $fullname = $fullname;
-                $adminemail = $request->recipient ?? 'info@knowcrunch.com';
-                $subject = 'Knowcrunch - Corporate training';
+            $adminemail = $request->recipient ?? 'info@knowcrunch.com';
 
-                $m->subject($subject);
-                $m->from($adminemail, 'Knowcrunch');
-                $m->replyTo($email, $fullname);
-
-                $m->to($adminemail, 'Knowcrunch');
-            });
+            SendEmail::dispatch('AdminCorporate', ['email'=>$adminemail, 'firstname'=>'Knowcrunch', 'lastname'=>'Inc'], 'Knowcrunch - Corporate training', [
+                'FNAME'=> $mail_data['csurname'],
+                'Email'=> $mail_data['cemail'],
+                'Phone'=> $mail_data['ctel'],
+                'Company'=> $mail_data['ccompany'],
+                'Title'=> $mail_data['cjob'],
+                'Message'=>'',
+            ], [], ['email'=>$email, 'name'=>$fullname]);
 
             return [
                 'status' => 1,

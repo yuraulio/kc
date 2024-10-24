@@ -7,7 +7,7 @@ use App\Events\ActivityEvent;
 use App\Jobs\SendEmail;
 use App\Model\Activation;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
@@ -26,7 +26,7 @@ class WelcomeEmail extends Notification
      */
     public function __construct(
         private readonly User $user,
-        private readonly array $data
+        private array $data
     ) {
         if (isset($data['duration'])) {
             $this->data['duration'] = strip_tags($data['duration']);
@@ -42,13 +42,11 @@ class WelcomeEmail extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
-    public function toMailchimp(object $notifiable)
+    public function toBrevo(object $notifiable)
     {
-        //system-user-all-courses-welcome-email
-        //system-user-waiting-list-welcome-email
         $slug = [];
         $slug['id'] = $this->user->id;
         $slug['email'] = $this->user->email;
@@ -78,7 +76,12 @@ class WelcomeEmail extends Notification
             }
         }
 
-        SendEmail::dispatch('WelcomeEmail', $this->user->toArray(), $subject, [
+        $emailEvent = 'WelcomeEmail';
+        if (isset($this->data['template']) && $this->data['template'] === 'waiting_list_welcome') {
+            $emailEvent = 'WaitingListWelcomeEmail';
+        }
+
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
             'FNAME'=> $this->user->firstname,
             'CourseName'=>$this->data['eventTitle'],
             'DurationDescription'=>$this->data['duration'],

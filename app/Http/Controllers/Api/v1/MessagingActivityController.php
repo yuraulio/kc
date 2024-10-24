@@ -19,8 +19,8 @@ class MessagingActivityController extends ApiBaseController
      */
     public function store(Request $request, EmailSendService $emailSendService)
     {
-        if (isset($request->mandrill_events)) {
-            return $emailSendService->recordWebhook(json_decode($request->mandrill_events, true));
+        if (isset($request->event)) {
+            return $emailSendService->recordWebhook($request->all());
         }
 
         return response()->noContent();

@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class SubscriptionWelcome extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,10 +42,10 @@ class SubscriptionWelcome extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-user-big-el-subscription-welcome
-        SendEmail::dispatch('SubscriptionWelcome', $this->user->toArray(), $this->data['subject'], [
+        //$this->data['subject']
+        SendEmail::dispatch('SubscriptionWelcome', $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'ExpirationDate'=>$this->data['subscriptionEnds'],

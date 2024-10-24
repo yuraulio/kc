@@ -123,8 +123,8 @@ class CronjobsController extends Controller
             $data['template'] = 'emails.user.subscription_non_payment';
             $data['amount'] = round($subscription->price, 2);
 
-            $user->first()->notify(new FailedPayment($data, $user));
-            event(new EmailSent($user->first()->email, 'FailedPayment'));
+            $user->first()->notify(new SubscriptionFailedPayment($data, $user));
+            event(new EmailSent($user->first()->email, 'SubscriptionFailedPayment'));
             event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
         }
     }
@@ -466,23 +466,6 @@ class CronjobsController extends Controller
         }
     }
 
-    public function dereeIDNotification()
-    {
-        $option = Option::where('abbr', 'deree_codes')->first();
-        $dereelist = json_decode($option->settings, true);
-
-        if (count($dereelist) <= 15) {
-            $data = [];
-            $data['dereeIDs'] = count($dereelist);
-            $sent = Mail::send('emails.admin.deree_notification', $data, function ($m) {
-                $sub = 'DereeIDs';
-                $m->from('info@knowcrunch.com', 'Knowcrunch');
-                $m->to('info@knowcrunch.com', 'Knowcrunch');
-                $m->subject($sub);
-            });
-        }
-    }
-
     public function remindAbandonedUser()
     {
         $abandoneds = CartCache::where('send_email', 0)->get();
@@ -589,7 +572,7 @@ class CronjobsController extends Controller
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                if ($event->id == 2304 && ($date->y == 0 && $date->m == 0 && $date->d == 7)) {
+                if ($event->id == 2304 && ($date->y == 0 && $date->m == 0 && ($date->d == 7 || $date->d == 15))) {
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['eventId'] = $event->id;
@@ -606,7 +589,7 @@ class CronjobsController extends Controller
                     $user->notify(new ExpirationMails($data, $user));
                     event(new EmailSent($user->email, 'ExpirationMails'));
                     event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
-                } elseif ($event->id !== 2304 && ($date->y == 0 && $date->m == 0 && $date->d == 7)) {
+                } elseif ($event->id !== 2304 && ($date->y == 0 && $date->m == 0 && ($date->d == 7 || $date->d == 15))) {
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['eventId'] = $event->id;
@@ -733,7 +716,7 @@ class CronjobsController extends Controller
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' enjoying ' . $event->title . '?';
                 $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
                 $data['expirationDate'] = date('d-m-Y', strtotime($expiration->pivot->expiration));
-                $data['template'] = 'emails.user.elearning_f&qemail';
+                // $data['template'] = 'emails.user.elearning_f&qemail';
 
                 $user->notify(new ElearningFQ($data, $user));
                 event(new EmailSent($user->email, 'ElearningFQ'));

@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Jobs\SendEmail;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -32,7 +32,7 @@ class ElearningFQ extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -41,9 +41,10 @@ class ElearningFQ extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        SendEmail::dispatch('ElearningFQ', $this->user, $this->data['subject'], [
+        //$this->data['subject']
+        SendEmail::dispatch('ElearningFQ', $this->user, null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'CourseExpiration'=>$this->data['expirationDate'],

@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class SendTopicAutomateMail extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,11 +42,8 @@ class SendTopicAutomateMail extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-activate-content-production-account-email
-        //system-activate-social-media-platforms
-        //system-all-courses-setup-advertising-accounts
         $subject = '';
         $emailEvent = '';
         if ($this->data['email_template'] == 'activate_social_media_account_email') {
@@ -59,9 +56,11 @@ class SendTopicAutomateMail extends Notification
             $subject = 'activate your content production accounts!';
             $emailEvent = 'SendTopicAutomateMailContentAccount';
         }
-        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'] . $subject, [
+        //$this->data['subject'] . $subject
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
+            'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : '0',
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Notifications;
 use App\Jobs\SendEmail;
 use App\Model\Event;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -37,7 +37,7 @@ class SendWaitingListEmail extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -46,15 +46,17 @@ class SendWaitingListEmail extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
         //system-user-waiting-list-open-notification-emai
+        $data = [];
         $data['urlEnrol'] = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
         $data['eventTitle'] = $this->event->title;
         $data['eventId'] = $this->event->id;
         $data['firstname'] = $this->user->firstname;
 
-        SendEmail::dispatch('SendWaitingListEmail', $this->user, 'Knowcrunch - Hi ' . $data['firstname'] . '. Course is available', [
+        $subject = 'Knowcrunch - Hi ' . $data['firstname'] . '. Course is available';
+        SendEmail::dispatch('SendWaitingListEmail', $this->user, null, [
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
             'LINK'=>$this->data['urlEnrol'],

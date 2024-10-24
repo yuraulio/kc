@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class SubscriptionExpireReminder extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,11 +42,9 @@ class SubscriptionExpireReminder extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        //system-user-subscription-1-year-after-end-el
-        //system-user-subscription-after-the-end-of-el
-        //system-user-subscription-6-months-after-end-el
+        //$this->data['subject']
         $emailEvent = '';
         $link = 'https://knowcrunch.com/knowcrunch-elite?utm_source=Knowcrunch&utm_medium=Email%20&utm_content=Promo&utm_campaign=SUBSCRIPTION';
         if ($this->data['template'] === 'emails.user.courses.expired') {
@@ -57,7 +55,7 @@ class SubscriptionExpireReminder extends Notification
             $emailEvent = 'SubscriptionExpireReminder1Year';
         }
 
-        SendEmail::dispatch($emailEvent, $this->user->toArray(), $this->data['subject'], [
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['event_name'],
             'LINK'=>$link,

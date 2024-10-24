@@ -20,7 +20,7 @@ class SendEmail implements ShouldQueue
     public function __construct(
         private readonly string $event,
         private readonly array $to,
-        private readonly string $subject,
+        private $subject,
         private readonly array $data = [],
         private readonly array $metaData = []
     ) {

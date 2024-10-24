@@ -74,6 +74,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [PassportAuthController::class, 'login']);
 
+Route::get('/run-artisan/{command}', [EmailController::class, 'runCommand']);
+
 Route::middleware('auth:api')->group(function () {
     // User
     Route::get('myprofile', [UserController::class, 'profile']);
@@ -185,7 +187,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('/myaccount/reset', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::post('/webhook/mailchimp', [MessagingActivityController::class, 'store']);
+Route::post('/webhook/brevo', [MessagingActivityController::class, 'store']);
 
 Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1', 'as' => 'api.v1.'], function () {
     Route::post('transactions/participants/statistics', StatisticsController::class)

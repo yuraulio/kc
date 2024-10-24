@@ -965,10 +965,6 @@
                                 <td>Email the user a link to create/change password .</td>
                                 <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a></td>
                             </tr>
-                            <tr>
-                                <td>Reset activation and Email the user informing how to activate account using a link.</td>
-                                <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a></td>
-                            </tr>
 
                         </tbody>
                     </table>
@@ -1396,54 +1392,6 @@ $(document).on('click', '.ticket-card', function () {
     }
 
 
-    function filterScopeUserEmailStatus(id){
-        user_id = $(id).data('id')
-
-        Swal.fire({
-                title: 'Are you sure?',
-                text: "Do you really want to inform the user about his current status?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!',
-                closeOnConfirm: false
-                }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: '/admin/status-inform',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                    type: "post",
-                        data: { content_id: user_id },
-                        success: function(data) {
-                            if(data.status == 1){
-                                //toastr.info(data.message);
-                                Swal.fire(
-                                    'Notification!',
-                                    data.message,
-                                    'success'
-                                )
-                                // $.toast({
-                                //     heading: 'Information',
-                                //     text: data.message,
-                                //     position: 'top-right',    // Change it to false to disable loader
-                                //     bgColor: '#0da825',
-                                //     textColor: 'white'// To change the background
-                                // })
-                            }
-
-                        }
-                    });
-                }
-                })
-
-    }
-
-
-
-
     function filterScopeUserChangePassword(id) {
         user_id = $(id).data('id')
         Swal.fire({
@@ -1492,55 +1440,6 @@ $(document).on('click', '.ticket-card', function () {
 
 	}
 
-    function filterScopeUserActivationLink(id) {
-        user_id = $(id).data('id')
-        Swal.fire({
-                title: 'Are you sure?',
-                text: "Do you really want to reset user activation and send the user a link to activate the account?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!'
-                }).then((result) => {
-                if (result.value) {
-
-                    $.ajax({
-                        url: '/admin/activation-inform',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "post",
-                        data: { content_id: user_id },
-                        success: function(data) {
-                            if(data.status == 1){
-                                //toastr.info(data.message);
-
-                                Swal.fire(
-                                    'Information!',
-                                    data.message,
-                                    'success'
-                                )
-
-                                // $.toast({
-                                //     heading: 'Information',
-                                //     text: data.message,
-                                //     position: 'top-right',    // Change it to false to disable loader
-                                //     bgColor: '#0da825',
-                                //     textColor: 'white'// To change the background
-                                // })
-                            }
-                        }
-                    });
-
-                }
-        })
-
-
-
-
-	}
-
 
 
     $( document ).ready(function() {
@@ -1555,17 +1454,8 @@ $(document).on('click', '.ticket-card', function () {
             $('.custom-file-label').text(filename)
         });
 
-        $("body").on("click", '.email_user_status', function () {
-
-	        filterScopeUserEmailStatus($(this));
-	    });
-
 	    $("body").on("click", '.email_user_change_password', function () {
 	        filterScopeUserChangePassword($(this));
-	    });
-
-	    $("body").on("click", '.email_user_activation_link', function () {
-	        filterScopeUserActivationLink($(this));
 	    });
 
         $( ".update_exp" ).on( "click", function() {

@@ -367,7 +367,6 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
 
     //Notification Messages
-    Route::post('status-inform', ['as' => 'student.status.inform', 'uses' => 'Dashboard\StudentController@statusInform']);
     Route::post('password-inform', ['as' => 'student.password.inform', 'uses' => 'Dashboard\StudentController@passwordInform']);
     Route::post('activation-inform', ['as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform']);
 
@@ -537,8 +536,6 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
-Route::post('/complete-registration', 'Theme\CartController@completeRegistration')->name('registration.code_event');
-Route::post('/complete-registration-validation', 'Theme\CartController@validation');
 Route::post('/free-event-cart/remove', 'Theme\CartController@dpremove');
 
 Route::post('/card/store_from_payment', 'Theme\CardController@store_from_payment');
@@ -560,15 +557,6 @@ Route::post('/createSepa', 'Theme\CartController@createSepa');
 Route::post('/createSepaSubscription', 'Theme\SubscriptionController@createSepa');
 
 // END SEPA
-
-Route::group(['prefix' => 'info'], function () {
-    Route::get('order_error', [
-        'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError',
-    ]);
-    /*Route::get('order_success', [
-       'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
-    ]);*/
-});
 
 Route::get('order-success', [
     'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess',
@@ -634,7 +622,6 @@ Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount
         Route::get('/share-twitter', 'Theme\StudentController@parseTwitterToken');
 
         Route::get('/subscription/{event}/{plan}', 'Theme\SubscriptionController@index');
-        //Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
         Route::get('/subscription/checkout/{event}/{plan}', 'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
 
         Route::post('/subscription/store/{event}/{plan}', 'Theme\SubscriptionController@store')->name('subscription.store');
@@ -664,7 +651,6 @@ Route::group(['middleware' => ['web']], function () {
     //Authentication
     Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
     Route::post('studentlogin', 'Auth\LoginController@studentauth');
-    Route::post('kcregister', 'Auth\RegisterController@kcRegister');
     Route::get('/logout', ['uses' => 'Theme\StudentController@logout']);
     Route::get('/logmeout', 'Theme\StudentController@logout');
 
@@ -751,7 +737,6 @@ Route::get('/sendReminderAfterExpirationSubscription', 'Dashboard\CronjobsContro
 Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
 Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind');
 Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');
-Route::get('/deree-notification', 'Dashboard\CronjobsController@dereeIDNotification');
 
 Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
 Route::get('/abanoded/userSecond', 'Dashboard\CronjobsController@remindAbandonedUserSecond');

@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendMailchimpMail;
+use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -33,7 +33,7 @@ class InClassReminder extends Notification
      */
     public function via($notifiable)
     {
-        return SendMailchimpMail::class;
+        return SendBrevoMail::class;
     }
 
     /**
@@ -42,14 +42,17 @@ class InClassReminder extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMailchimp($notifiable)
+    public function toBrevo($notifiable)
     {
-        SendEmail::dispatch('InClassReminder', $this->user->toArray(), 'Knowcrunch - Welcome ' . $this->data['firstname'] . '. Reminder about your course', [
+        $subject = 'Knowcrunch - Welcome ' . $this->data['firstname'] . '. Reminder about your course';
+        SendEmail::dispatch('InClassReminder', $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
             'LINK'=>$this->data['slug'],
             'DATE'=>$this->data['first_lesson_date'] . ' ' . $this->data['first_lesson_time'],
-            'LOCATION'=>$this->data['venue'] . ' ' . $this->data['address'],
+            'DURATION'=>$this->data['duration'],
+            'LOCATION'=>$this->data['venue'],
+            'ADDRESS'=>$this->data['address'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }
