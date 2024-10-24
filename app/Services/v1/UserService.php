@@ -6,6 +6,8 @@ namespace App\Services\v1;
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\ChunkReadFilter;
+use App\Model\Delivery;
+use App\Model\EventUser;
 use App\Model\Option;
 use App\Model\User;
 use Carbon\Carbon;
@@ -22,7 +24,30 @@ class UserService
         //TODO event_id filter
         return User::query()
             ->with($this->getRelations())
-            ->when(array_key_exists('date_from', $data), function ($q) use ($data) {
+            ->when(array_key_exists('event_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->where('events.id', $data['event_id']);
+                });
+            })
+            ->when(array_key_exists('delivery_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->whereHas('delivery', function ($q) use ($data) {
+                        $q->where('deliveries.id', $data['delivery_id']);
+                    });
+                });
+            })
+            ->when(array_key_exists('coupon_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->whereHas('coupons', function ($q) use ($data) {
+                        $q->where('coupons.id', $data['coupon_id']);
+                    });
+                });
+            })
+            ->when(array_key_exists('profile_status', $data), function ($q) use ($data) {
+                $q->where('users.profile_status', $data['profile_status']);
+            })->when(array_key_exists('account_status', $data), function ($q) use ($data) {
+                $q->where('users.account_status', $data['account_status']);
+            })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
                 $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
             })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
                 $q->where('users.created_at', '<=', Carbon::parse($data['date_to']));
@@ -56,24 +81,9 @@ class UserService
         }
         $user->save();
 
-        if (array_key_exists('roles', $data)) {
-            $roles = array_map(function ($item) {
-                return $item['id'];
-            }, $data['roles']);
-            $user->roles()->sync($roles);
-        }
-        if (array_key_exists('skills', $data)) {
-            $skills = array_map(function ($item) {
-                return $item['id'];
-            }, $data['skills']);
-            $user->skills()->sync($skills);
-        }
-        if (array_key_exists('tags', $data)) {
-            $tags = array_map(function ($item) {
-                return $item['id'];
-            }, $data['tags']);
-            $user->tags()->sync($tags);
-        }
+        $user->roles()->sync($data['roles']);
+        $user->skills()->sync($data['skills']);
+        $user->tags()->sync($data['tags']);
 
         $user->load($this->getRelations());
 
@@ -95,24 +105,9 @@ class UserService
 
         $user->save();
 
-        if (array_key_exists('roles', $data)) {
-            $roles = array_map(function ($item) {
-                return $item['id'];
-            }, $data['roles']);
-            $user->roles()->sync($roles);
-        }
-        if (array_key_exists('skills', $data)) {
-            $skills = array_map(function ($item) {
-                return $item['id'];
-            }, $data['skills']);
-            $user->skills()->sync($skills);
-        }
-        if (array_key_exists('tags', $data)) {
-            $tags = array_map(function ($item) {
-                return $item['id'];
-            }, $data['tags']);
-            $user->tags()->sync($tags);
-        }
+        $user->roles()->sync($data['roles']);
+        $user->skills()->sync($data['skills']);
+        $user->tags()->sync($data['tags']);
 
         $user->load($this->getRelations());
 
@@ -122,21 +117,23 @@ class UserService
     public function userCounts(): array
     {
         return [
-            'admins'      => User::query()->whereHas('roles', function ($q) {
+            'admins'                => User::query()->whereHas('roles', function ($q) {
                 $q->whereIn('role_users.role_id', [RoleEnum::Admin->value, RoleEnum::SuperAdmin->value]);
             })->count(),
-            'managers'    => User::query()->whereHas('roles', function ($q) {
+            'managers'              => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::Manager->value);
             })->count(),
-            'editors'     => User::query()->whereHas('roles', function ($q) {
+            'editors'               => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::Author->value);
             })->count(),
-            'instructors' => User::query()->whereHas('roles', function ($q) {
-                $q->where('role_users.role_id', RoleEnum::Member->value);
+            'instructors'           => User::query()->whereHas('roles', function ($q) {
+                $q->where('role_users.role_id', RoleEnum::Collaborator->value);
             })->count(),
-            'students'    => User::query()->whereHas('roles', function ($q) {
+            'students'              => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::KnowCrunchStudent->value);
             })->count(),
+            'active_students'       => $this->getActiveStudents(),
+            'instructors_by_course' => $this->getInstructorsByCourse(),
         ];
     }
 
@@ -372,5 +369,61 @@ class UserService
             $user->roles()->sync([RoleEnum::KnowCrunchStudent->value], false);
             $this->createKCIdForUser($user);
         }
+    }
+
+    private function getActiveStudents(): array
+    {
+        $eLearning = EventUser::query()
+            ->whereDate('expiration', '>', Carbon::now())
+            ->where(function ($q) {
+                $q->whereIn('comment', [' ', ''])
+                    ->orWhere('comment', null);
+            })
+            ->count();
+
+        $inClass = EventUser::query()
+            ->whereDate('expiration', '>', Carbon::now())
+            ->where('comment', 'like', '%enroll from%')
+            ->count();
+
+        return [
+            'active_students' => $eLearning + $inClass,
+            'e_learning'      => $eLearning,
+            'in_class'        => $inClass,
+        ];
+    }
+
+    private function getInstructorsByCourse()
+    {
+        $classroomInstructors = User::query()->whereHas('roles', function ($q) {
+            $q->where('role_users.role_id', RoleEnum::Member->value);
+        })->whereHas('events', function ($q) {
+            $q->whereHas('delivery', function ($q) {
+                $q->where('deliveries.id', Delivery::where('delivery_type', 'classroom')->first()->id);
+            });
+        })->count();
+
+        $videoInstructors = User::query()->whereHas('roles', function ($q) {
+            $q->where('role_users.role_id', RoleEnum::Collaborator->value);
+        })->whereHas('events', function ($q) {
+            $q->whereHas('delivery', function ($q) {
+                $q->where('deliveries.id', Delivery::where('delivery_type', 'video')->first()->id);
+            });
+        })->count();
+
+        $virtualClassInstructors = User::query()->whereHas('roles', function ($q) {
+            $q->where('role_users.role_id', RoleEnum::Collaborator->value);
+        })->whereHas('events', function ($q) {
+            $q->whereHas('delivery', function ($q) {
+                $q->where('deliveries.id', Delivery::where('delivery_type', 'virtual_class')->first()->id);
+            });
+        })->count();
+
+        return [
+            'all'     => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
+            'classroom'     => $classroomInstructors,
+            'video'         => $videoInstructors,
+            'virtual_class' => $virtualClassInstructors,
+        ];
     }
 }
