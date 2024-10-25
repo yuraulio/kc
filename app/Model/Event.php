@@ -465,6 +465,11 @@ class Event extends Model
             ->groupBy('instructor_id');
     }
 
+    public function userInstructors(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'event_topic_lesson_instructor', 'user_id');
+    }
+
     public function summary1(): BelongsToMany
     {
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')

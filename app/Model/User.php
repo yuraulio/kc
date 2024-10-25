@@ -64,7 +64,7 @@ class User extends Authenticatable
         'invoice_details',
         'oexams',
         'country_code',
-        'stripe_ids',
+        'stripe_id',
         'social_links',
         'biography',
         'is_employee',
@@ -241,6 +241,11 @@ class User extends Authenticatable
         if ($this->profile_image && $this->profile_image->parent) {
             return $this->profile_image->parent;
         }
+    }
+
+    public function instructorEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor', 'user_id', 'event_id');
     }
 
     public function events()

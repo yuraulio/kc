@@ -40,6 +40,7 @@ class UserResource extends JsonResource
             'address'             => $this->address,
             'address_num'         => $this->address_num,
             'postcode'            => $this->postcode,
+            'stripe_id'           => $this->stripe_id,
             'is_employee'         => $this->is_employee,
             'is_freelancer'       => $this->is_freelancer,
             'will_work_remote'    => $this->will_work_remote,
@@ -58,6 +59,7 @@ class UserResource extends JsonResource
             'invoice_details'     => $this->invoice_details,
             'activities'          => $this->activities,
             'image'               => $this->image,
+            'instructor'          => $this->instructor()->first(),
             'paymentMethods'      => $paymentMethods,
         ];
     }

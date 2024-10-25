@@ -396,31 +396,31 @@ class UserService
     private function getInstructorsByCourse()
     {
         $classroomInstructors = User::query()->whereHas('roles', function ($q) {
-            $q->where('role_users.role_id', RoleEnum::Member->value);
-        })->whereHas('events', function ($q) {
+            $q->where('roles.name', 'Instructor');
+        })->whereHas('instructorEvents', function ($q) {
             $q->whereHas('delivery', function ($q) {
                 $q->where('deliveries.id', Delivery::where('delivery_type', 'classroom')->first()->id);
             });
         })->count();
 
         $videoInstructors = User::query()->whereHas('roles', function ($q) {
-            $q->where('role_users.role_id', RoleEnum::Collaborator->value);
-        })->whereHas('events', function ($q) {
+            $q->where('roles.name', 'Instructor');
+        })->whereHas('instructorEvents', function ($q) {
             $q->whereHas('delivery', function ($q) {
                 $q->where('deliveries.id', Delivery::where('delivery_type', 'video')->first()->id);
             });
         })->count();
 
         $virtualClassInstructors = User::query()->whereHas('roles', function ($q) {
-            $q->where('role_users.role_id', RoleEnum::Collaborator->value);
-        })->whereHas('events', function ($q) {
+            $q->where('roles.name', 'Instructor');
+        })->whereHas('instructorEvents', function ($q) {
             $q->whereHas('delivery', function ($q) {
                 $q->where('deliveries.id', Delivery::where('delivery_type', 'virtual_class')->first()->id);
             });
         })->count();
 
         return [
-            'all'     => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
+            'all'           => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
             'classroom'     => $classroomInstructors,
             'video'         => $videoInstructors,
             'virtual_class' => $virtualClassInstructors,
