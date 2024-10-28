@@ -44,6 +44,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -71,7 +72,7 @@ class UserController extends Controller
             $query->search($search);
         }
 
-        $users = $query->paginate((int) $request->query->get('per_page', 50))
+        $users = $query->paginate((int)$request->query->get('per_page', 50))
             ->appends($request->query->all());
 
         $users->through(function ($user) {
@@ -130,7 +131,7 @@ class UserController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'code' => 701,
+                    'code'    => 701,
                     'message' => 'Your SMS code has expired! ',
                 ]);
             }
@@ -144,13 +145,13 @@ class UserController extends Controller
 
                 return response()->json([
                     'success' => true,
-                    'code' => 200,
+                    'code'    => 200,
                     'message' => 'SMS code is correct',
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'code' => 702,
+                    'code'    => 702,
                     'message' => 'SMS code is not correct',
                 ]);
             }
@@ -158,7 +159,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => false,
-            'code' => 700,
+            'code'    => 700,
             'message' => 'SMS verification is required',
         ]);
     }
@@ -229,7 +230,7 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => false,
-                'code' => 700,
+                'code'    => 700,
                 'message' => 'SMS verification is required',
             ]);
         }
@@ -270,7 +271,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $data,
+            'data'    => $data,
         ]);
     }
 
@@ -391,14 +392,14 @@ class UserController extends Controller
                                                 if ($folderIsSelected) {
                                                     $subfiles[] = $file_bonus['filename'];
 
-                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][] = ['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                    $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][] = ['fid' => $file_bonus['parent'], 'foldername' => $subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                                 } else {
                                                     if (isset($selectedFiles)) {
                                                         foreach ($selectedFiles['selectedFolders'] as $key10 => $selectedFile) {
                                                             if ($file_bonus['dirname'] == $selectedFile) {
                                                                 $subfiles[] = $file_bonus['filename'];
 
-                                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][] = ['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][] = ['fid' => $file_bonus['parent'], 'foldername' => $subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                                             }
                                                         }
                                                     }
@@ -414,12 +415,12 @@ class UserController extends Controller
                             if ($folder['id'] == $file['fid']) {
                                 //dd($file);
                                 if ($folderIsSelected) {
-                                    $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
+                                    $data1[$folder['id']]['files'][] = ['fid' => $file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
                                 } else {
                                     if (isset($selectedFiles)) {
                                         foreach ($selectedFiles['selectedFolders'] as $key10 => $selectedFile) {
                                             if ($file['dirname'] == $selectedFile) {
-                                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
+                                                $data1[$folder['id']]['files'][] = ['fid' => $file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
                                             }
                                         }
                                     }
@@ -453,12 +454,12 @@ class UserController extends Controller
                                         foreach ($files_bonus as $file_bonus) {
                                             if (isset($file_bonus['parent']) && $file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'], $subfiles)) {
                                                 if ($folderIsSelected) {
-                                                    $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                    $data1[$folder_bonus['parent']]['bonus'][] = ['fid' => $file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                                 } else {
                                                     if (isset($selectedFiles)) {
                                                         foreach ($selectedFiles['selectedFolders'] as $key10 => $selectedFile) {
                                                             if ($file_bonus['dirname'] == $selectedFile) {
-                                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid' => $file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                                             }
                                                         }
                                                     }
@@ -494,15 +495,19 @@ class UserController extends Controller
                 $newSubfolders = [];
                 foreach ($file['subfolders'] as $subf) {
                     $newSubfolders[] = $subf;
-                //    //$newSubfolders['foldername'] = $key;
+                    //    //$newSubfolders['foldername'] = $key;
                 }
 
                 if ($event->is_inclass_course()) {
-                    $test[$keyFile] = ['id'=>$file['id'], 'name'=>$file['foldername'], 'dirname'=>$file['dirname'], 'foldername'=>$file['foldername'], 'files'=>array_merge($file['files'], $file['bonus']), 'bonus'=>$file['bonus'],
-                        'subfolders'=>$newSubfolders];
+                    $test[$keyFile] = [
+                        'id'         => $file['id'], 'name' => $file['foldername'], 'dirname' => $file['dirname'], 'foldername' => $file['foldername'], 'files' => array_merge($file['files'], $file['bonus']), 'bonus' => $file['bonus'],
+                        'subfolders' => $newSubfolders,
+                    ];
                 } else {
-                    $test[] = ['id'=>$file['id'], 'dirname'=>$file['dirname'], 'foldername'=>$file['foldername'], 'files'=>$file['files'], 'bonus'=>$file['bonus'],
-                        'subfolders'=>$newSubfolders];
+                    $test[] = [
+                        'id'         => $file['id'], 'dirname' => $file['dirname'], 'foldername' => $file['foldername'], 'files' => $file['files'], 'bonus' => $file['bonus'],
+                        'subfolders' => $newSubfolders,
+                    ];
                 }
             }
 
@@ -571,7 +576,7 @@ class UserController extends Controller
             }
             // if inclass, parse dropbox files without attach by topic
             $newArr['files']['folders'] = $foldersNew;
-        // if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
+            // if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
             //     foreach($foldersNew as $key1 => $folderNew){
 
             //         $eventFiles = [];
@@ -587,9 +592,9 @@ class UserController extends Controller
 
             //         $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
             //     }
-        // }else{
-        //   $newArr['files']['folders'] = [];
-        // }
+            // }else{
+            //   $newArr['files']['folders'] = [];
+            // }
         } elseif ($event->is_elearning_course()) {
             $newArr['is_elearning'] = true;
             $isElearning = true;
@@ -598,7 +603,7 @@ class UserController extends Controller
             $newArr['videos_seen'] = $event->video_seen($user);
             // Statistics
             $statistics = ($statistics = $user->statistic()->wherePivot('event_id', $event['id'])->first()) ?
-                        $statistics->toArray() : ['pivot' => [], 'videos' => ''];
+                $statistics->toArray() : ['pivot' => [], 'videos' => ''];
 
             //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
@@ -771,12 +776,12 @@ class UserController extends Controller
                     //$newArr['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
 
                     $newArr['calendar'][] = [
-                        'time' => $date_lesson ?? '',
-                        'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
-                        'title' =>  htmlspecialchars_decode($lesson['title'], ENT_QUOTES),
-                        'room' => $lesson['pivot']['room'],
+                        'time'             => $date_lesson ?? '',
+                        'date_time'        => date_format(date_create($date_lesson), 'd/m/Y'),
+                        'title'            => htmlspecialchars_decode($lesson['title'], ENT_QUOTES),
+                        'room'             => $lesson['pivot']['room'],
                         'instructor_image' => $inst['media'],
-                        'instructor_name' => $inst['name'],
+                        'instructor_name'  => $inst['name'],
 
                     ];
 
@@ -789,7 +794,7 @@ class UserController extends Controller
         }
 
         $newArr['topics'] = [];
-        foreach ($topics as $key11 =>  $topic) {
+        foreach ($topics as $key11 => $topic) {
             //dd($topic);
 
             $arr['topic_content'] = [];
@@ -851,11 +856,11 @@ class UserController extends Controller
             }
 
             $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first() ?
-             $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
+                $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
         }
 
         $eventSubs = $user['eventSubscriptions']->whereNotIn('id', $eventSubscriptions)->filter(function ($item) {
-            return  $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
+            return $item->stripe_status != 'cancelled' && $item->stripe_status != 'canceled';
         });
 
         foreach ($eventSubs as $key => $subEvent) {
@@ -914,7 +919,8 @@ class UserController extends Controller
     /**
      * Display the User.
      *
-     * @param  User  $user
+     * @param User $user
+     *
      * @return JsonResponse
      */
     public function show(User $user): JsonResponse
@@ -931,6 +937,7 @@ class UserController extends Controller
      * Store a new User.
      *
      * @param UserRequest $request
+     *
      * @return JsonResponse
      */
     public function store(UserRequest $request): JsonResponse
@@ -939,11 +946,11 @@ class UserController extends Controller
             $request
                 ->merge([
                     'password' => Hash::make($request->get('password')),
-                    'consent' => json_encode([
-                        'ip' => $request->ip(),
-                        'date' => Carbon::now(),
+                    'consent'  => json_encode([
+                        'ip'        => $request->ip(),
+                        'date'      => Carbon::now(),
                         'firstname' => $request->get('firstname'),
-                        'lastname' => $request->get('lastname'),
+                        'lastname'  => $request->get('lastname'),
                     ]),
                 ])
                 ->all()
@@ -980,8 +987,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function updateProfile(Request $request)
@@ -1013,17 +1021,17 @@ class UserController extends Controller
             if (!$user1->image) {
                 $imgProfileEmpty = Media::create([
                     'original_name' => '',
-                    'name' => '',
-                    'ext' => '',
-                    'file_info' => '',
-                    'size' => '',
-                    'height' => '',
-                    'width' => '',
-                    'dpi' => '',
+                    'name'          => '',
+                    'ext'           => '',
+                    'file_info'     => '',
+                    'size'          => '',
+                    'height'        => '',
+                    'width'         => '',
+                    'dpi'           => '',
                     // 'mediable_id' => '',
                     // 'mediable_type' => '',
-                    'details' => '',
-                    'path' => '',
+                    'details'       => '',
+                    'path'          => '',
                 ]);
                 $user1->image()->save($imgProfileEmpty);
                 $user1->refresh();
@@ -1044,7 +1052,7 @@ class UserController extends Controller
 
         $isUpdateUser = User::where('id', $user1->id)->update(
             $request->merge([
-                'password' => Hash::make($request->get('password')),
+                'password'        => Hash::make($request->get('password')),
                 'receipt_details' => json_encode($receiptDetails),
             ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password'])
         );
@@ -1064,13 +1072,13 @@ class UserController extends Controller
         if ($isUpdateUser == 1) {
             return response()->json([
                 'message' => 'Update profile successfully',
-                'data' => $updated_user,
+                'data'    => $updated_user,
                 'billing' => $receiptDetails,
             ]);
         } else {
             return response()->json([
                 'message' => 'Update profile failed',
-                'data' => $updated_user,
+                'data'    => $updated_user,
                 'billing' => $receiptDetails,
             ]);
         }
@@ -1082,7 +1090,7 @@ class UserController extends Controller
         $authorizationToken = $setting->value;
 
         return response()->json([
-            'success' => true,
+            'success'      => true,
             'dropBoxToken' => $authorizationToken,
         ]);
     }
@@ -1090,8 +1098,9 @@ class UserController extends Controller
     /**
      * Update the User in storage.
      *
-     * @param  Request  $request
-     * @param  User  $user
+     * @param Request $request
+     * @param User    $user
+     *
      * @return JsonResponse
      */
     public function update(Request $request, User $user): JsonResponse
@@ -1104,8 +1113,9 @@ class UserController extends Controller
     /**
      * Updates the status of the user.
      *
-     * @param User $user
+     * @param User    $user
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function updateStatus(User $user, Request $request): JsonResponse
@@ -1117,13 +1127,13 @@ class UserController extends Controller
         $user->load('statusAccount');
 
         if ($user->statusAccount) {
-            $user->statusAccount->completed = (bool) $request->get('status');
+            $user->statusAccount->completed = (bool)$request->get('status');
 
             $user->statusAccount->save();
         } else {
             $activation = new Activation();
             $activation->user_id = $user->id;
-            $activation->completed = (bool) $request->get('status');
+            $activation->completed = (bool)$request->get('status');
 
             $activation->save();
         }
@@ -1179,7 +1189,7 @@ class UserController extends Controller
 
         return new JsonResponse([
             'success' => true,
-            'data' => $user,
+            'data'    => $user,
             'billing' => $billing,
         ]);
     }
@@ -1190,6 +1200,7 @@ class UserController extends Controller
      * It implements the Login As feature.
      *
      * @param User $user
+     *
      * @return JsonResponse
      */
     public function impersonate(User $user): JsonResponse
@@ -1207,6 +1218,7 @@ class UserController extends Controller
      * Delete the user.
      *
      * @param User $user
+     *
      * @return JsonResponse
      */
     public function destroy(User $user): JsonResponse
@@ -1220,6 +1232,7 @@ class UserController extends Controller
      * Delete multiple users.
      *
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function batchDestroy(Request $request): JsonResponse
@@ -1252,22 +1265,70 @@ class UserController extends Controller
 
     public function export(Request $request): Response|BinaryFileResponse
     {
-        $queryStringDirector = new QueryStringDirector($request);
-        $query = User::query();
+        $data = $request->all();
+//        $queryStringDirector = new QueryStringDirector($request);
+        $query = User::query()
 
-        if ($search = $queryStringDirector->getSearch()) {
-            $query->search($search);
-        }
+//        if ($search = $queryStringDirector->getSearch()) {
+//            $query->search($search);
+//        }
+//
+//        if ($filters = $queryStringDirector->getFilters()) {
+//            foreach ($filters as $filter) {
+//                $query->filter($filter);
+//            }
+//        }
+//
+//        if ($sort = $queryStringDirector->getSort()) {
+//            $query->sort($sort);
+//        }
 
-        if ($filters = $queryStringDirector->getFilters()) {
-            foreach ($filters as $filter) {
-                $query->filter($filter);
-            }
-        }
-
-        if ($sort = $queryStringDirector->getSort()) {
-            $query->sort($sort);
-        }
+            ->when(array_key_exists('event_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->where('events.id', $data['event_id']);
+                });
+            })
+            ->when(array_key_exists('delivery_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->whereHas('delivery', function ($q) use ($data) {
+                        $q->where('deliveries.id', $data['delivery_id']);
+                    });
+                });
+            })
+            ->when(array_key_exists('coupon_id', $data), function ($q) use ($data) {
+                $q->whereHas('events', function ($q) use ($data) {
+                    $q->whereHas('coupons', function ($q) use ($data) {
+                        $q->where('coupons.id', $data['coupon_id']);
+                    });
+                });
+            })
+            ->when(array_key_exists('profile_status', $data), function ($q) use ($data) {
+                $q->where('users.profile_status', $data['profile_status']);
+            })->when(array_key_exists('account_status', $data), function ($q) use ($data) {
+                $q->where('users.account_status', $data['account_status']);
+            })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
+                $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
+            })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
+                $q->where('users.created_at', '<=', Carbon::parse($data['date_to']));
+            })->when(array_key_exists('roles', $data), function ($q) use ($data) {
+                $q->whereHas('roles', function ($q) use ($data) {
+                    $q->whereIn('roles.id', array_map('intval', $data['roles']));
+                });
+            })->when(array_key_exists('not_equal_roles', $data), function ($q) use ($data) {
+                $q->whereHas('roles', function ($q) use ($data) {
+                    $q->whereNotIn('roles.id', array_map('intval', $data['not_equal_roles']));
+                });
+            })->when(array_key_exists('tags', $data), function ($q) use ($data) {
+                $q->whereHas('tags', function ($q) use ($data) {
+                    $q->whereIn('tags.id', array_map('intval', $data['tags']));
+                });
+            })->when(array_key_exists('query', $data), function ($q) use ($data) {
+                $q->where(function ($q) use ($data) {
+                    $q->where('users.firstname', 'like', '%' . $data['query'] . '%')
+                        ->orWhere('users.lastname', 'like', '%' . $data['query'] . '%')
+                        ->orWhere('users.email', 'like', '%' . $data['query'] . '%');
+                });
+            })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc');
 
         $query->with(['statusAccount', 'role']);
 
