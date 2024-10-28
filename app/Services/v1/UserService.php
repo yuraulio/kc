@@ -108,9 +108,15 @@ class UserService
 
         $user->save();
 
-        $user->roles()->sync($data['roles']);
-        $user->skills()->sync($data['skills']);
-        $user->tags()->sync($data['tags']);
+        if (array_key_exists('roles', $data)) {
+            $user->roles()->sync($data['roles']);
+        }
+        if (array_key_exists('skills', $data)) {
+            $user->skills()->sync($data['skills']);
+        }
+        if (array_key_exists('tags', $data)) {
+            $user->tags()->sync($data['tags']);
+        }
 
         $user->load($this->getRelations());
 

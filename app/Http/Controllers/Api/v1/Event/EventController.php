@@ -22,6 +22,13 @@ class EventController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Event::query(), $request);
 
+        $userId = $request->userId;
+        $query = $query->when($userId, function ($q) use ($userId) {
+            $q->whereHas('users', function ($q) use ($userId) {
+                $q->where('users.id', $userId);
+            });
+        });
+
         return new JsonResponse(
             $this->paginateByRequestParameters($query, $request)
         );

@@ -79,10 +79,9 @@ class UserController extends Controller
         }
 
         $token = $user->createToken('LaravelAuthApp');
-        Auth::login($user);
 
         return new JsonResponse([
-            'link'   => env('APP_URL') . '/myaccount',
+            'link'   => config('app.url') . '/myaccount',
             'token'  => $token->accessToken,
             'expire' => $token->token->expires_at->diffForHumans(),
             'sms'    => encrypt($user->id . '-' . date('H:i:s')),
