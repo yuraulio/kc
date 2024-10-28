@@ -469,7 +469,6 @@ class CronjobsController extends Controller
     public function remindAbandonedUser()
     {
         $abandoneds = CartCache::where('send_email', 0)->get();
-
         $nowTime = now()->subMinutes(60);
         if (isBlackFriday() || isCyberMonday()) {
             $nowTime = now()->subMinutes(120);
@@ -497,13 +496,14 @@ class CronjobsController extends Controller
             $data['emailEvent'] = 'AbandonedCart';
             if(isBlackFriday()) {
                 $data['emailEvent'] = 'AbandonedCartBF1';
+                $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
             } else if(isCyberMonday()) {
                 $data['emailEvent'] = 'AbandonedCartCM1';
+                $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
             }
             $data['eventId'] = $event->id;
             $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
             $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
-
             if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
                 $user->notify(new AbandonedCart($data, $user));
                 event(new EmailSent($user->email, 'AbandonedCart'));
@@ -553,8 +553,10 @@ class CronjobsController extends Controller
                 $data['eventTitle'] = $event->title;
                 if(isBlackFriday()) {
                     $data['emailEvent'] = 'AbandonedCartBF2';
+                    $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
                 } else if(isCyberMonday()) {
                     $data['emailEvent'] = 'AbandonedCartCM2';
+                    $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
                 }
                 $data['eventId'] = $event->id;
                 $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
