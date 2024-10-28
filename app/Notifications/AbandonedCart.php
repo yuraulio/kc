@@ -46,7 +46,7 @@ class AbandonedCart extends Notification
     public function toBrevo($notifiable)
     {
         $subject = $this->data['firstName'] . ' - do you need help with your enrollment';
-        SendEmail::dispatch('AbandonedCart', $this->user->toArray(), null, [
+        SendEmail::dispatch($this->data['emailEvent'], $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'FAQ_LINK'=>$this->data['faqs'],

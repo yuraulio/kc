@@ -1467,6 +1467,51 @@ if (!function_exists('getLessonCategoryByTopic')) {
     }
 }
 
+if (!function_exists('isBlackFriday')) {
+    function isBlackFriday() {
+        // Get today's date
+        $today = new DateTime();
+        
+        // Get the year of today's date
+        $year = $today->format('Y');
+        
+        // Create a DateTime object for the first day of November in the current year
+        $novemberFirst = new DateTime("first day of November $year");
+        
+        // Find the fourth Friday of November
+        $fourthFriday = clone $novemberFirst;
+        $fourthFriday->modify('fourth thursday of november');
+        $fourthFriday->modify('+1 day');
+        
+        // Check if today is the fourth Friday of November (Black Friday)
+        return $today->format('Y-m-d') === $fourthFriday->format('Y-m-d');
+    }
+}
+
+if (!function_exists('isCyberMonday')) {
+    function isCyberMonday() {
+        // Get today's date
+        $today = new DateTime();
+        
+        // Get the year of today's date
+        $year = $today->format('Y');
+
+        // Create a DateTime object for the first day of November in the current year
+        $novemberFirst = new DateTime("first day of November $year");
+
+        // Find the fourth Friday of November (Black Friday)
+        $blackFriday = clone $novemberFirst;
+        $blackFriday->modify('fourth thursday of november');
+
+        // Clone Black Friday date and modify it to find the following Monday (Cyber Monday)
+        $cyberMonday = clone $blackFriday;
+        $cyberMonday->modify('next monday');
+
+        // Check if today is Cyber Monday
+        return $today->format('Y-m-d') === $cyberMonday->format('Y-m-d');
+    }
+}
+
 if (!function_exists('escapeLike')) {
     function escapeLike($val)
     {

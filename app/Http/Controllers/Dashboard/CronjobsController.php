@@ -470,12 +470,16 @@ class CronjobsController extends Controller
     {
         $abandoneds = CartCache::where('send_email', 0)->get();
 
-        $nowTime = now()->subMinutes(30);
+        $nowTime = now()->subMinutes(60);
+        if (isBlackFriday() || isCyberMonday()) {
+            $nowTime = now()->subMinutes(120);
+        }
+
         foreach ($abandoneds as $abandoned) {
             if ($abandoned->created_at >= $nowTime) {
                 continue;
             }
-
+            
             if (!$user = $abandoned->user) {
                 continue;
             }
@@ -490,6 +494,12 @@ class CronjobsController extends Controller
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
+            $data['emailEvent'] = 'AbandonedCart';
+            if(isBlackFriday()) {
+                $data['emailEvent'] = 'AbandonedCartBF1';
+            } else if(isCyberMonday()) {
+                $data['emailEvent'] = 'AbandonedCartCM1';
+            }
             $data['eventId'] = $event->id;
             $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
             $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
@@ -515,15 +525,15 @@ class CronjobsController extends Controller
         $now_date = now();
         $now_date = date_format($now_date, 'Y-m-d');
 
-        if ((strtotime(config('services.promotions.BLACKFRIDAY')) == strtotime($now_date)) || (strtotime(config('services.promotions.CYBERMONDAY')) == strtotime($now_date))) {
+        if (isBlackFriday() || isCyberMonday()) {
             $abandoneds = CartCache::where('send_email', '=', 1)->get();
 
             foreach ($abandoneds as $abandoned) {
-                if ($abandoned->created_at <= now()->subMinutes(120)) {
+                if ($abandoned->created_at <= now()->subMinutes(240)) {
                     continue;
                 }
 
-                if ($abandoned->updated_at >= now()->subMinutes(60)) {
+                if ($abandoned->updated_at >= now()->subMinutes(120)) {
                     continue;
                 }
 
@@ -541,6 +551,11 @@ class CronjobsController extends Controller
 
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
+                if(isBlackFriday()) {
+                    $data['emailEvent'] = 'AbandonedCartBF2';
+                } else if(isCyberMonday()) {
+                    $data['emailEvent'] = 'AbandonedCartCM2';
+                }
                 $data['eventId'] = $event->id;
                 $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
                 $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
