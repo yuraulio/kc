@@ -33,7 +33,6 @@
         "cbschuld/browser.php": "^1.9",
         "coderjerk/bird-elephant": "^0.6.1",
         "codexshaper/laravel-menu-builder": "dev-master",
-        "mailchimp/transactional": "^1.0",
         "doctrine/dbal": "^3.8",
         "dompdf/dompdf": "^2.0",
         "dymantic/laravel-instagram-feed": "^3.3",

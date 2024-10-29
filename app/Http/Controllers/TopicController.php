@@ -65,10 +65,8 @@ class TopicController extends Controller
         $unassign_topics = [];
 
         foreach ($new_topics as $key => $new_topic) {
-            //dd($new_topic);
             $found = false;
             foreach ($assign_topics as $key1 => $assign_topic) {
-                //dd($assign_topic);
                 if ($new_topic['id'] == $assign_topic['id']) {
                     $found = true;
                 }
@@ -94,7 +92,7 @@ class TopicController extends Controller
         } else {
             $status = 0;
         }
-        $request->request->add(['status' => $status]);
+        $request->request->add(['status' => $status, 'email_template'=>is_array($request->email_template) ? implode(',', $request->email_template) : $request->email_template]);
 
         $topic = $model->create($request->all());
 
@@ -118,8 +116,6 @@ class TopicController extends Controller
             foreach ($request->topic_ids as $topic) {
                 $event->topic()->attach($topic);
             }
-        } else {
-            //dd('nothing selected');
         }
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully assign.'));
@@ -166,17 +162,18 @@ class TopicController extends Controller
         }
 
         $fromCategory = $request->fromCategory ?: $request->fromCategory;
-        $request->request->add(['status' => $status]);
+        $request->request->add(['status' => $status, 'email_template'=>is_array($request->email_template) ? implode(',', $request->email_template) : $request->email_template]);
         $topic->update($request->all());
 
         $lessons = [];
         $lessonsAttached = [];
-
-        $fromCategoryModel = Category::findOrFail($fromCategory);
-
+        try {
+            $fromCategoryModel = Category::findOrFail($fromCategory);
+        } catch(\Exception $e) {
+            $fromCategoryModel = [];
+        }
         foreach ($request->category_id as $category_id) {
             if (!in_array($category_id, $topic->category()->pluck('category_id')->toArray())) {
-                //dd('efw1');
                 $category = Category::find($category_id);
                 $priority = $category->topics()->orderBy('priority')->get();
                 $priority = isset($priority->last()['pivot']['priority']) ? $priority->last()['pivot']['priority'] + 1 : count($priority) + 1;
@@ -193,14 +190,13 @@ class TopicController extends Controller
                 }
 
                 $topic = Topic::find($topic->id);
-                foreach ($fromCategoryModel->events as $fromEvent) {
+                foreach ($fromCategoryModel['events'] as $fromEvent) {
                     dispatch(new CopyTopicFromOneCategoryToAnother($category, $fromEvent->id, $fromCategory, $topic, $lessonsAttached));
                 }
             }
-            //dd('edw2');
         }
 
-        return redirect()->route('topics.edit', [$topic->id, 'selectedCategory'=>$fromCategory])->withStatus(__('Topic successfully updated.'));
+        return redirect()->route('topics.edit', [$topic->id])->withStatus(__('Topic successfully updated.'));
     }
 
     /**

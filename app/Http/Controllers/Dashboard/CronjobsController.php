@@ -478,7 +478,7 @@ class CronjobsController extends Controller
             if ($abandoned->created_at >= $nowTime) {
                 continue;
             }
-            
+
             if (!$user = $abandoned->user) {
                 continue;
             }
@@ -494,10 +494,10 @@ class CronjobsController extends Controller
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
             $data['emailEvent'] = 'AbandonedCart';
-            if(isBlackFriday()) {
+            if (isBlackFriday()) {
                 $data['emailEvent'] = 'AbandonedCartBF1';
                 $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
-            } else if(isCyberMonday()) {
+            } elseif (isCyberMonday()) {
                 $data['emailEvent'] = 'AbandonedCartCM1';
                 $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
             }
@@ -551,10 +551,10 @@ class CronjobsController extends Controller
 
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
-                if(isBlackFriday()) {
+                if (isBlackFriday()) {
                     $data['emailEvent'] = 'AbandonedCartBF2';
                     $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
-                } else if(isCyberMonday()) {
+                } elseif (isCyberMonday()) {
                     $data['emailEvent'] = 'AbandonedCartCM2';
                     $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
                 }
@@ -1031,7 +1031,7 @@ class CronjobsController extends Controller
     {
         $date1 = date('Y-m-d', strtotime('+1 days'));
 
-        $dates = [$date1];
+        $dates = [$date1, date('Y-m-d', strtotime('+4 days'))];
 
         $events = Event::
         where('published', true)
@@ -1065,6 +1065,7 @@ class CronjobsController extends Controller
             $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';
             $data['fb_group'] = $event->fb_group;
             $data['eventTitle'] = $event->title;
+            $data['Location'] = isset($venues[0]['name']) ? $venues[0]['name'] : '';
             $data['eventId'] = $event->id;
 
             foreach ($event['topic'] as $topic) {
@@ -1077,19 +1078,47 @@ class CronjobsController extends Controller
                     continue;
                 }
 
-                $data['email_template'] = $topic->email_template;
-                foreach ($event->users as $user) {
-                    $data['firstname'] = $user->firstname;
-                    $data['subject'] = 'Knowcrunch | ' . $user->firstname . ', ';
-
-                    $user->notify(new SendTopicAutomateMail($data, $user));
-                    event(new EmailSent($user->email, 'SendTopicAutomateMail'));
-                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                $data['Date'] = (isset($topic->pivot->date)) ? $topic->pivot->date : '-';
+                if (isset($topic->pivot->time_starts)) {
+                    $timeObj = new DateTime($topic->pivot->time_starts);
+                    $data['Time'] = $timeObj->format('H:i:s');
                 }
+                $date1 = new DateTime($topic->pivot->time_starts);
+                $date2 = new DateTime('today');
 
-                foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
-                    $lesson->pivot->send_automate_mail = true;
-                    $lesson->pivot->save();
+                $interval = $date1->diff($date2);
+
+                $templates = explode(',', $topic->email_template);
+                foreach ($templates as $emailTemplate) {
+                    $data['email_template'] = $emailTemplate;
+
+                    if (strpos($data['email_template'], 'activate') !== false && $interval->days > 1) {
+                        return;
+                    }
+                    if (strpos($emailTemplate, 'instructor') === false) {
+                        foreach ($event->users as $user) {
+                            $data['firstname'] = $user->firstname;
+                            $data['lastname'] = $user->lastname;
+
+                            $user->notify(new SendTopicAutomateMail($data, $user));
+                            event(new EmailSent($user->email, 'SendTopicAutomateMail'));
+                        }
+                    } else {
+                        $instructor = Instructor::find($topic->pivot->instructor_id);
+                        $user = $instructor->user[0];
+                        $data['firstname'] = $user->firstname;
+                        $data['lastname'] = $user->lastname;
+
+                        $user->notify(new SendTopicAutomateMail($data, $user));
+                        event(new EmailSent($user->email, 'SendTopicAutomateMail'));
+                    }
+
+                    foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
+                        if ($interval->days === 1) {
+                            $lesson->pivot->send_automate_mail = true;
+                            $lesson->pivot->save();
+                        }
+                    }
                 }
             }
         }

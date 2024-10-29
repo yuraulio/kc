@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Jobs\SendEmail;
 use App\Model\User;
 use App\Notifications\SendBrevoMail;
@@ -44,23 +46,25 @@ class SendTopicAutomateMail extends Notification
      */
     public function toBrevo($notifiable)
     {
-        $subject = '';
         $emailEvent = '';
         if ($this->data['email_template'] == 'activate_social_media_account_email') {
-            $subject = 'activate your social media accounts!';
             $emailEvent = 'SendTopicAutomateMailSocialAccount';
         } elseif ($this->data['email_template'] == 'activate_advertising_account_email') {
-            $subject = 'activate your personal advertising accounts!';
             $emailEvent = 'SendTopicAutomateMailAdAccount';
         } elseif ($this->data['email_template'] == 'activate_production_content_account_email') {
-            $subject = 'activate your content production accounts!';
             $emailEvent = 'SendTopicAutomateMailContentAccount';
+        } elseif ($this->data['email_template'] == 'instructor_course_graduation_reminder_email') {
+            $emailEvent = 'InstructorCourseGraduationReminder';
+        } elseif ($this->data['email_template'] == 'instructor_course_kickoff_reminder_email') {
+            $emailEvent = 'InstructorCourseKickoffReminder';
+        } elseif ($this->data['email_template'] == 'student_course_kickoff_reminder_email') {
+            $emailEvent = 'StudentCourseKickoffReminder';
         }
-        //$this->data['subject'] . $subject
-        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
+
+        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, array_merge([
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
             'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : '0',
-        ], ['event_id'=>$this->data['eventId']]);
+        ], $this->data), ['event_id'=>$this->data['eventId']]);
     }
 }

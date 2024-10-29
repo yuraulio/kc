@@ -1447,6 +1447,9 @@ if (!function_exists('automateEmailTemplates')) {
         $emailTemplates['activate_social_media_account_email'] = 'Activate Social Media Account Email';
         $emailTemplates['activate_advertising_account_email'] = 'Activate Advertising Account Email';
         $emailTemplates['activate_content_production_account_email'] = 'Activate Content Production Account Email';
+        $emailTemplates['instructor_course_kickoff_reminder_email'] = 'Instructor course kick off reminder email';
+        $emailTemplates['instructor_course_graduation_reminder_email'] = 'Instructor course graduation reminder email';
+        $emailTemplates['student_course_kickoff_reminder_email'] = 'User course kick off reminder email';
 
         return $emailTemplates;
     }
@@ -1468,31 +1471,33 @@ if (!function_exists('getLessonCategoryByTopic')) {
 }
 
 if (!function_exists('isBlackFriday')) {
-    function isBlackFriday() {
+    function isBlackFriday()
+    {
         // Get today's date
         $today = new DateTime();
-        
+
         // Get the year of today's date
         $year = $today->format('Y');
-        
+
         // Create a DateTime object for the first day of November in the current year
         $novemberFirst = new DateTime("first day of November $year");
-        
+
         // Find the fourth Friday of November
         $fourthFriday = clone $novemberFirst;
         $fourthFriday->modify('fourth thursday of november');
         $fourthFriday->modify('+1 day');
-        
+
         // Check if today is the fourth Friday of November (Black Friday)
         return $today->format('Y-m-d') === $fourthFriday->format('Y-m-d');
     }
 }
 
 if (!function_exists('isCyberMonday')) {
-    function isCyberMonday() {
+    function isCyberMonday()
+    {
         // Get today's date
         $today = new DateTime();
-        
+
         // Get the year of today's date
         $year = $today->format('Y');
 

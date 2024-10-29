@@ -204,12 +204,12 @@
                                     {{--<h6 class="heading-small text-muted mb-4">{{ __('Topic information') }}</h6>--}}
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-email_template">{{ __('Automated Email Template') }}</label>
-                                            <select name="email_template" id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}">
+                                            <select name="email_template[]" multiple id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}">
                                                 <option value="">-</option>
 
                                                 @foreach(automateEmailTemplates() as $key => $emailTemplate)
 
-                                                    <option value="{{ $key }}" @if(old('email_template',$topic->email_template) === $key) selected @endif >{{ $emailTemplate }}</option>
+                                                    <option value="{{ $key }}" @if(strpos(old('email_template',$topic->email_template), $key) !== FALSE ) selected @endif >{{ $emailTemplate }}</option>
 
                                                 @endforeach
 

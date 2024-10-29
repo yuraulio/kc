@@ -51,7 +51,7 @@ class AbandonedCart extends Notification
             'CourseName'=>$this->data['eventTitle'],
             'FAQ_LINK'=>$this->data['faqs'],
             'LINK'=>$this->data['slug'],
-            'DiscountedPrice'=>isset($this->data['DiscountedPrice']) ? '$'.$this->data['DiscountedPrice'] : '-',
+            'DiscountedPrice'=>isset($this->data['DiscountedPrice']) ? '$' . $this->data['DiscountedPrice'] : '-',
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

@@ -539,6 +539,125 @@ return new class extends Migration {
                 ],
             ],
         ]);
+
+        $trigger = ['key' => 'AbandonedCartBF1', 'label' => 'Abandoned cart Black Friday reminder 1 email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[67],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'AbandonedCartCM1', 'label' => 'Abandoned cart Cyber Monday reminder 1 email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[69],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'AbandonedCartBF2', 'label' => 'Abandoned cart Black Friday reminder 2 email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[70],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'AbandonedCartCM2', 'label' => 'Abandoned cart Cyber Monday reminder 2 email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[68],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'InstructorCourseGraduationReminder', 'label' => 'Instructor course graduation reminder email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[72],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'InstructorCourseKickoffReminder', 'label' => 'Instructor course kick off reminder email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[71],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
+
+        $trigger = ['key' => 'StudentCourseKickoffReminder', 'label' => 'Student course kick off reminder email'];
+        Email::query()->create([
+            'title' => $trigger['label'],
+            'status' => 1,
+            'predefined_trigger' => $trigger['key'],
+            'template' => $mailChimpKeyValues[60],
+            'description' => $trigger['label'],
+            'creator_id' => 1,
+            'filter_criteria' => [
+                [
+                    'key'=> ['label'=> '', 'id'=> ''],
+                    'operator' =>'are',
+                    'values' => [],
+                ],
+            ],
+        ]);
     }
 
     /**
