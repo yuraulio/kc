@@ -80,12 +80,8 @@ class UserController extends Controller
         }
         $token = $user->createToken('LaravelAuthApp');
 
-        if ($user->roles()->where('name', 'KnowCrunch Student')->exists()) {
-            return redirect()->route('admin.user.login_as', [$token->accessToken]);
-        }
-
         return new JsonResponse([
-            'link'   => route('user.login_as', ['id' => $user->id]),
+            'link'   => route('admin.user.login_as', [$token->accessToken]),
             'token'  => $token->accessToken,
             'expire' => $token->token->expires_at->diffForHumans(),
             'sms'    => encrypt($user->id . '-' . date('H:i:s')),
