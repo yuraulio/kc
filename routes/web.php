@@ -25,6 +25,7 @@ Route::redirect('/e-learning-masterclass-in-facebook-instagram-advertising', '/e
 Route::redirect('/masterclass-in-x-twitter-platform-ad-manager', '/masterclass-in-x-twitter-platform', 301);
 
 Auth::routes(['register' => false]);
+Route::get('user/login_as/{token}', 'UserController@loginAs')->name('admin.user.login_as');
 
 Route::get('/slack-test', function () {
     $user = User::first();

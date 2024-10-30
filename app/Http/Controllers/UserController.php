@@ -31,6 +31,8 @@ use App\Services\UserService;
 use Carbon\Carbon;
 use DataTables;
 use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -353,15 +355,17 @@ class UserController extends Controller
         return view('users.index_new', compact('data'));
     }
 
-    public function loginAs($id)
+    public function loginAs($token)
     {
-        if (!Auth::user()->role->whereIn('name', ['Super Administrator'])->isNotEmpty()) {
-            abort(403, 'Access not authorized');
-        }
+        $publicKey = file_get_contents(storage_path('oauth-public.key'));
+        $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
+
+        $id = $decoded->sub;
+
         $user = User::findOrFail($id);
         Auth::login($user);
 
-        return redirect()->to('/myaccount');
+        return redirect()->route('myaccount');
     }
 
     public function autoLogin(Request $request)

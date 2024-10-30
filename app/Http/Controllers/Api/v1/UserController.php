@@ -15,6 +15,7 @@ use App\Http\Resources\Api\v1\User\UserResource;
 use App\Model\User;
 use App\Services\v1\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,16 +73,19 @@ class UserController extends Controller
         return response()->json(['success' => $user->delete()], Response::HTTP_OK);
     }
 
-    public function loginAs(User $user): JsonResponse
+    public function loginAs(User $user): JsonResponse|RedirectResponse
     {
         if (!Auth::user()->role->where('id', RoleEnum::SuperAdmin->value)->isNotEmpty()) {
             abort(403, 'Access not authorized');
         }
-
         $token = $user->createToken('LaravelAuthApp');
 
+        if ($user->roles()->where('name', 'KnowCrunch Student')->exists()) {
+            return redirect()->route('admin.user.login_as', [$token->accessToken]);
+        }
+
         return new JsonResponse([
-            'link'   => config('app.url') . '/myaccount',
+            'link'   => route('user.login_as', ['id' => $user->id]),
             'token'  => $token->accessToken,
             'expire' => $token->token->expires_at->diffForHumans(),
             'sms'    => encrypt($user->id . '-' . date('H:i:s')),
