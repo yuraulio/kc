@@ -9,10 +9,12 @@ use App\Http\Controllers\ChunkReadFilter;
 use App\Model\Delivery;
 use App\Model\EventUser;
 use App\Model\Option;
+use App\Model\ShoppingCart;
 use App\Model\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -41,6 +43,28 @@ class UserService
                         $q->where('coupons.id', $data['coupon_id']);
                     });
                 });
+            })
+            ->when(array_key_exists('abandoned', $data), function ($q) use ($data) {
+                $timestamp = Cache::get(
+                    'timestamp-last-time-check-abandoned-cart',
+                    Carbon::now()->subYears(10)->format('Y-m-d H:i:s'));
+                $listIds = ShoppingCart::with('user')
+                    ->where('created_at', '>', $timestamp)
+                    ->pluck('identifier')
+                    ->toArray();
+
+                if ((bool)$data['abandoned'] === true) {
+                    $q->whereIn('id', $listIds);
+                } else {
+                    $q->whereNotIn('id', $listIds);
+                }
+            })
+            ->when(array_key_exists('transaction_status', $data), function ($q) use ($data) {
+                if ($data['transaction_status'] === 'paid') {
+                    $q->whereHas('transactions');
+                } elseif ($data['transaction_status'] === 'free') {
+                    $q->whereDoesntHave('transactions');
+                }
             })
             ->when(array_key_exists('profile_status', $data), function ($q) use ($data) {
                 $q->where('users.profile_status', $data['profile_status']);
@@ -242,7 +266,7 @@ class UserService
             'AE' => 'receipt_details',
             'AF' => 'invoice_details',
             'AG' => 'stripe_id',
-            'AI' => 'country_code',
+            'AI' => 'country',
             'AK' => 'stripe_ids',
             'AL' => 'notes',
             'AO' => 'pm_type',
@@ -253,34 +277,46 @@ class UserService
     private function renamedKeysFromExample(): array
     {
         return [
-            'A'  => 'firstname',
-            'B'  => 'lastname',
-            'C'  => 'email',
-            'D'  => 'slug',
-            'E'  => 'password',
-            'F'  => 'company',
-            'G'  => 'job_title',
-            'H'  => 'nationality',
-            'I'  => 'genre',
-            'J'  => 'birthday',
-            'K'  => 'skype',
-            'L'  => 'mobile',
-            'M'  => 'telephone',
-            'N'  => 'address',
-            'O'  => 'address_num',
-            'P'  => 'postcode',
-            'Q'  => 'city',
-            'R'  => 'afm',
-            'S'  => 'billing',
-            'T'  => 'billname',
-            'U'  => 'billemail',
-            'V'  => 'billaddress',
-            'W'  => 'billaddressnum',
-            'X'  => 'billpostcode',
-            'Y'  => 'billcity',
-            'Z'  => 'billcountry',
-            'AA' => 'billstate',
-            'AB' => 'billafm',
+            'B'  => 'firstname',
+            'C'  => 'lastname',
+            'D'  => 'email',
+            'E'  => 'slug',
+            'F'  => 'password',
+            'G'  => 'company',
+            'H'  => 'company_url',
+            'I'  => 'job_title',
+            'J'  => 'nationality',
+            'K'  => 'genre',
+            'L'  => 'birthday',
+            'M'  => 'skype',
+            'N'  => 'mobile',
+            'O'  => 'telephone',
+            'P'  => 'address',
+            'Q'  => 'address_num',
+            'R'  => 'postcode',
+            'S'  => 'city',
+            'T'  => 'afm',
+            'U'  => 'billing',
+            'V'  => 'billname',
+            'W'  => 'billemail',
+            'X'  => 'billaddress',
+            'Y'  => 'billaddressnum',
+            'Z'  => 'billpostcode',
+            'AA' => 'billcity',
+            'AB' => 'billcountry',
+            'AC' => 'billstate',
+            'AD' => 'billafm',
+            'AE' => 'country',
+            'AF' => 'notes',
+            'AG' => 'stripe_id',
+            'AH' => 'companyname',
+            'AI' => 'companyprofession',
+            'AJ' => 'companyafm',
+            'AK' => 'companydoy',
+            'AL' => 'companyaddress',
+            'AM' => 'companyaddressnum',
+            'AN' => 'companypostcode',
+            'AO' => 'companycity',
         ];
     }
 
@@ -337,6 +373,16 @@ class UserService
                 'billcountry'    => $data['billcountry'] ?? null,
                 'billstate'      => $data['billstate'] ?? null,
                 'billafm'        => $data['billafm'] ?? null,
+            ]);
+            $data['invoice_details'] = json_encode([
+                'companyname'       => $data['companyname'] ?? null,
+                'companyprofession' => $data['companyprofession'] ?? null,
+                'companyafm'        => $data['companyafm'] ?? null,
+                'companydoy'        => $data['companydoy'] ?? null,
+                'companyaddress'    => $data['companyaddress'] ?? null,
+                'companyaddressnum' => $data['companyaddressnum'] ?? null,
+                'companypostcode'   => $data['companypostcode'] ?? null,
+                'companycity'       => $data['companycity'] ?? null,
             ]);
             $validations = $this->validateUser($data);
 

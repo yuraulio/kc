@@ -113,6 +113,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('media-manager/download/{mediaFile}', [MediaController::class, 'download']);
     Route::post('media-manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
 
+    Route::post('download/users-sample', [MediaController::class, 'downloadExportExample']);
+
     // Page manager
     Route::resource('pages', PagesController::class, ['as' => 'admin'])->only([
         'index', 'store', 'update', 'show', 'destroy',

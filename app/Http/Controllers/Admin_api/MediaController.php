@@ -311,4 +311,13 @@ class MediaController extends Controller
 
         return response()->download($file);
     }
+
+    public function downloadExportExample(): BinaryFileResponse
+    {
+        $file = public_path('/resources/Users_sample.xlsx');
+
+        throw_if(!file_exists($file), new NotFoundHttpException(sprintf('File "%s" does not exist.', $file)));
+
+        return response()->download($file);
+    }
 }
