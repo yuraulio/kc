@@ -2,6 +2,7 @@
 
 namespace App\Services\Messaging;
 
+use App\Model\MessageCategory;
 use App\Model\WebNotification;
 use Illuminate\Http\Request;
 use Storage;
@@ -10,7 +11,7 @@ class WebNotificationService
 {
     public function createOrUpdate(Request $request)
     {
-        return WebNotification::updateOrCreate(
+        $webNotification = WebNotification::updateOrCreate(
             [
                 'id' => $request->id,
             ],
@@ -25,6 +26,15 @@ class WebNotificationService
                 'filter_criteria' => $request->filter_criteria,
             ]
         );
+        if (count($request->categories)) {
+            $webNotification->messaging_categories()->detach();
+            foreach ($request->categories as $category) {
+                $messageCategory = MessageCategory::find($category['id']);
+                $messageCategory->web_app_notification()->save($webNotification);
+            }
+        }
+
+        return $webNotification;
     }
 
     public function delete(WebNotification $webNotification)

@@ -72,7 +72,7 @@ class UserController extends Controller
             $query->search($search);
         }
 
-        $users = $query->paginate((int)$request->query->get('per_page', 50))
+        $users = $query->paginate((int) $request->query->get('per_page', 50))
             ->appends($request->query->all());
 
         $users->through(function ($user) {
@@ -576,7 +576,7 @@ class UserController extends Controller
             }
             // if inclass, parse dropbox files without attach by topic
             $newArr['files']['folders'] = $foldersNew;
-            // if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
+        // if(isset($foldersNew[0]) && count($foldersNew[0]) > 0){
             //     foreach($foldersNew as $key1 => $folderNew){
 
             //         $eventFiles = [];
@@ -592,9 +592,9 @@ class UserController extends Controller
 
             //         $newArr['files']['folders'][] = ['name' => $folderName, 'files' => $eventFiles];
             //     }
-            // }else{
-            //   $newArr['files']['folders'] = [];
-            // }
+        // }else{
+        //   $newArr['files']['folders'] = [];
+        // }
         } elseif ($event->is_elearning_course()) {
             $newArr['is_elearning'] = true;
             $isElearning = true;
@@ -1127,13 +1127,13 @@ class UserController extends Controller
         $user->load('statusAccount');
 
         if ($user->statusAccount) {
-            $user->statusAccount->completed = (bool)$request->get('status');
+            $user->statusAccount->completed = (bool) $request->get('status');
 
             $user->statusAccount->save();
         } else {
             $activation = new Activation();
             $activation->user_id = $user->id;
-            $activation->completed = (bool)$request->get('status');
+            $activation->completed = (bool) $request->get('status');
 
             $activation->save();
         }

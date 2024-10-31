@@ -3,6 +3,7 @@
 namespace App\Services\Messaging;
 
 use App\Model\Email;
+use App\Model\MessageCategory;
 use Illuminate\Http\Request;
 use Storage;
 
@@ -10,7 +11,7 @@ class EmailService
 {
     public function createOrUpdate(Request $request)
     {
-        return Email::updateOrCreate(
+        $email = Email::updateOrCreate(
             [
                 'id' => $request->id,
             ],
@@ -24,6 +25,15 @@ class EmailService
                 'filter_criteria' => $request->filter_criteria,
             ]
         );
+        if (count($request->categories)) {
+            $email->messaging_categories()->detach();
+            foreach ($request->categories as $category) {
+                $messageCategory = MessageCategory::find($category['id']);
+                $messageCategory->email()->save($email);
+            }
+        }
+
+        return $email;
     }
 
     public function delete(Email $email)

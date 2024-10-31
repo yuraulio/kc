@@ -3,7 +3,6 @@
 namespace App\Services\Exam;
 
 use App\Contracts\Api\v1\Lesson\ILessonService;
-use App\Dto\Api\v1\ExamCategory\LessonDto;
 use App\Model\ExamCategory;
 use Illuminate\Http\Request;
 

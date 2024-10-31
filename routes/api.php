@@ -47,6 +47,7 @@ use App\Http\Controllers\Api\v1\InstructorController;
 use App\Http\Controllers\Api\v1\Media\EditImageController;
 use App\Http\Controllers\Api\v1\Media\UploadImageController;
 use App\Http\Controllers\Api\v1\Messaging\EmailController;
+use App\Http\Controllers\Api\v1\Messaging\MessageCategoryController;
 use App\Http\Controllers\Api\v1\Messaging\MobileNotificationController;
 use App\Http\Controllers\Api\v1\Messaging\WebNotificationController;
 use App\Http\Controllers\Api\v1\MessagingActivityController;
@@ -291,6 +292,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     // Messaging
 
     // Email
+    Route::apiResource('messaging/categories', MessageCategoryController::class);
     Route::apiResource('messaging/emails', EmailController::class);
     Route::get('messaging/emails-templates', [EmailController::class, 'getTemplates']);
     Route::get('messaging/emails-triggers', [EmailController::class, 'getEmailTriggers']);

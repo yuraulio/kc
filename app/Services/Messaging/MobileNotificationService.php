@@ -2,6 +2,7 @@
 
 namespace App\Services\Messaging;
 
+use App\Model\MessageCategory;
 use App\Model\MobileNotification;
 use Illuminate\Http\Request;
 use Storage;
@@ -10,7 +11,7 @@ class MobileNotificationService
 {
     public function createOrUpdate(Request $request)
     {
-        return MobileNotification::updateOrCreate(
+        $mobileNotification = MobileNotification::updateOrCreate(
             [
                 'id' => $request->id,
             ],
@@ -25,6 +26,15 @@ class MobileNotificationService
                 'filter_criteria' => $request->filter_criteria,
             ]
         );
+        if (count($request->categories)) {
+            $mobileNotification->messaging_categories()->detach();
+            foreach ($request->categories as $category) {
+                $messageCategory = MessageCategory::find($category['id']);
+                $messageCategory->mobile_app_notification()->save($mobileNotification);
+            }
+        }
+
+        return $mobileNotification;
     }
 
     public function delete(MobileNotification $mobileNotification)

@@ -47,13 +47,14 @@ class UserService
             ->when(array_key_exists('abandoned', $data), function ($q) use ($data) {
                 $timestamp = Cache::get(
                     'timestamp-last-time-check-abandoned-cart',
-                    Carbon::now()->subYears(10)->format('Y-m-d H:i:s'));
+                    Carbon::now()->subYears(10)->format('Y-m-d H:i:s')
+                );
                 $listIds = ShoppingCart::with('user')
                     ->where('created_at', '>', $timestamp)
                     ->pluck('identifier')
                     ->toArray();
 
-                if ((bool)$data['abandoned'] === true) {
+                if ((bool) $data['abandoned'] === true) {
                     $q->whereIn('id', $listIds);
                 } else {
                     $q->whereNotIn('id', $listIds);
