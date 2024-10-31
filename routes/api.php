@@ -177,7 +177,6 @@ Route::middleware('auth:api')->group(function () {
             Route::post('delete-batch', [UserController::class, 'batchDestroy']);
 
             Route::post('login-as/{user}', [V1UserControllerAlias::class, 'loginAs']);
-            Route::get('counts', [V1UserControllerAlias::class, 'userCounts']);
             Route::post('import', [V1UserControllerAlias::class, 'importUsers']);
 
             Route::get('', [V1UserControllerAlias::class, 'index']);
@@ -185,6 +184,12 @@ Route::middleware('auth:api')->group(function () {
             Route::post('', [V1UserControllerAlias::class, 'store']);
             Route::put('{user}', [V1UserControllerAlias::class, 'update']);
             Route::delete('{user}', [V1UserControllerAlias::class, 'destroy']);
+
+            Route::prefix('counts')->group(function () {
+                Route::get('admins', [V1UserControllerAlias::class, 'adminsCounts']);
+                Route::get('students', [V1UserControllerAlias::class, 'studentsCounts']);
+                Route::get('instructors', [V1UserControllerAlias::class, 'instructorsCounts']);
+            });
         });
     });
 });

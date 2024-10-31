@@ -88,9 +88,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function userCounts(): JsonResponse
+    public function adminsCounts(): JsonResponse
     {
-        return \response()->json($this->service->userCounts(), Response::HTTP_OK);
+        return \response()->json($this->service->adminsCounts(), Response::HTTP_OK);
+    }
+
+    public function studentsCounts(): JsonResponse
+    {
+        return \response()->json($this->service->studentsCounts(), Response::HTTP_OK);
+    }
+
+    public function instructorsCounts(): JsonResponse
+    {
+        return \response()->json($this->service->getInstructorsByCourse(), Response::HTTP_OK);
     }
 
     public function importUsers(UserImportRequest $request): JsonResponse

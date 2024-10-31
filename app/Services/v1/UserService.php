@@ -148,7 +148,7 @@ class UserService
         return $user;
     }
 
-    public function userCounts(): array
+    public function adminsCounts(): array
     {
         return [
             'admins'                => User::query()->whereHas('roles', function ($q) {
@@ -160,14 +160,14 @@ class UserService
             'editors'               => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::Author->value);
             })->count(),
-            'instructors'           => User::query()->whereHas('roles', function ($q) {
-                $q->where('role_users.role_id', RoleEnum::Collaborator->value);
-            })->count(),
-            'students'              => User::query()->whereHas('roles', function ($q) {
-                $q->where('role_users.role_id', RoleEnum::KnowCrunchStudent->value);
-            })->count(),
-            'active_students'       => $this->getActiveStudents(),
-            'instructors_by_course' => $this->getInstructorsByCourse(),
+        ];
+    }
+
+    public function studentsCounts(): array
+    {
+        return [
+            'total'  => $this->getTotalStudents(),
+            'active' => $this->getActiveStudents(),
         ];
     }
 
@@ -427,6 +427,32 @@ class UserService
         }
     }
 
+    private function getTotalStudents(): array
+    {
+        $eLearning = EventUser::query()
+            ->where(function ($q) {
+                $q->whereIn('comment', [' ', ''])
+                    ->orWhere('comment', null);
+            })
+            ->count();
+
+        $inClass = EventUser::query()
+            ->where('comment', 'like', '%enroll from%')
+            ->count();
+
+        $total = $eLearning + $inClass;
+
+        return [
+            'total' => $total,
+            'e_learning'      => $eLearning,
+            'in_class'        => $inClass,
+            'percentage' => [
+                'e_learning' => $eLearning / $total * 100,
+                'in_class'   => $inClass / $total * 100,
+            ]
+        ];
+    }
+
     private function getActiveStudents(): array
     {
         $eLearning = EventUser::query()
@@ -442,14 +468,20 @@ class UserService
             ->where('comment', 'like', '%enroll from%')
             ->count();
 
+        $total = $eLearning + $inClass;
+
         return [
-            'active_students' => $eLearning + $inClass,
+            'total' => $total,
             'e_learning'      => $eLearning,
             'in_class'        => $inClass,
+            'percentage' => [
+                'e_learning' => $eLearning / $total * 100,
+                'in_class'   => $inClass / $total * 100,
+            ]
         ];
     }
 
-    private function getInstructorsByCourse()
+    public function getInstructorsByCourse()
     {
         $classroomInstructors = User::query()->whereHas('roles', function ($q) {
             $q->where('roles.name', 'Instructor');
