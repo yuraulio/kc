@@ -95,6 +95,6 @@ class UserController extends Controller
 
     public function importUsers(UserImportRequest $request): JsonResponse
     {
-        return \response()->json($this->service->importUsersFromFile($request->file('file')), Response::HTTP_OK);
+        return \response()->json($this->service->importUsersFromFile($request->file('import_file')), Response::HTTP_OK);
     }
 }

@@ -9,7 +9,7 @@ class UserImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'sometimes|mimes:xlsx,xls|max:2048',
+            'import_file' => 'required|mimes:xlsx,xls|max:2048',
         ];
     }
 }
