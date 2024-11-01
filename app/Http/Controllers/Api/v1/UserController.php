@@ -30,7 +30,9 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        return UserResource::collection($this->service->filter($request->validated()));
+        $filterQuery = $this->service->filterQuery($request->validated());
+
+        return UserResource::collection($filterQuery->paginate($data['per_page'] ?? 25));
     }
 
     public function show(User $user): UserResource

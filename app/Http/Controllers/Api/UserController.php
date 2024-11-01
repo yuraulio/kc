@@ -9,6 +9,7 @@ use Apifon\Resource\SMSResource;
 use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
+use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\UserImportRequest;
 use App\Http\Requests\UserRequest;
 use App\Model\Activation;
@@ -19,6 +20,7 @@ use App\Model\Setting;
 use App\Model\User;
 use App\Services\QueryString\QueryStringDirector;
 use App\Services\UserService;
+use App\Services\v1\UserService as V1UserServiceAlias;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +35,7 @@ class UserController extends Controller
 {
     private UserService $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, private V1UserServiceAlias $service)
     {
         $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
 
@@ -1263,72 +1265,9 @@ class UserController extends Controller
         ], $code);
     }
 
-    public function export(Request $request): Response|BinaryFileResponse
+    public function export(FilterRequest $request): Response|BinaryFileResponse
     {
-        $data = $request->all();
-//        $queryStringDirector = new QueryStringDirector($request);
-        $query = User::query()
-
-//        if ($search = $queryStringDirector->getSearch()) {
-//            $query->search($search);
-//        }
-//
-//        if ($filters = $queryStringDirector->getFilters()) {
-//            foreach ($filters as $filter) {
-//                $query->filter($filter);
-//            }
-//        }
-//
-//        if ($sort = $queryStringDirector->getSort()) {
-//            $query->sort($sort);
-//        }
-
-            ->when(array_key_exists('event_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
-                    $q->where('events.id', $data['event_id']);
-                });
-            })
-            ->when(array_key_exists('delivery_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
-                    $q->whereHas('delivery', function ($q) use ($data) {
-                        $q->where('deliveries.id', $data['delivery_id']);
-                    });
-                });
-            })
-            ->when(array_key_exists('coupon_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
-                    $q->whereHas('coupons', function ($q) use ($data) {
-                        $q->where('coupons.id', $data['coupon_id']);
-                    });
-                });
-            })
-            ->when(array_key_exists('profile_status', $data), function ($q) use ($data) {
-                $q->where('users.profile_status', $data['profile_status']);
-            })->when(array_key_exists('account_status', $data), function ($q) use ($data) {
-                $q->where('users.account_status', $data['account_status']);
-            })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
-            })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '<=', Carbon::parse($data['date_to']));
-            })->when(array_key_exists('roles', $data), function ($q) use ($data) {
-                $q->whereHas('roles', function ($q) use ($data) {
-                    $q->whereIn('roles.id', array_map('intval', $data['roles']));
-                });
-            })->when(array_key_exists('not_equal_roles', $data), function ($q) use ($data) {
-                $q->whereHas('roles', function ($q) use ($data) {
-                    $q->whereNotIn('roles.id', array_map('intval', $data['not_equal_roles']));
-                });
-            })->when(array_key_exists('tags', $data), function ($q) use ($data) {
-                $q->whereHas('tags', function ($q) use ($data) {
-                    $q->whereIn('tags.id', array_map('intval', $data['tags']));
-                });
-            })->when(array_key_exists('query', $data), function ($q) use ($data) {
-                $q->where(function ($q) use ($data) {
-                    $q->where('users.firstname', 'like', '%' . $data['query'] . '%')
-                        ->orWhere('users.lastname', 'like', '%' . $data['query'] . '%')
-                        ->orWhere('users.email', 'like', '%' . $data['query'] . '%');
-                });
-            })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc');
+        $query = $this->service->filterQuery($request->validated());
 
         $query->with(['statusAccount', 'role']);
 

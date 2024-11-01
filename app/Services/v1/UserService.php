@@ -13,6 +13,7 @@ use App\Model\ShoppingCart;
 use App\Model\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserService
 {
-    public function filter(array $data): LengthAwarePaginator
+    public function filterQuery(array $data): Builder
     {
         return User::query()
             ->with($this->getRelations())
@@ -93,8 +94,7 @@ class UserService
                         ->orWhere('users.lastname', 'like', '%' . $data['query'] . '%')
                         ->orWhere('users.email', 'like', '%' . $data['query'] . '%');
                 });
-            })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
-            ->paginate($data['per_page'] ?? 25);
+            })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc');
     }
 
     public function store(array $data): User
