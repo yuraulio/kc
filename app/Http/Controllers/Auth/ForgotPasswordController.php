@@ -89,7 +89,6 @@ class ForgotPasswordController extends Controller
         if ($user) {
             $user->notify(new userChangePassword($user));
             event(new EmailSent($user->email, 'userChangePassword'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - ' . $user->firstname . ' change your password' . ', ' . Carbon::now()->format('d F Y')));
 
             if ($request->ajax()) {
                 return response()->json([

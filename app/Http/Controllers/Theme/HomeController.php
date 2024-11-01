@@ -285,7 +285,6 @@ class HomeController extends Controller
 
         $user->notify(new WelcomeEmail($user, $data));
         event(new EmailSent($user->email, 'WelcomeEmail'));
-        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
 
         $student = $user->events->where('id', $content->id)->first();
 

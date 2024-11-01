@@ -385,7 +385,6 @@ class SubscriptionController extends Controller
 
                 $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
-                event(new ActivityEvent($subscription->user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 $adminemail = 'info@knowcrunch.com';
 
@@ -547,7 +546,6 @@ class SubscriptionController extends Controller
 
             $user->notify(new WelcomeEmail($user, $data1));
             event(new EmailSent($user->email, 'WelcomeEmail'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['firstName'] . ' - do you need help with your enrollment' . ', ' . Carbon::now()->format('d F Y')));
 
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -715,7 +713,6 @@ class SubscriptionController extends Controller
 
                 $user->notify(new SubscriptionWelcome($data, $user));
                 event(new EmailSent($user->email, 'SubscriptionWelcome'));
-                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 $adminemail = 'info@knowcrunch.com';
 

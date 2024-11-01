@@ -96,7 +96,7 @@ class EmailSendService
                     'event_id'     => $event['message-id'],
                     'type'         => 'email',
                     'email'        => $user->email,
-                    'status'       => ($event['event'] === 'unique_opened') ? 'open' : ucwords($event['event']),
+                    'status'       => ($event['event'] === 'unique_opened') ? 'Open' : ucwords($event['event']),
                     'opened'       => ($event['event'] === 'unique_opened') ? 1 : 0,
                     'clicked'      => ($event['event'] === 'click') ? 1 : 0,
                     'activity_log' => $event,
@@ -108,6 +108,8 @@ class EmailSendService
                 }
                 if ($event['event'] === 'unique_opened') {
                     (new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                } elseif ($event['event'] === 'request' && $event['reason'] === 'sent') {
+                    (new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $event['subject'] . Carbon::now()->format('d F Y')));
                 }
             }
             //Creating event relationship

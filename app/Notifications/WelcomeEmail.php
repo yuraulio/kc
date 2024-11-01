@@ -87,7 +87,5 @@ class WelcomeEmail extends Notification
             'DurationDescription'=>$this->data['duration'],
             'LINK'=>$this->data['slug'],
         ], ['event_id'=>$this->data['eventId']]);
-
-        event(new ActivityEvent($this->user, ActivityEventEnum::EmailSent->value, $subject . ', ' . Carbon::now()->format('d F Y')));
     }
 }

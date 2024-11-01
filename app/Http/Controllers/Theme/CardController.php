@@ -10,13 +10,6 @@ class CardController extends Controller
 {
     public function store_from_payment(Request $request)
     {
-        /*$this->validate($request, [
-            'payment_method' => 'required',
-            'exp_month' => 'required',
-            'cvv' => 'required',
-            'exp_year' => 'required',
-        ]);*/
-
         $user = Auth::user();
         if ($user['stripe_id'] == null) {
             $options = ['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
@@ -27,8 +20,6 @@ class CardController extends Controller
 
             $user->stripe_ids = json_encode($stripe_ids);
             $user->save();
-
-            //dd($user);
         }
 
         try {
@@ -37,7 +28,6 @@ class CardController extends Controller
             $card['exp_month'] = '';
             $card['exp_year'] = '';
 
-            //dd($request->all());
             $user->addPaymentMethod($request->payment_method);
             $user->updateDefaultPaymentMethod($request->payment_method);
 
@@ -60,47 +50,35 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            // \Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Api\Exception\ServerErrorException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Stripe\Exception\CardException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         }
     }
 
     public function storePaymentMyaccount(Request $request)
     {
-        /*$this->validate($request, [
-            'payment_method' => 'required',
-            'exp_month' => 'required',
-            'cvv' => 'required',
-            'exp_year' => 'required',
-        ]);*/
-
         $user = Auth::user();
         if ($user['stripe_id'] == null) {
             $options = ['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
@@ -111,8 +89,6 @@ class CardController extends Controller
 
             $user->stripe_ids = json_encode($stripe_ids);
             $user->save();
-
-            //dd($user);
         }
 
         try {
@@ -150,21 +126,18 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            // \Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
             return response()->json([
                 'success' => false,
@@ -177,7 +150,6 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         }
     }
 
@@ -194,21 +166,18 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            // \Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
             return response()->json([
                 'success' => false,
@@ -221,7 +190,6 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         }
     }
 
@@ -239,21 +207,18 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\CardErrorException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            // \Session::flash('stripe-error',$e->getMessage());
         } catch(\Cartalyst\Stripe\Exception\MissingParameterException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Laravel\Cashier\Exceptions\IncompletePayment $e) {
             return response()->json([
                 'success' => false,
@@ -266,9 +231,7 @@ class CardController extends Controller
                 'message' => $e->getMessage(),
 
             ]);
-            //\Session::flash('stripe-error',$e->getMessage());
         } catch(\Stripe\Exception\CardException $e) {
-            //dd($e);
             \Session::put('dperror', $e->getMessage());
 
             return '/cart';

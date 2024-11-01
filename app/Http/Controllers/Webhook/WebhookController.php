@@ -666,7 +666,6 @@ class WebhookController extends BaseWebhookController
             // TODO
             $user->notify(new AfterSepaPaymentEmail($user, $datamail));
             event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
         }
         if ($sub['amount'] / 100 > 0) {
             $invoiceNumber = generate_invoice_number($paymentMethod->id);
@@ -803,7 +802,6 @@ class WebhookController extends BaseWebhookController
         // help
         $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
-        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
     }
 
     private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $planSubscription = false, $billingEmail = false)
@@ -850,7 +848,6 @@ class WebhookController extends BaseWebhookController
         } else {
             $user->notify(new CourseInvoice($data));
             event(new EmailSent($user->first()->email, 'CourseInvoice'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch | ' . $user->firstName . ' - download your receipt' . ', ' . Carbon::now()->format('d F Y')));
         }
 
         //system-user-admin-all-courses-payment-receipt

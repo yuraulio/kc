@@ -66,26 +66,4 @@ class EmailController extends ApiBaseController
     {
         return ['data'=>EmailTriggersEnum::getEmailTriggers()];
     }
-
-    public function runCommand(Request $request, $command)
-    {
-        try {
-            // Get any additional parameters from the request
-            $params = $request->all();
-
-            // Prepare the command with its parameters
-            $output = Artisan::call($command, $params);
-
-            // Return the output of the Artisan command
-            return response()->json([
-                'status' => 'success',
-                'output' => Artisan::output(),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
 }

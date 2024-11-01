@@ -158,7 +158,6 @@ if (!function_exists('sendAfterSuccessPaymentSepa')) {
 
                 $user->notify(new AfterSepaPaymentEmail($user, $data));
                 event(new EmailSent($user->email, 'AfterSepaPaymentEmail'));
-                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome to our course ' . $user->firstname . ', ' . Carbon::now()->format('d F Y')));
             }
         }
     }

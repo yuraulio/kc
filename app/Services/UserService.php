@@ -545,7 +545,6 @@ class UserService
             $user->notify(new CourseInvoice($data));
 
             $subject = 'Knowcrunch | ' . $data['firstName'] . ' - download your receipt';
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $subject . ', ' . Carbon::now()->format('d F Y')));
 
             event(new EmailSent($user->email, 'CourseInvoice'));
             $invoiceFileName = date('Y.m.d');
@@ -565,7 +564,6 @@ class UserService
                 ], ['event_id'=>$data['eventId']]);
 
             event(new EmailSent($adminemail, 'elearning_invoice'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch |' . $muser['name'] . ' – Payment Successful in ' . $muser['event_title'] . ', ' . Carbon::now()->format('d F Y')));
         }
     }
 

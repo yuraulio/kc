@@ -141,7 +141,6 @@ class ELearningService
 
                 $user->notify(new SendTopicAutomateMail($data, $user));
                 event(new EmailSent($user->email, 'SendTopicAutomateMail'));
-                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 // find all topic lessons for update
                 foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {

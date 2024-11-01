@@ -18,6 +18,7 @@ use App\Model\Transaction;
 use App\Model\User;
 use App\Notifications\CourseInvoice;
 use App\Notifications\SubscriptionWelcome;
+use App\Notifications\WaitingListWelcomeEmail;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
 use Auth;
@@ -727,9 +728,13 @@ class InfoController extends Controller
                     ? 'waiting_list_welcome' : 'welcome';
 
                 $data['firstName'] = $user->firstname;
-
-                $user->notify(new WelcomeEmail($user, $data));
-                event(new EmailSent($user->email, 'WelcomeEmail'));
+                if ($transaction->event->first() && $user->waitingList()->where('event_id', $transaction->event->first()->id)->first()) {
+                    $user->notify(new WaitingListWelcomeEmail($user, $data));
+                    event(new EmailSent($user->email, 'WaitingListWelcomeEmail'));
+                } else {
+                    $user->notify(new WelcomeEmail($user, $data));
+                    event(new EmailSent($user->email, 'WelcomeEmail'));
+                }
             }
         }
     }
@@ -865,7 +870,6 @@ class InfoController extends Controller
                 } else {
                     $data['user']->notify(new CourseInvoice($data));
                     event(new EmailSent($data['user']->email, 'CourseInvoice'));
-                    event(new ActivityEvent($data['user'], ActivityEventEnum::EmailSent->value, $email_data['subject'] . ', ' . Carbon::now()->format('d F Y')));
                 }
             }
         }
@@ -974,6 +978,5 @@ class InfoController extends Controller
 
         $user->notify(new SubscriptionWelcome($data, $user));
         event(new EmailSent($user->email, 'SubscriptionWelcome'));
-        event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
     }
 }

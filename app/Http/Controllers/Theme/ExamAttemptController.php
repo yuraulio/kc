@@ -382,7 +382,6 @@ class ExamAttemptController extends Controller
                 $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email . '--' . $cert->id));
                 $student->notify(new CertificateAvaillable($data, $student));
                 event(new EmailSent($student->email, 'CertificateAvaillable'));
-                event(new ActivityEvent($student, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
 
                 if ($examResultData) {
                     echo '<script>alert("woo!")</script>';

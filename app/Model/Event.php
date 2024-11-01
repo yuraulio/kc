@@ -1214,7 +1214,6 @@ class Event extends Model
                 ->info('[user_id: ' . $user->id . ', event_id: ' . $this->id . '] The email about a new certificate is sent.');
 
             event(new EmailSent($user->email, 'CertificateAvaillable'));
-            event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
         }
     }
 
