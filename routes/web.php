@@ -731,26 +731,26 @@ Route::group(['middleware' => ['web']], function () {
 Route::get('/dropbox/KUBnqOX1FNyTh72', 'DropboxController@cacheDropboxCLI');
 Route::get('/dropbox/KUBnqOX1FNyTh74', 'DropboxController@refreshDropBoxKey');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
+
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
 Route::get('/sendReminderAfterExpirationSubscription', 'Dashboard\CronjobsController@sendReminderForExpiredSubscription');
-
-Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
 Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind');
-Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');
-
 Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
 Route::get('/abanoded/userSecond', 'Dashboard\CronjobsController@remindAbandonedUserSecond');
-
 Route::get('/send-expiration-emails', 'Dashboard\CronjobsController@sendExpirationEmails'); //in
 Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentReminder'); //in
 Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod'); //in
 Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ'); //in
 Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail'); //in
-Route::get('/absences', 'Dashboard\CronjobsController@absences'); //in
 Route::get('/sendInClassReminder', 'Dashboard\CronjobsController@sendInClassReminder'); //in
 Route::get('/automateTopicMail', 'Dashboard\CronjobsController@sendAutomateMailBasedOnTopic'); //in
 Route::get('/automateInstructorsMail', 'Dashboard\CronjobsController@sendAutomateEmailForInstructors'); //in
+
+Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
+Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');
+
+Route::get('/absences', 'Dashboard\CronjobsController@absences'); //in
 Route::get('/calculateRoyaltiesInstructor', 'Dashboard\CronjobsController@calculateTotalRoyaltiesForInstructors'); //in
 
 // Generate XML

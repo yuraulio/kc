@@ -449,7 +449,7 @@ class UserService
             'percentage' => [
                 'e_learning' => $eLearning / $total * 100,
                 'in_class'   => $inClass / $total * 100,
-            ]
+            ],
         ];
     }
 
@@ -477,7 +477,7 @@ class UserService
             'percentage' => [
                 'e_learning' => $eLearning / $total * 100,
                 'in_class'   => $inClass / $total * 100,
-            ]
+            ],
         ];
     }
 

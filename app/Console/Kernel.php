@@ -12,48 +12,7 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
-    protected $commands = [
-        Commands\AttachCertificatesToOldStudents::class,
-        Commands\InitCertificate::class,
-        Commands\SyncBillingData::class,
-        Commands\FixUsersName::class,
-        Commands\InitStatisticsTabs::class,
-        Commands\deteleAbandoned::class,
-        Commands\AttachInvociceTranasactionToUser::class,
-        Commands\AttachPaymentMethod::class,
-        Commands\UpdateCavenTransactionDetails::class,
-        Commands\RestoreTopicsLessons::class,
-        Commands\TabTitlesForSection::class,
-        Commands\TicketsTitle::class,
-        Commands\FreeElearningCertification::class,
-        Commands\GenerateInvoices::class,
-        Commands\ExportAllUserByCategory::class,
-        Commands\AttachCerficateByEvent::class,
-        Commands\SubscriptionsEnds::class,
-        Commands\NewAdminMediaManager::class,
-        Commands\ComponentsRefresh::class,
-        Commands\PublishCheck::class,
-        Commands\ImportFaqs::class,
-        Commands\AttachFilesToEvents::class,
-        Commands\FixOrder::class,
-        Commands\AttachFaqs::class,
-        Commands\InsertTestimonial::class,
-        Commands\FixStatistics::class,
-        Commands\UserBalanceStripe::class,
-        Commands\ClearInvoices::class,
-        Commands\KCIDToUsers::class,
-        Commands\LessonLinksFixed::class,
-        Commands\FixEventInfoTable::class,
-        Commands\FixExamQuestion::class,
-        Commands\FixExamQuestion::class,
-        Commands\EnableExams::class,
-        Commands\RestoreVideosStatistics::class,
-        Commands\FixStatisicsPercent::class,
-        Commands\INSERTLESSONS::class,
-        Commands\ExportCertificateByEvent::class,
-        Commands\ClassroomTrainingCertification::class,
-        Commands\MoveAndCompressImages::class,
-    ];
+    protected $commands = [];
 
     protected function bootstrappers()
     {
@@ -76,6 +35,20 @@ class Kernel extends ConsoleKernel
         }
 
         $schedule->command('publishCheck')->hourly();
+        $schedule->command('email:sendNonPayment')->dailyAt('02:00');
+        $schedule->command('email:sendSubscriptionNonPayment')->dailyAt('15:00');
+        $schedule->command('email:sendReminderForExpiredSubscription')->dailyAt('12:00');
+        $schedule->command('email:sendSubscriptionRemind')->dailyAt('15:10');
+        $schedule->command('email:remindAbandonedUser')->everyFiveMinutes();
+        $schedule->command('email:remindAbandonedUserSecond')->cron('*/8 * * * *');
+        $schedule->command('email:sendExpirationEmails')->dailyAt('15:00');
+        $schedule->command('email:sendPaymentReminder')->dailyAt('16:00');
+        $schedule->command('email:sendHalfPeriod')->dailyAt('17:00');
+        $schedule->command('email:sendElearningFQ')->dailyAt('18:00');
+        $schedule->command('email:sendSurveyMail')->dailyAt('19:00');
+        $schedule->command('email:sendInClassReminder')->dailyAt('17:02');
+        $schedule->command('email:sendAutomateMailBasedOnTopic')->dailyAt('10:00');
+        $schedule->command('email:sendAutomateEmailForInstructors')->dailyAt('12:00');
     }
 
     /**
@@ -86,6 +59,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__ . '/Commands/Emails');
 
         require base_path('routes/console.php');
     }

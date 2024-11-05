@@ -44,11 +44,10 @@ class InstructorsMail extends Notification
      */
     public function toBrevo($notifiable)
     {
-        //$this->data['subject']
         SendEmail::dispatch('InstructorsMail', $this->user->toArray(), null, [
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['title'],
-            'DATE'=>$this->data['data'],
+            'DATE'=>$this->data['date'],
             'LOCATION'=>$this->data['location'],
         ]);
     }
