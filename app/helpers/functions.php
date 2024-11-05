@@ -186,7 +186,7 @@ if (!function_exists('getTransactionStringForAdminEmail')) {
         }
 
         $amount = ($transaction->total_amount == 0) ? 'Free' : round($transaction->total_amount / $installments, 2);
-        $transParam = 'Ticket Type: ' . $tickettype . ', Amount: ' . $amount . ', Coupon: ' . $transaction->coupon_code;
+        $transParam = 'Ticket Type: ' . $tickettype . '#####Amount: ' . $amount . '#####Coupon: ' . $transaction->coupon_code;
 
         return $transParam;
     }

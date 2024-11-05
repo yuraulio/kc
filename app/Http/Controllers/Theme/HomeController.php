@@ -547,7 +547,6 @@ class HomeController extends Controller
         $transdata['helperdetails'] = $helperdetails;
         $transdata['status'] = 5;
 
-        //system-admin-all-courses-new-subscription
         $link = "http://www.knowcrunch.com/admin/user/{$user['id']}/edit";
         if (isset($helperdetails[$user['email']])) {
             $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';

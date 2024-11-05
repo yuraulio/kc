@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\EmailSent;
 use App\Model\Category;
 use App\Model\Certificate;
 use App\Model\City;
@@ -10,6 +11,7 @@ use App\Model\Event;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
 use App\Model\User;
+use App\Notifications\CertificateAvaillable;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
@@ -69,6 +71,15 @@ class CreateCertificatesTrainingEventsService
 
                             $cert->event()->save($event);
                             $cert->user()->save($user);
+
+                            $data['firstName'] = $user->firstname;
+                            $data['eventTitle'] = $event->title;
+                            $data['eventId'] = $event->id;
+                            $data['fbGroup'] = $event->fb_group;
+                            $data['template'] = 'emails.user.certificate';
+                            $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($user->email . '--' . $cert->id));
+                            $user->notify(new CertificateAvaillable($data, $user));
+                            event(new EmailSent($user->email, 'CertificateAvaillable'));
                         }
                     }
                 }

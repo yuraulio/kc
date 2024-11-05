@@ -115,7 +115,8 @@ class AutomatedTopicEmail extends Command
                     }
 
                     foreach ($event->lessons()->wherePivot('topic_id', $topic->id)->get() as $lesson) {
-                        if ($interval->days === 1) {
+                        if (($interval->days === 1)
+                        || ($interval->days === 7 && $emailTemplate !== 'student_course_kickoff_reminder_email')) {
                             $lesson->pivot->send_automate_mail = true;
                             $lesson->pivot->save();
                         }

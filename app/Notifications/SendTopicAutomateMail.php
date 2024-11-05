@@ -57,6 +57,8 @@ class SendTopicAutomateMail extends Notification
             $emailEvent = 'InstructorCourseGraduationReminder';
         } elseif ($this->data['email_template'] == 'instructor_course_kickoff_reminder_email') {
             $emailEvent = 'InstructorCourseKickoffReminder';
+        } elseif ($this->data['email_template'] == 'instructor_class_workshop_reminder') {
+            $emailEvent = 'InstructorWorkshopReminder';
         } elseif ($this->data['email_template'] == 'student_course_kickoff_reminder_email') {
             $emailEvent = 'StudentCourseKickoffReminder';
         }
