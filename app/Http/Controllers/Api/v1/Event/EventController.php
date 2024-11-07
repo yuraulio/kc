@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
+use App\Model\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -132,5 +133,10 @@ class EventController extends ApiBaseController
         }
 
         return response()->json(['message' => 'This slug is available for using', 'usage' => 'available_for_using']);
+    }
+
+    public function userSubscriptions(User $user): JsonResponse
+    {
+        return $this->response(['subscriptions' => $user->subscriptionEvents]);
     }
 }

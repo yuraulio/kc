@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\v1\FacebookAuthController;
 use App\Http\Controllers\Api\v1\CareerController;
 use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\CityController;
@@ -54,6 +55,7 @@ use App\Http\Controllers\Api\v1\MessagingActivityController;
 use App\Http\Controllers\Api\v1\PartnerController;
 use App\Http\Controllers\Api\v1\PaymentMethodController;
 use App\Http\Controllers\Api\v1\Report\ReportController;
+use App\Http\Controllers\Api\v1\ReviewController;
 use App\Http\Controllers\Api\v1\SkillController;
 use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\TopicController;
@@ -74,6 +76,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', [PassportAuthController::class, 'login']);
+
+Route::get('auth/facebook', [FacebookAuthController::class, 'redirect']);
+Route::get('auth/facebook/callback', [FacebookAuthController::class, 'callback']);
 
 Route::get('/run-artisan/{command}', [EmailController::class, 'runCommand']);
 
@@ -166,6 +171,14 @@ Route::middleware('auth:api')->group(function () {
         Route::post('', [SkillController::class, 'store']);
         Route::put('{skill}', [SkillController::class, 'update']);
         Route::delete('{skill}', [SkillController::class, 'destroy']);
+    });
+
+    Route::prefix('reviews')->group(function () {
+        Route::get('', [ReviewController::class, 'index']);
+        Route::get('{review}', [ReviewController::class, 'show']);
+        Route::post('', [ReviewController::class, 'store']);
+        Route::put('{review}', [ReviewController::class, 'update']);
+        Route::delete('{review}', [ReviewController::class, 'destroy']);
     });
 
     Route::prefix('dashboard')->group(function () {

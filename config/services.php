@@ -70,6 +70,12 @@ return [
         'facebook_access_token' => env('facebook_access_token'),
     ],
 
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_REDIRECT_URI'),
+    ],
+
     'vimeo' => [
         'token' => env('vimeo_token'),
         'password' => env('video_password'),

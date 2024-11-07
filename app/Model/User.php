@@ -76,6 +76,9 @@ class User extends Authenticatable
         'notes',
         'profile_status',
         'account_status',
+        'facebook_id',
+        'facebook_access_token',
+        'facebook_page_token',
     ];
 
     /**
