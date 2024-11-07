@@ -110,4 +110,9 @@ class UserController extends Controller
     {
         return \response()->json($this->service->importUsersFromFile($request->file('import_file')), Response::HTTP_OK);
     }
+
+    public function getPayments(User $user): JsonResponse
+    {
+        return \response()->json(['payments' => $user->events_for_user_list], Response::HTTP_OK);
+    }
 }
