@@ -204,6 +204,9 @@ Route::middleware('auth:api')->group(function () {
                 Route::get('instructors', [V1UserControllerAlias::class, 'instructorsCounts']);
             });
         });
+        Route::prefix('events')->group(function () {
+            Route::post('{event}/clone', [EventController::class, 'duplicateEvent'])->name('api.event.clone');
+        });
     });
 });
 

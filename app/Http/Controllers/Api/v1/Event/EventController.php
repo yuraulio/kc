@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
+use App\Services\v1\EventDuplicationService;
 use App\Model\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,15 @@ use Throwable;
 
 class EventController extends ApiBaseController
 {
+    /**
+     * Creates a new controller object.
+     *
+     * @param  \App\Services\v1\EventDuplicationService $eventDuplicationService
+     */
+    public function __construct(private readonly EventDuplicationService $eventDuplicationService)
+    {
+    }
+
     /**
      * Display a listing of the events.
      */
@@ -133,6 +143,16 @@ class EventController extends ApiBaseController
         }
 
         return response()->json(['message' => 'This slug is available for using', 'usage' => 'available_for_using']);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function duplicateEvent(Event $event): Response
+    {
+        $status = $this->eventDuplicationService->duplicate($event) ? Response::HTTP_CREATED : Response::HTTP_INTERNAL_SERVER_ERROR;
+
+        return response('Duplication event attempt', $status);
     }
 
     public function userSubscriptions(User $user): JsonResponse

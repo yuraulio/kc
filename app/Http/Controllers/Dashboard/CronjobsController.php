@@ -295,6 +295,424 @@ class CronjobsController extends Controller
         }
     }
 
+    public function remindAbandonedUser()
+    {
+        $abandoneds = CartCache::where('send_email', 0)->get();
+        $nowTime = now()->subMinutes(60);
+        if (isBlackFriday() || isCyberMonday()) {
+            $nowTime = now()->subMinutes(120);
+        }
+
+        foreach ($abandoneds as $abandoned) {
+            if ($abandoned->created_at >= $nowTime) {
+                continue;
+            }
+
+            if (!$user = $abandoned->user) {
+                continue;
+            }
+
+            if (!$event = $abandoned->eventt) {
+                continue;
+            }
+
+            if (!$event->published || $event->status != 0) {
+                continue;
+            }
+
+            $data['firstName'] = $user->firstname;
+            $data['eventTitle'] = $event->title;
+            $data['emailEvent'] = 'AbandonedCart';
+            if (isBlackFriday()) {
+                $data['emailEvent'] = 'AbandonedCartBF1';
+                $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
+            } elseif (isCyberMonday()) {
+                $data['emailEvent'] = 'AbandonedCartCM1';
+                $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
+            }
+            $data['eventId'] = $event->id;
+            $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
+            $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
+            if (filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+                $user->notify(new AbandonedCart($data, $user));
+                event(new EmailSent($user->email, 'AbandonedCart'));
+                $subject = $user->firstname . ' - do you need help with your enrollment';
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $subject . ', ' . Carbon::now()->format('d F Y')));
+                event(new ActivityEvent($user, ActivityEventEnum::AbandonedCart->value, $abandoned->product_title . ', ' . Carbon::now()->format('d F Y')));
+
+                $abandoned->send_email = 1;
+                $abandoned->save();
+            } else {
+                $abandoned->send_email = 1;
+                $abandoned->save();
+            }
+        }
+    }
+
+    public function remindAbandonedUserSecond()
+    {
+        $now_date = now();
+        $now_date = date_format($now_date, 'Y-m-d');
+
+        if (isBlackFriday() || isCyberMonday()) {
+            $abandoneds = CartCache::where('send_email', '=', 1)->get();
+
+            foreach ($abandoneds as $abandoned) {
+                if ($abandoned->created_at <= now()->subMinutes(240)) {
+                    continue;
+                }
+
+                if ($abandoned->updated_at >= now()->subMinutes(120)) {
+                    continue;
+                }
+
+                if (!$user = $abandoned->user) {
+                    continue;
+                }
+
+                if (!$event = $abandoned->eventt) {
+                    continue;
+                }
+
+                if (!$event->published || $event->status != 0) {
+                    continue;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $event->title;
+                if (isBlackFriday()) {
+                    $data['emailEvent'] = 'AbandonedCartBF2';
+                    $data['DiscountedPrice'] = ($abandoned->price * 0.5); //50% Off Black Friday
+                } elseif (isCyberMonday()) {
+                    $data['emailEvent'] = 'AbandonedCartCM2';
+                    $data['DiscountedPrice'] = ($abandoned->price * 0.6); //40% Off Cyber Monday
+                }
+                $data['eventId'] = $event->id;
+                $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
+                $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
+
+                $user->notify(new AbandonedCart($data, $user, true));
+                event(new EmailSent($user->email, 'AbandonedCart'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['firstName'] . ' - do you need help with your enrollment' . ', ' . Carbon::now()->format('d F Y')));
+                event(new ActivityEvent($user, ActivityEventEnum::AbandonedCart->value, $abandoned->product_title . ', ' . Carbon::now()->format('d F Y')));
+                $abandoned->send_email = 2;
+                $abandoned->save();
+            }
+        }
+    }
+
+    public function sendExpirationEmails()
+    {
+        $adminemail = 'info@knowcrunch.com';
+        $events = Event::has('transactions')->with('users')->where('view_tpl', 'elearning_event')->get();
+
+        $today = date_create(date('Y/m/d'));
+        $today1 = date('Y-m-d');
+
+        foreach ($events as $event) {
+            foreach ($event['users'] as $user) {
+                if (!($user->pivot->expiration >= $today1) || !$user->pivot->expiration) {
+                    continue;
+                }
+
+                $date = date_create($user->pivot->expiration);
+                $date = date_diff($date, $today);
+
+                if ($event->id == 2304 && ($date->y == 0 && $date->m == 0 && ($date->d == 7 || $date->d == 15))) {
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
+
+                    $data['expirationDate'] = date('d-m-Y', strtotime($user->pivot->expiration));
+
+                    $page = Pages::find(4752);
+
+                    $data['subscriptionSlug'] = url('/') . '/' . $page->getSlug();
+                    $data['template'] = 'emails.user.courses.masterclass_expiration';
+                    $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
+                    $data['subscription_price'] = $event->plans[0]['cost'];
+
+                    $user->notify(new ExpirationMails($data, $user));
+                    event(new EmailSent($user->email, 'ExpirationMails'));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                } elseif ($event->id !== 2304 && ($date->y == 0 && $date->m == 0 && ($date->d == 7 || $date->d == 15))) {
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
+
+                    $data['expirationDate'] = date('d-m-Y', strtotime($user->pivot->expiration));
+
+                    $data['template'] = 'emails.user.courses.week_expiration';
+                    $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
+
+                    $user->notify(new ExpirationMails($data, $user));
+                    event(new EmailSent($user->email, 'ExpirationMails'));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                }
+            }
+        }
+    }
+
+    public function sendPaymentReminder()
+    {
+        $today = date('Y-m-d');
+
+        $invoiceUsers = Invoice::doesntHave('subscription')->where('date', '!=', '-')->where('instalments_remaining', '>', 0)->get();
+
+        foreach ($invoiceUsers as $invoiceUser) {
+            $user = $invoiceUser->user->first();
+            if (!$user) {
+                continue;
+            }
+
+            if (!$invoiceUser->transaction->first()) {
+                continue;
+            }
+
+            $date = date_create($invoiceUser->date);
+            $today = date_create(date('Y/m/d'));
+            $date = date_diff($date, $today);
+
+            if (($date->y == 0 && $date->m == 0 && $date->d == 7)) {
+                $data = [];
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $invoiceUser->event->first()->title;
+                $data['eventId'] = $invoiceUser->event->first()->id;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' a payment is coming';
+                $data['paymentDate'] = date('d-m-Y', strtotime($invoiceUser->date));
+                $data['template'] = 'emails.user.payment_reminder';
+
+                $user->notify(new PaymentReminder($data));
+                event(new EmailSent($user->email, 'PaymentReminder'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+            }
+        }
+    }
+
+    public function sendHalfPeriod()
+    {
+        $adminemail = 'info@knowcrunch.com';
+
+        $events = Event::has('transactions')->where('published', true)->with('users')
+            ->whereHas('eventInfo', function ($query) {
+                $query->whereCourseDelivery(143);
+            })
+            ->get();
+
+        $today = date_create(date('Y/m/d'));
+        $today1 = date('Y-m-d');
+        foreach ($events as $event) {
+            $eventInfo = $event->event_info();
+            $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : '';
+
+            foreach ($event['users'] as $user) {
+                if (!($user->pivot->expiration >= $today1) || !$user->pivot->expiration || !$expiration) {
+                    continue;
+                }
+                $date = date_create($user->pivot->expiration);
+                $date = date_diff($date, $today);
+
+                if ($date->y == 0 && $date->m == ($expiration / 2) && $date->d == 0) {
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['eventId'] = $event->id;
+                    $data['fbGroup'] = $event->fb_group;
+                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' you are almost there';
+                    $data['template'] = 'emails.user.half_period';
+
+                    $user->notify(new HalfPeriod($data, $user));
+                    event(new EmailSent($user->email, 'HalfPeriod'));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                }
+            }
+        }
+    }
+
+    public function sendElearningFQ()
+    {
+        $today = date('Y-m-d', strtotime('-15 day', strtotime(date('Y-m-d'))));
+        $adminemail = 'info@knowcrunch.com';
+        $transactions = Transaction::with('event', 'user')->whereDay('created_at', date('d', strtotime($today)))
+            ->whereMonth('created_at', date('m', strtotime($today)))
+            ->whereYear('created_at', date('Y', strtotime($today)))
+            ->where(function ($q) use ($today) {
+                $q->whereHas('event', function ($query) use ($today) {
+                    $query->whereViewTpl('elearning_event');
+                });
+            })->get();
+
+        foreach ($transactions as $transaction) {
+            if (!($event = $transaction->event->first())) {
+                continue;
+            }
+
+            if (count($event->getExams()) <= 0 || !$event->expiration) {
+                continue;
+            }
+
+            foreach ($transaction['user'] as $user) {
+                $expiration = $event->users()->wherePivot('user_id', $user->id)->first();
+                if (!$expiration) {
+                    continue;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' enjoying ' . $event->title . '?';
+                $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['expirationDate'] = date('d-m-Y', strtotime($expiration->pivot->expiration));
+                // $data['template'] = 'emails.user.elearning_f&qemail';
+
+                $user->notify(new ElearningFQ($data, $user));
+                event(new EmailSent($user->email, 'ElearningFQ'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+            }
+        }
+    }
+
+    public function sendSurveyMail()
+    {
+        $events = Event::has('transactions')->with('users')->where('view_tpl', 'elearning_event')->get();
+        $today = date('Y/m/d');
+        $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
+        foreach ($events as $event) {
+            $sendEmail = false;
+            foreach ($event['users'] as $user) {
+                if ($user->pivot->expiration !== $today || !$user->pivot->expiration) {
+                    continue;
+                }
+                if ($event->evaluate_instructors) {
+                    $sendEmail = true;
+                } elseif ($event->evaluate_topics) {
+                    $sendEmail = true;
+                } elseif ($event->fb_testimonial) {
+                    $sendEmail = true;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
+                $data['template'] = 'emails.user.survey_email';
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
+                $data['evaluateTopics'] = $event->evaluate_topics;
+                $data['evaluateInstructors'] = $event->evaluate_instructors;
+
+                if ($sendEmail) {
+                    $user->notify(new SurveyEmail($data, $user));
+                    event(new EmailSent($user->email, 'SurveyEmail'));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                }
+            }
+        }
+
+        $events = Event::has('transactions')->with('users')->where('view_tpl', 'event')->get();
+
+        foreach ($events as $event) {
+            $sendEmail = false;
+            $lessons = $event->lessons;
+            foreach ($event['users'] as $user) {
+                $lesson = $lessons->last();
+
+                if (!isset($lesson['pivot']['time_ends'])) {
+                    continue;
+                }
+
+                $lastDayLesson = date('Y-m-d', strtotime($lesson['pivot']['time_ends']));
+
+                if ($lastDayLesson !== $today) {
+                    continue;
+                }
+
+                if ($event->evaluate_instructors) {
+                    $sendEmail = true;
+                } elseif ($event->evaluate_topics) {
+                    $sendEmail = true;
+                } elseif ($event->fb_testimonial) {
+                    $sendEmail = true;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
+                $data['template'] = 'emails.user.survey_email';
+                $data['evaluateTopics'] = $event->evaluate_topics;
+                $data['evaluateInstructors'] = $event->evaluate_instructors;
+                $data['eventTitle'] = $event->title;
+                $data['eventId'] = $event->id;
+
+                if ($sendEmail) {
+                    $user->notify(new SurveyEmail($data, $user));
+                    event(new EmailSent($user->email, 'SurveyEmail'));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $data['subject'] . ', ' . Carbon::now()->format('d F Y')));
+                }
+            }
+        }
+    }
+
+    public function sendInClassReminder()
+    {
+        $date1 = date('Y-m-d', strtotime('+7 days'));
+        $dates = [$date1];
+
+        $events = Event::
+        where('published', true)
+            ->whereIn('status', [0, 2])
+            ->whereIn('launch_date', $dates)
+            ->whereHas('eventInfo', function ($query) {
+                $query->where('course_delivery', '!=', 143);
+            })
+            ->with('users')
+            ->get();
+
+        foreach ($events as $event) {
+            $first_lesson = $event->lessons->first();
+
+            if ($first_lesson) {
+                $data['first_lesson_date'] = isset($first_lesson->pivot->date) ? date('d-m-Y', strtotime($first_lesson->pivot->date)) : '';
+                $data['first_lesson_time'] = isset($first_lesson->pivot->time_starts) ? date('H:i', strtotime($first_lesson->pivot->time_starts)) : '';
+            }
+
+            $info = $event->event_info();
+            $venues = $event->venues;
+
+            $data['duration'] = isset($info['inclass']['dates']['text']) ? $info['inclass']['dates']['text'] : '';
+            $data['course_hours'] = isset($info['inclass']['days']['text']) ? $info['inclass']['days']['text'] : '';
+            $data['venue'] = isset($venues[0]['name']) ? $venues[0]['name'] : '';
+            $data['address'] = isset($venues[0]['address']) ? $venues[0]['address'] : '';
+            $data['faq'] = url('/') . '/' . $event->slugable->slug . '/#faq?utm_source=Knowcrunch.com&utm_medium=Registration_Email';
+            $data['fb_group'] = $event->fb_group;
+            $data['eventTitle'] = $event->title;
+            $data['eventId'] = $event->id;
+
+            foreach ($event->users as $user) {
+                $data['button_text'] = 'Activate your account';
+                $data['activateAccount'] = false;
+                $data['slug'] = '';
+
+                $slug = [];
+                $slug['id'] = $user->id;
+                $slug['email'] = $user->email;
+                $slug['create'] = true;
+
+                $slug = encrypt($slug);
+
+                $data['firstname'] = $user->firstname;
+                $data['lastname'] = $user->lastname;
+                $data['slug'] = url('/') . '/create-your-password/' . $slug;
+
+                if ($user->statusAccount && $user->statusAccount->completed) {
+                    $data['activateAccount'] = false;
+                    $data['button_text'] = 'Access your account';
+                    $data['slug'] = url(config('app.url')) . '/myaccount';
+                }
+
+                $user->notify(new InClassReminder($data, $user));
+                event(new EmailSent($user->email, 'InClassReminder'));
+                event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, 'Knowcrunch - Welcome ' . $user->firstname . '. Reminder about your course' . ', ' . Carbon::now()->format('d F Y')));
+            }
+        }
+    }
+
     public function absences()
     {
         $date = date('Y-m-d');
