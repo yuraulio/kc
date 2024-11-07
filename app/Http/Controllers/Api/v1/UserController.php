@@ -11,6 +11,7 @@ use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\Api\v1\User\StoreRequest;
 use App\Http\Requests\Api\v1\User\UpdateRequest;
 use App\Http\Requests\UserImportRequest;
+use App\Http\Resources\Api\v1\User\UserCollection;
 use App\Http\Resources\Api\v1\User\UserResource;
 use App\Model\User;
 use App\Services\v1\UserService;
@@ -32,7 +33,7 @@ class UserController extends Controller
 
         $filterQuery = $this->service->filterQuery($request->validated());
 
-        return UserResource::collection($filterQuery->paginate($data['per_page'] ?? 25));
+        return UserCollection::collection($filterQuery->paginate($data['per_page'] ?? 25));
     }
 
     public function show(User $user): UserResource
