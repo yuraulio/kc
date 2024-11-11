@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'lastname'            => $this->lastname,
             'email'               => $this->email,
             'birthday'            => $this->birthday,
+            'last_login'          => $this->last_login,
             'mobile'              => $this->mobile,
             'notes'               => $this->notes,
             'city'                => $this->city,
@@ -55,12 +56,13 @@ class UserResource extends JsonResource
             'roles'               => $this->roles,
             'tags'                => $this->tags,
             'skills'              => $this->skills,
-            'receipt_details'     => $this->receipt_details,
-            'invoice_details'     => $this->invoice_details,
+            'receipt_details'     => json_decode($this->receipt_details, true),
+            'invoice_details'     => json_decode($this->invoice_details, true),
             'activities'          => $this->activities,
             'image'               => $this->image,
             'instructor'          => $this->instructor()->first(),
             'paymentMethods'      => $paymentMethods,
+            'concent'             => json_decode($this->consent, true) ?? null,
         ];
     }
 }

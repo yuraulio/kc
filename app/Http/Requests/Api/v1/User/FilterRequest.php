@@ -24,6 +24,7 @@ class FilterRequest extends FormRequest
             'date_to'            => ['sometimes', 'date_format:d-m-Y'],
             'roles'              => ['sometimes', 'array'],
             'roles.*'            => ['sometimes', 'integer', Rule::exists('roles', 'id')],
+            'not_equal_roles.*'  => ['sometimes', 'integer', Rule::exists('roles', 'id')],
             'tags'               => ['sometimes', 'array'],
             'tags.*'             => ['sometimes', 'integer', Rule::exists('tags', 'id')],
             'order_by'           => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],
