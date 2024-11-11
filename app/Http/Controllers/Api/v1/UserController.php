@@ -33,7 +33,7 @@ class UserController extends Controller
 
         $filterQuery = $this->service->filterQuery($request->validated());
 
-        return UserCollection::collection($filterQuery->paginate($data['per_page'] ?? 25));
+        return UserCollection::collection($filterQuery->paginate($request->per_page ?? 25));
     }
 
     public function show(User $user): UserResource

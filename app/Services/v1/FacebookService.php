@@ -50,6 +50,7 @@ class FacebookService
             return true;
         } catch (Exception $e) {
             Log::error($e->getMessage(), $e->getCode());
+
             return false;
         }
     }
@@ -71,6 +72,5 @@ class FacebookService
 
     public function postReview(Review $review)
     {
-
     }
 }
