@@ -56,13 +56,13 @@ class UserResource extends JsonResource
             'roles'               => $this->roles,
             'tags'                => $this->tags,
             'skills'              => $this->skills,
-            'receipt_details'     => json_decode($this->receipt_details, true),
-            'invoice_details'     => json_decode($this->invoice_details, true),
+            'receipt_details'     => json_decode($this->receipt_details ?? '', true) ?? null,
+            'invoice_details'     => json_decode($this->invoice_details ?? '', true) ?? null,
             'activities'          => $this->activities,
             'image'               => $this->image,
             'instructor'          => $this->instructor()->first(),
             'paymentMethods'      => $paymentMethods,
-            'concent'             => json_decode($this->consent, true) ?? null,
+            'concent'             => json_decode($this->consent ?? '', true) ?? null,
         ];
     }
 }
