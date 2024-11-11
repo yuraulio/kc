@@ -81,8 +81,8 @@ class UserService
                     $q->whereIn('roles.id', array_map('intval', $data['roles']));
                 });
             })->when(array_key_exists('not_equal_roles', $data), function ($q) use ($data) {
-                $q->whereHas('roles', function ($q) use ($data) {
-                    $q->whereNotIn('roles.id', array_map('intval', $data['not_equal_roles']));
+                $q->whereDoesntHave('roles', function ($q) use ($data) {
+                    $q->whereIn('roles.id', array_map('intval', $data['not_equal_roles']));
                 });
             })->when(array_key_exists('tags', $data), function ($q) use ($data) {
                 $q->whereHas('tags', function ($q) use ($data) {
