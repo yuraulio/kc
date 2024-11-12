@@ -192,8 +192,10 @@ Route::middleware('auth:api')->group(function () {
             Route::post('login-as/{user}', [V1UserControllerAlias::class, 'loginAs']);
             Route::post('import', [V1UserControllerAlias::class, 'importUsers']);
             Route::get('payments/{user}', [V1UserControllerAlias::class, 'getPayments']);
-            Route::get('terms/{user}/generateConsentPdf', [V1UserControllerAlias::class, 'getPayments']);
+            Route::get('terms/{user}/generateConsentPdf', [V1UserControllerAlias::class, 'generateConsentPdf']);
+            Route::get('{user}/activities', [V1UserControllerAlias::class, 'getUserActivities']);
 
+            Route::get('{user}/events', [EventController::class, 'getEventProgress']);
             Route::get('', [V1UserControllerAlias::class, 'index']);
             Route::get('{user}', [V1UserControllerAlias::class, 'show']);
             Route::post('', [V1UserControllerAlias::class, 'store']);

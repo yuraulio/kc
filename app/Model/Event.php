@@ -3,8 +3,6 @@
 namespace App\Model;
 
 use App\Audience;
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Library\PageVariables;
 use App\Model\Admin\Countdown;
@@ -29,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Laravel\Cashier\Subscription;
 
 /**
  * @property int                       $id

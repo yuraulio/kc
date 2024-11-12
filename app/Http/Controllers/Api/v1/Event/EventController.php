@@ -5,24 +5,25 @@ namespace App\Http\Controllers\Api\v1\Event;
 use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
+use App\Http\Resources\Api\v1\Event\EventProgressCollection;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
 use App\Model\User;
+use App\Services\v1\EventService;
 use App\Services\v1\EventDuplicationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class EventController extends ApiBaseController
 {
-    /**
-     * Creates a new controller object.
-     *
-     * @param  \App\Services\v1\EventDuplicationService $eventDuplicationService
-     */
-    public function __construct(private readonly EventDuplicationService $eventDuplicationService)
+    public function __construct(
+        private readonly EventDuplicationService $eventDuplicationService,
+        private readonly EventService $service
+    )
     {
     }
 
@@ -158,5 +159,17 @@ class EventController extends ApiBaseController
     public function userSubscriptions(User $user): JsonResponse
     {
         return $this->response(['subscriptions' => $user->subscriptionEvents]);
+    }
+
+    public function getEventProgress(User $user, Request $request): AnonymousResourceCollection
+    {
+        $events = $user->events_for_user_list1()
+            ->with('users', function ($q) use ($user) {
+                $q->where('users.id', $user->id);
+            })
+            ->orderBy($request->order_by ?? 'id', $request->order_type ?? 'desc')
+            ->paginate($request->per_page ?? 5);
+
+        return EventProgressCollection::collection($events);
     }
 }

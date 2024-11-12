@@ -73,9 +73,9 @@ class UserService
             })->when(array_key_exists('account_status', $data), function ($q) use ($data) {
                 $q->where('users.account_status', $data['account_status']);
             })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
+                $q->whereDate('users.created_at', '>=', Carbon::parse($data['date_from']));
             })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '<=', Carbon::parse($data['date_to']));
+                $q->whereDate('users.created_at', '<=', Carbon::parse($data['date_to']));
             })->when(array_key_exists('roles', $data), function ($q) use ($data) {
                 $q->whereHas('roles', function ($q) use ($data) {
                     $q->whereIn('roles.id', array_map('intval', $data['roles']));
@@ -178,7 +178,6 @@ class UserService
             'image',
             'roles',
             'tags',
-            'activities',
         ];
     }
 
