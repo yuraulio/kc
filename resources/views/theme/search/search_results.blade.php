@@ -86,9 +86,6 @@
 
             $search1 = strpos(trim(strtolower($loc)),trim(strtolower($search_term)));
             $search2 = strpos(trim(strtolower($row['title'])),trim(strtolower($search_term)));
-           // $search3 = strpos(trim(strtolower($lvalue['header'])),trim(strtolower($search_term)));
-           // $search4 = false;
-            //dd($row);
 
             foreach($row['summary1'] as $sum){
                 if($sum['section'] == 'date'){

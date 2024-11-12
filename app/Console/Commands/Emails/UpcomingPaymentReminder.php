@@ -6,7 +6,6 @@ use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\Invoice;
-use App\Notifications\InstructorsMail;
 use App\Notifications\PaymentReminder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

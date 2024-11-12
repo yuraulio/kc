@@ -16,8 +16,6 @@
 		@include('theme.event.partials.videos')
     <div class="container" id="testi-text">
     	
-		{{--@include('theme.event.partials.api_videos_test')--}}
-		
     	<div class="row">
 	        <div class="col-lg-12 col-md-12 col-sm-12 testimonials_text_col" style="width: 90%;display: block;margin: 0 auto;float: none;">
 

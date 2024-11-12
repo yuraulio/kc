@@ -68,7 +68,6 @@ class MainController extends Controller
             }
 
             $inthemedia = Page::select('content')->find(20);
-            //dd($inthemedia);
 
             if ($inthemedia) {
                 if (isset(json_decode($inthemedia->content, true)[4]['columns'][0]['template']['inputs'][1])) {
@@ -83,18 +82,9 @@ class MainController extends Controller
                     }
                 }
             }
-            //dd($inthemedia);
-
-            //in the media
-            //dd(Page::find(21));
-            // corpot
 
             $dynamicPageData['homeBrands'] = $corp;
-            //$dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
-            //in the media
             $dynamicPageData['homeLogos'] = $inthemedia;
-
-            //$dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
         }
 
         if (!$page) {

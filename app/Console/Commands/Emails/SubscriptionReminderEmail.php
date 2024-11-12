@@ -5,7 +5,6 @@ namespace App\Console\Commands\Emails;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\Instructor;
-use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionReminder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

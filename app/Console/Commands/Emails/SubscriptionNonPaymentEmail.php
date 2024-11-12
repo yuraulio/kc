@@ -5,7 +5,6 @@ namespace App\Console\Commands\Emails;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\Instructor;
-use App\Notifications\InstructorsMail;
 use App\Notifications\SubscriptionFailedPayment;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -39,7 +38,6 @@ class SubscriptionNonPaymentEmail extends Command
             $subscription->email_send = true;
             $subscription->save();
 
-            //dd($subscription->user);
             $user = $subscription->user;
             $event = $user->subscriptionEvents()->where('subscription_id', $subscription->id)->first();
 

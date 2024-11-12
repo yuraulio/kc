@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 class AutomatedInstructorEmail extends Command
 {
     // Command name and description
-    protected $signature = 'email:sendAutomatedForInstructors';
+    protected $signature = 'email:sendAutomateEmailForInstructors';
     protected $description = 'Send automated email reminders to instructors';
 
     public function __construct()

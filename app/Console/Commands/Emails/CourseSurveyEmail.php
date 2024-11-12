@@ -4,7 +4,6 @@ namespace App\Console\Commands\Emails;
 
 use App\Model\Event;
 use App\Model\Instructor;
-use App\Notifications\InstructorsMail;
 use App\Notifications\SurveyEmail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -37,11 +36,7 @@ class CourseSurveyEmail extends Command
                 if ($user->pivot->expiration !== $today || !$user->pivot->expiration) {
                     continue;
                 }
-                if ($event->evaluate_instructors) {
-                    $sendEmail = true;
-                } elseif ($event->evaluate_topics) {
-                    $sendEmail = true;
-                } elseif ($event->fb_testimonial) {
+                if ($event->evaluate_instructors || $event->evaluate_topics || $event->fb_testimonial) {
                     $sendEmail = true;
                 }
 
@@ -78,11 +73,7 @@ class CourseSurveyEmail extends Command
                     continue;
                 }
 
-                if ($event->evaluate_instructors) {
-                    $sendEmail = true;
-                } elseif ($event->evaluate_topics) {
-                    $sendEmail = true;
-                } elseif ($event->fb_testimonial) {
+                if ($event->evaluate_instructors || $event->evaluate_topics || $event->fb_testimonial) {
                     $sendEmail = true;
                 }
 

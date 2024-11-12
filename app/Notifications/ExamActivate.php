@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ExpirationMails extends Notification
+class ExamActivate extends Notification
 {
     use Queueable;
 
@@ -44,16 +44,10 @@ class ExpirationMails extends Notification
      */
     public function toBrevo($notifiable)
     {
-        $emailEvent = 'ExpirationMailsInWeek';
-        if ($this->data['template'] === 'emails.user.courses.masterclass_expiration') {
-            $emailEvent = 'ExpirationMailsMasterClass';
-        }
-        SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+        SendEmail::dispatch('ExamActivate', $this->user->toArray(), null, [
+            'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>isset($this->data['slug']) ? $this->data['slug'] : url('/'),
-            'ExpirationDate'=>$this->data['expirationDate'],
-            'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : 0,
+            'LINK'=>$this->data['slug'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

@@ -480,23 +480,12 @@ class Event extends Model
     public function is_inclass_course()
     {
         $eventInfo = $this->event_info();
-        /*if(isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139){
-            return true;
-        }*/
 
         if (isset($eventInfo['delivery']) && $eventInfo['delivery'] != 143) {
             return true;
         }
 
         return false;
-
-        //return $this->view_tpl !== 'elearning_event' && $this->view_tpl !== 'elearning_free';
-
-        //if($this->delivery->first() && $this->delivery->first()->id == 139){
-        //    return true;
-        //}else{
-        //    return false;
-        //}
     }
 
     public function is_elearning_course()
@@ -508,13 +497,6 @@ class Event extends Model
         }
 
         return false;
-
-        //return $this->view_tpl == 'elearning_event' || $this->view_tpl == 'elearning_free';
-        // if($this->delivery->first() && $this->delivery->first()->id == 143){
-        //     return true;
-        // }else{
-        //     return false;
-        // }
     }
 
     public function delivery(): BelongsToMany
@@ -664,7 +646,6 @@ class Event extends Model
                     if (!$lesson['instructor_id'] && $this->status != 5) {
                         unset($lessonsArray[$key]);
                     }
-                    //if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
                     // ean einai se waiting list to event na mhn to kanei unset
                     if ($this->is_elearning_course() && $lesson['vimeo_video'] == '' && $this->status != 5) {
                         unset($lessonsArray[$key]);
@@ -940,14 +921,11 @@ class Event extends Model
             return true;
         }
 
-        //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
-        //if(!$event->created_at || $event->pivot->comment == 'enroll' /*|| $event->view_tpl == 'elearning_free'*/){
 
         if (!$event->created_at || $event->pivot->comment == 'enroll||0' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 0)) {
             return false;
         } elseif ($event->pivot->comment == 'enroll||1' || (strpos($event->pivot->comment, 'enroll from') !== false && explode('||', $event->pivot->comment)[1] == 1)) {
-            //$periodAfterHasCourse = $accessMonths;
             $accessMonths = 80;
             $periodAfterHasCourse = $this->progress($user);
         }

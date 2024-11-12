@@ -16,7 +16,6 @@ class EmailResource extends JsonResource
             'template' => $this->resource->template,
             'creator_id'=> $this->resource->creator_id,
             'status'=> $this->resource->status,
-            'filter_criteria'=> $this->resource->filter_criteria,
             'created_at' => $this->resource->created_at,
             'description' => $this->resource->description,
         ];

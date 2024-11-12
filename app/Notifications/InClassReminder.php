@@ -49,6 +49,8 @@ class InClassReminder extends Notification
             'FNAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
             'LINK'=>$this->data['slug'],
+            'FAQ'=>$this->data['faq'],
+            'FB_GROUP'=>$this->data['fb_group'],
             'DATE'=>$this->data['first_lesson_date'] . ' ' . $this->data['first_lesson_time'],
             'DURATION'=>$this->data['duration'],
             'LOCATION'=>$this->data['venue'],

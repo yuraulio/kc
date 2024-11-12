@@ -177,11 +177,9 @@ class CronjobsController extends Controller
     {
         $destinationPath = public_path() . '/csv/fb/';
         if (!File::exists($destinationPath)) {
-            //dd('ddd');
             File::makeDirectory($destinationPath, $mode = 0777, true, true);
         }
 
-        //$events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','event_free_coupon')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
         $events = Event::wherePublished(1)->whereFeed(1)->with('category', 'ticket', 'mediable')->get();
 
         $columns = ['id', 'title', 'description', 'availability', 'price', 'link', 'image_link', 'brand', 'google_product_category', 'condition', 'custom_label_0'];
@@ -217,11 +215,9 @@ class CronjobsController extends Controller
     {
         $destinationPath = public_path() . '/csv/google/';
         if (!File::exists($destinationPath)) {
-            //dd('ddd');
             File::makeDirectory($destinationPath, $mode = 0777, true, true);
         }
 
-        //$events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','event_free_coupon')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
         $events = Event::wherePublished(1)->whereFeed(1)->with('category', 'ticket', 'mediable')->get();
         $columns = ['ID', 'Item Title', 'Final URL', 'Image URL', 'Price', 'Item Category', 'Item Description'];
 

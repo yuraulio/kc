@@ -7,7 +7,6 @@ use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\Invoice;
 use App\Notifications\FailedPayment;
-use App\Notifications\InstructorsMail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

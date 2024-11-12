@@ -32,6 +32,6 @@ class SendEmail implements ShouldQueue
     public function handle(EmailSendService $service): void
     {
         // Send email
-        $service->sendEmail($this->event, $this->to, $this->subject, $this->data, $this->metaData);
+        $service->sendEmailByTriggerName($this->event, $this->to, $this->subject, $this->data, $this->metaData);
     }
 }

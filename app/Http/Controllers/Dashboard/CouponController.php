@@ -9,17 +9,6 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
-    // private function getEvents($view_tpl = null){
-
-    //     if(!$view_tpl){
-    //         $events =  Event::where('published',true)->get();
-    //     }else{
-    //         $events = Event::where('view_tpl',$view_tpl)->where('published',true)->get();
-    //     }
-
-    //     return $events;
-    // }
-
     private function getEvents()
     {
         $events = Event::where('published', true)->where('status', 0)->get();

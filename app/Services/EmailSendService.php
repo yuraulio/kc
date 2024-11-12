@@ -24,47 +24,64 @@ class EmailSendService
         return $tags;
     }
 
-    public function sendEmail(string $event, array $to, $subject = null, array $payload, array $metaData = [], array $replyTo = [])
+    public function sendEmailByEmailId(int $emailId, array $to, $subject = null, array $payload, array $metaData = [], array $replyTo = [])
+    {
+        $email = Email::where(['id' => $emailId, 'status' => 1])->first();
+        if ($email) {
+            return $this->sendEmail($email, $to, $subject, $payload, $metaData, $replyTo);
+        }
+
+        return response()->noContent();
+    }
+
+    private function sendEmail(Email $email, array $to, $subject = null, array $payload, array $metaData = [], array $replyTo = [])
+    {
+        try {
+            $metaData = $this->convertToTags($metaData);
+            $emailPayload = [
+                'params' => $payload,
+                'to' => [
+                    [
+                        'email' => $to['email'],
+                        'name'  => $to['firstname'] . ' ' . $to['lastname'],
+                    ],
+                ],
+                'templateId' => $email->template['id'],
+            ];
+            if (isset($replyTo['email'])) {
+                $emailPayload['replyTo'] = $replyTo;
+            }
+            if (isset($subject) && !empty($subject)) {
+                $emailPayload['subject'] = $subject;
+            }
+            if (count($metaData) > 0) {
+                $emailPayload['tags'] = $metaData;
+            }
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'api-key' => env('BREVO_API_KEY'),
+                'content-type' => 'application/json',
+            ])->post('https://api.brevo.com/v3/smtp/email', $emailPayload);
+            $emailResponse = $response->json();
+            if (isset($emailResponse['messageId'])) {
+                return ['status'=>'success'];
+            }
+            throw new \Exception($emailResponse['message']);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            \Log::error('Brevo error : ' . $e->getMessage());
+        } catch (\Exception $e) {
+            \Log::error('Brevo error : ' . $e->getMessage());
+        }
+    }
+
+    public function sendEmailByTriggerName(string $event, array $to, $subject = null, array $payload, array $metaData = [], array $replyTo = [])
     {
         $email = Email::where(['predefined_trigger' => $event, 'status' => 1])->first();
         if ($email) {
-            try {
-                $metaData = $this->convertToTags($metaData);
-                $emailPayload = [
-                    'params' => $payload,
-                    'to' => [
-                        [
-                            'email' => $to['email'],
-                            'name'  => $to['firstname'] . ' ' . $to['lastname'],
-                        ],
-                    ],
-                    'templateId' => $email->template['id'],
-                ];
-                if (isset($replyTo['email'])) {
-                    $emailPayload['replyTo'] = $replyTo;
-                }
-                if (isset($subject) && !empty($subject)) {
-                    $emailPayload['subject'] = $subject;
-                }
-                if (count($metaData) > 0) {
-                    $emailPayload['tags'] = $metaData;
-                }
-                $response = Http::withHeaders([
-                    'accept' => 'application/json',
-                    'api-key' => env('BREVO_API_KEY'),
-                    'content-type' => 'application/json',
-                ])->post('https://api.brevo.com/v3/smtp/email', $emailPayload);
-                $emailResponse = $response->json();
-                if (isset($emailResponse['messageId'])) {
-                    return ['status'=>'success'];
-                }
-                throw new \Exception($emailResponse['message']);
-            } catch (\GuzzleHttp\Exception\ClientException $e) {
-                \Log::error('Brevo error : ' . $e->getMessage());
-            } catch (\Exception $e) {
-                \Log::error('Brevo error : ' . $e->getMessage());
-            }
+            return $this->sendEmail($email, $to, $subject, $payload, $metaData, $replyTo);
         }
+
+        return response()->noContent();
     }
 
     public function sendAgain(array $formData)

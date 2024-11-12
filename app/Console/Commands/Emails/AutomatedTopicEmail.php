@@ -5,7 +5,6 @@ namespace App\Console\Commands\Emails;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\Instructor;
-use App\Notifications\InstructorsMail;
 use App\Notifications\SendTopicAutomateMail;
 use Carbon\Carbon;
 use DateTime;
@@ -32,8 +31,7 @@ class AutomatedTopicEmail extends Command
     {
         $date1 = date('Y-m-d', strtotime('+1 days'));
 
-        $dates = [$date1, date('Y-m-d', strtotime('+4 days'))];
-
+        $dates = [$date1, date('Y-m-d', strtotime('+7 days'))];
         $events = Event::
         where('published', true)
             ->whereIn('status', [/*0,2,*/ 3])

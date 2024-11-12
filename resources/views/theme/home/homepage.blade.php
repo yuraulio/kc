@@ -75,10 +75,9 @@
    </section>
    <?php
 
-
       endif; ?>
 
-
+   
    @if(isset($nonElearningEvents))
    @foreach($nonElearningEvents as $bcatid => $category)
 
@@ -249,15 +248,8 @@
    @endforeach
    @endif
 
-<?php //dd('end'); ?>
-<?php //dd($inclassEventsbycategoryFree); ?>
    @if(isset($inclassFree))
    @foreach($inclassFree as $bcatid => $category)
-   <?php
-   //dd($bcateventids[]);
-    ?>
-
-   <?php //dd($bcateventids); ?>
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">

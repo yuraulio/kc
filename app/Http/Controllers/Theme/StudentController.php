@@ -406,17 +406,12 @@ class StudentController extends Controller
 
                 $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
 
-                if ($event->id == 2304) {
-                    //dd($eventInfo['elearning']['exam']['activate_months']);
-                }
-
                 if (isset($eventInfo['elearning']['exam']['activate_months']) && $eventInfo['elearning']['exam']['activate_months'] != null) {
                     $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user, $eventInfo['elearning']['exam']['activate_months']);
                 } else {
                     $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user, 0);
                 }
 
-                //$data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8,$statistic);
                 $data['mySubscriptionEvents'][$key]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : []; //$event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id', $subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['delivery'] = isset($eventInfo['delivery']) ? $eventInfo['delivery'] : -1;
@@ -555,16 +550,12 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['certs'] = isset($event['certificates']) && $event['certificates'] ? $event['certificates'] : [];
 
-                // if($event->id == 4641){
-                //     dd($event['certificates']);
-                // }
                 $data['events'][$event->id]['exams'] = $event->getExams();
 
                 $data['events'][$event->id]['exam_activate_months'] = isset($eventInfo['elearning']['exam']) ? $eventInfo['elearning']['exam']['activate_months'] : null;
 
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
-                //$data['events'][$event->id]['summary1'] = $event['summary1'];
                 $data['events'][$event->id]['hours'] = isset($eventInfo['hours']['hour']) && $eventInfo['hours']['hour'] > 0 ? $eventInfo['hours']['hour'] : '';
                 $data['events'][$event->id]['hours_icon'] = isset($eventInfo['hours']['icon']['path']) ? $eventInfo['hours']['icon']['path'] : null;
 
@@ -583,12 +574,8 @@ class StudentController extends Controller
                 } else {
                     $data['events'][$event->id]['exam_access'] = $event->examAccess($user, 0);
                 }
-                //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
-
                 $eventSubscriptions[] = $result = $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first() ?
                                             $user->eventSubscriptions()->wherePivot('event_id', $event['id'])->orderByPivot('expiration', 'DESC')->first()->id : -1;
-
-                //$eventSubscriptions[] =  array_values($user->eventSubscriptions()->wherePivot('event_id',$event['id'])->pluck('id')->toArray());
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];

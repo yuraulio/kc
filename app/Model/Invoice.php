@@ -53,20 +53,6 @@ class Invoice extends Model
             $query->where('name', 'like', $search_term_str);
         }
 
-        /*if (isset($filters['search_term']) && strlen($filters['search_term']) > 1) {
-
-                $search_term_str = '%'.implode("%", explode(" ", $filters['search_term'])).'%';
-                $events = Content::where('title', 'like', $search_term_str)
-                    ->orWhere('slug', 'like', $search_term_str)
-                    ->orWhere('id', 'like', $search_term_str)
-                    ->orWhere('meta_title', 'like', $search_term_str)
-                    ->orWhere('meta_keywords', 'like', $search_term_str)
-                    ->where('view_tpl','elearning_event')->pluck('id');
-
-                    $query->whereIn('event_id', $events);
-
-        }*/
-
         return $query;
     }
 

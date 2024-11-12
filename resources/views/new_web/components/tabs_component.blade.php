@@ -65,7 +65,6 @@
                             </ul>
 
                             @if ($event)
-                                {{--@if($event->view_tpl == "elearning_free")--}}
                                 @if($freeEvent)
 
                                     @if($is_event_paid==0 && !Auth::user())
@@ -82,7 +81,6 @@
                                     @if($is_event_paid==0 && $event['view_tpl'] == 'event_free_coupon')
                                         <a href="javascript:void(0)" id="open-code-popup" class="btn btn--lg btn--primary">ENROLL NOW</a>
                                     @else
-{{--                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>--}}
                                         <button class="btn btn--lg btn--primary go-to-href" onclick="document.getElementById('seats').scrollIntoView({behavior: 'smooth'});">
                                           ENROLL NOW
                                         </button>
@@ -90,13 +88,11 @@
                                 @elseif($estatus == App\Model\Event::STATUS_WAITING && !$is_joined_waiting_list && !$is_event_paid)
                                     <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
                                 @elseif($estatus != App\Model\Event::STATUS_COMPLETED && $estatus != App\Model\Event::STATUS_WAITING && $estatus != App\Model\Event::STATUS_CLOSE && !$is_event_paid)
-{{--                                    <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>--}}
                                     <button class="btn btn--lg btn--primary go-to-href go-to-href soldout" onclick="document.getElementById('seats').scrollIntoView({behavior: 'smooth'});">
                                       SOLD OUT
                                     </button>
                                 @elseif($estatus == App\Model\Event::STATUS_OPEN && $is_event_paid)
                                     @if($is_event_expired == 1)
-{{--                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href">REENROLL</a>--}}
                                         <button class="btn btn--lg btn--primary go-to-href" onclick="document.getElementById('seats').scrollIntoView({behavior: 'smooth'});">
                                           REENROLL
                                         </button>

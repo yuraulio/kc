@@ -41,12 +41,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:sendSubscriptionRemind')->dailyAt('15:10');
         $schedule->command('email:remindAbandonedUser')->everyFiveMinutes();
         $schedule->command('email:remindAbandonedUserSecond')->cron('*/8 * * * *');
-        $schedule->command('email:sendExpirationEmails')->dailyAt('15:00');
         $schedule->command('email:sendPaymentReminder')->dailyAt('16:00');
-        $schedule->command('email:sendHalfPeriod')->dailyAt('17:00');
         $schedule->command('email:sendElearningFQ')->dailyAt('18:00');
-        $schedule->command('email:sendSurveyMail')->dailyAt('19:00');
-        $schedule->command('email:sendInClassReminder')->dailyAt('17:02');
         $schedule->command('email:sendAutomateMailBasedOnTopic')->dailyAt('10:00');
         $schedule->command('email:sendAutomateEmailForInstructors')->dailyAt('12:00');
     }
@@ -60,6 +56,7 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__ . '/Commands');
         $this->load(__DIR__ . '/Commands/Emails');
+        $this->load(__DIR__ . '/Commands/DynamicTriggerEmails');
 
         require base_path('routes/console.php');
     }

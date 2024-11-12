@@ -7,7 +7,6 @@ use App\Model\Event;
 use App\Model\Instructor;
 use App\Model\Pages;
 use App\Notifications\ExpirationMails;
-use App\Notifications\InstructorsMail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -35,7 +34,6 @@ class ExpirationEmail extends Command
 
         $today = date_create(date('Y/m/d'));
         $today1 = date('Y-m-d');
-
         foreach ($events as $event) {
             foreach ($event['users'] as $user) {
                 if (!($user->pivot->expiration >= $today1) || !$user->pivot->expiration) {
@@ -54,7 +52,7 @@ class ExpirationEmail extends Command
 
                     $page = Pages::find(4752);
 
-                    $data['subscriptionSlug'] = url('/') . '/' . $page->getSlug();
+                    $data['slug'] = url('/') . '/' . $page->getSlug();
                     $data['template'] = 'emails.user.courses.masterclass_expiration';
                     $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
                     $data['subscription_price'] = $event->plans[0]['cost'];

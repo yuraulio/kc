@@ -316,22 +316,12 @@ class CMS
                     }
 
                     if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
-                        //$event['sumStudents'] = get_sum_students_course((isset($category) ? $category : null));
-
                         $data['elearningEvents'][$category['id']]['events'][] = $event;
                         $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
-
-                    //dd($event['ticket']);
                     } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
-                        //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
                         $data['inclassFree'][$category['id']]['events'][] = $event;
-                    //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
-                    } /*elseif ($event['view_tpl'] == 'elearning_free') {
-                                $data['elearningFree'][$category['id']]['events'][] = $event;
-                            }*/ else {
-                        //$event['sumStudents'] = get_sum_students_course((isset($event['category']) ? $category : null));
+                    } else {
                         $data['nonElearningEvents'][$category['id']]['events'][] = $event;
-                        //$data['nonElearningEvents'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                     }
                 }
             }

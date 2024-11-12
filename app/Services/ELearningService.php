@@ -10,6 +10,7 @@ use App\Model\EventStatistic;
 use App\Model\Topic;
 use App\Model\User;
 use App\Notifications\ErrorSlack;
+use App\Notifications\ExamActivate;
 use App\Notifications\SendTopicAutomateMail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -93,6 +94,16 @@ class ELearningService
                 } elseif ($event && count($event->getExams()) > 0) {
                     Log::channel('daily')
                         ->info('[user_id: ' . $user->id . ', event_id: ' . $event->id . '] User finished the course but exams count is more than 0. So the certification won\'t be generated.');
+                    $examAccess = $event->examAccess($user);
+                    if ($examAccess) {
+                        $data['firstname'] = $user->firstname;
+                        $data['eventTitle'] = $event->title;
+                        $data['eventId'] = $event->id;
+                        $data['slug'] = url('/') . '/myaccount';
+
+                        $user->notify(new ExamActivate($data, $user));
+                        event(new EmailSent($user->email, 'ExamActivate'));
+                    }
                 } elseif ($event && $event->hasCertificate()) {
                     $event->certification($user);
                 }

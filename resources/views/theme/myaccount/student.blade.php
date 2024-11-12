@@ -964,7 +964,6 @@
                                     $allInstallmentsPayed = $eventEloquent->allInstallmentsPayed();
                                   }
                                   @endphp
-                                {{--@if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')--}}
                                 @if($event['delivery'] != 143)
                                 <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2 @if((isset($event['paid']) && $event['paid'] == 0 && isset($event['transactionPending']) && $event['transactionPending'] == 2) || (isset($event['transactionPendingSepa']) && $event['transactionPendingSepa'] == 1)){{'pendingSepa'}}@elseif(isset($event['paid']) && $event['paid'] == 0 ){{'unpaid'}}@endif">
                                     <div class="item">
@@ -1640,7 +1639,6 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                <?php //dd($event); ?>
                                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                                     <div class="bottom">
                                                         @if (isset($event['hours']))
@@ -1659,7 +1657,6 @@
                                                             <?php $expire = false; ?>
                                                             @foreach($mySubscriptions as $key => $sub)
                                                             @foreach($plans as $key1 => $plan)
-                                                            <?php //dd($plan['stipe_plan']); ?>
                                                             @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                                             @if($event['id'] == $plan['event_id'])
                                                             <?php
@@ -1831,7 +1828,6 @@
                                 @if(isset($mySubscriptionEvents) && count($mySubscriptionEvents) > 0)
                                 <!-- subs -->
                                 @foreach($mySubscriptionEvents as $keyType => $event)
-                                {{--@if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')--}}
                                 @if($event['delivery'] != 143)
                                 @else
                                 <div class="col12 dynamic-courses-wrapper">

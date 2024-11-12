@@ -6,7 +6,6 @@ use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\Instructor;
 use App\Notifications\HalfPeriod;
-use App\Notifications\InstructorsMail;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

@@ -30,7 +30,7 @@ class EmailController extends ApiBaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, EmailService $emailService): EmailResource
+    public function store(Request $request, EmailService $emailService)
     {
         return EmailResource::make(
             $emailService->createOrUpdate($request),
@@ -42,6 +42,8 @@ class EmailController extends ApiBaseController
      */
     public function show(Request $request, Email $email): JsonResponse
     {
+        $email->load('triggers');
+
         return new JsonResponse(
             $this->applyRequestParametersToModel($email, $request)
         );

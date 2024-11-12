@@ -838,9 +838,6 @@ Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
         return redirect('/brands-trained');
     });
 
-    // if (cache("cmsMode") != Setting::NEW_PAGES) {
-    //     Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
-    // }
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     // Route::get('{slug?}', 'Theme\HomeController@index');
 });
