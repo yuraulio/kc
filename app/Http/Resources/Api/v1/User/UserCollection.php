@@ -26,7 +26,7 @@ class UserCollection extends JsonResource
             'mobile'              => $this->mobile,
             'notes'               => $this->notes,
             'city'                => $this->city,
-            'country_code'        => $this->country_code,
+            'country'             => $this->country,
             'job_title'           => $this->job_title,
             'company'             => $this->company,
             'company_url'         => $this->company_url,

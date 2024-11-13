@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Api\v1\User;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,12 +29,12 @@ class UserResource extends JsonResource
             'firstname'           => $this->firstname,
             'lastname'            => $this->lastname,
             'email'               => $this->email,
-            'birthday'            => $this->birthday,
+            'birthday'            => Carbon::parse($this->birthday)->format('d-m-Y'),
             'last_login'          => $this->last_login,
             'mobile'              => $this->mobile,
             'notes'               => $this->notes,
             'city'                => $this->city,
-            'country_code'        => $this->country_code,
+            'country'             => $this->country,
             'job_title'           => $this->job_title,
             'company'             => $this->company,
             'company_url'         => $this->company_url,
