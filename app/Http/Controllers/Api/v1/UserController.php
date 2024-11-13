@@ -150,9 +150,9 @@ class UserController extends Controller
 
         $activities = $user->activities()
             ->when(array_key_exists('date_from', $data), function ($q) use ($data) {
-                $q->whereDate('users.created_at', '>=', Carbon::parse($data['date_from']));
+                $q->whereDate('user_activities.created_at', '>=', Carbon::parse($data['date_from']));
             })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
-                $q->whereDate('users.created_at', '<=', Carbon::parse($data['date_to']));
+                $q->whereDate('user_activities.created_at', '<=', Carbon::parse($data['date_to']));
             })
             ->orderBy($request->order_by ?? 'created_at', $request->order_type ?? 'desc')
             ->paginate($request->per_page ?? 5);
