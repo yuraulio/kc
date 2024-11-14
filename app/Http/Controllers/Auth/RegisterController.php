@@ -18,18 +18,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
-use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Model\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Mail;
-use Propaganistas\LaravelPhone\PhoneNumber;
 use Session;
 
 class RegisterController extends Controller

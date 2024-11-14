@@ -2,12 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Notifications\SendWaitingListEmail;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

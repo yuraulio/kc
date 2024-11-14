@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Models\Invoice;
 use App\Notifications\FailedPayment;

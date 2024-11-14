@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Enums\ActivityEventEnum;
 use App\Enums\RoleEnum;
+use App\Events\ActivityEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\User\FilterActivityRequest;
@@ -158,5 +160,12 @@ class UserController extends Controller
             ->paginate($request->per_page ?? 5);
 
         return UserActivitiesResource::collection($activities);
+    }
+
+    public function activityTest(User $user, Request $request): JsonResponse
+    {
+        event(new ActivityEvent($user, ActivityEventEnum::AbandonedCart->value, 'Test activity' . Carbon::now()->format('d F Y'), User::findOrFail($request->who_id)));
+
+        return \response()->json(['success' => true]);
     }
 }

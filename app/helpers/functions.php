@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Jobs\SendEmail;
 use App\Model\Admin\Page;

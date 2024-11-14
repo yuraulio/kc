@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Model\Event;
 use App\Model\EventStatistic;
@@ -12,7 +10,6 @@ use App\Model\User;
 use App\Notifications\ErrorSlack;
 use App\Notifications\ExamActivate;
 use App\Notifications\SendTopicAutomateMail;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class ELearningService

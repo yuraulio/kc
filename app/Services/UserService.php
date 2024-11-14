@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\ChunkReadFilter;
 use App\Jobs\SendEmail;
@@ -18,7 +16,6 @@ use App\Notifications\WelcomeEmail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

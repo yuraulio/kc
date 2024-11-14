@@ -2,16 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Jobs\SendEmail;
 use App\Model\Activation;
 use App\Model\User;
-use App\Notifications\SendBrevoMail;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 

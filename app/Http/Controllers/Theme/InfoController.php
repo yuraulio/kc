@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Theme;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Jobs\EventSoldOut;

@@ -18,8 +18,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
 use App\Http\Controllers\Controller;
 use App\Model\User;

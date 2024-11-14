@@ -124,9 +124,9 @@ class EmailSendService
                     $messagingActivity->user()->save($user);
                 }
                 if ($event['event'] === 'unique_opened') {
-                    (new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['subject'] . Carbon::now()->format('d F Y')));
                 } elseif ($event['event'] === 'request' && $event['reason'] === 'sent') {
-                    (new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $event['subject'] . Carbon::now()->format('d F Y')));
                 }
             }
             //Creating event relationship

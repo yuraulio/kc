@@ -2,14 +2,9 @@
 
 namespace App\Notifications;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Jobs\SendEmail;
 use App\Model\User;
-use App\Notifications\SendBrevoMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class SendTopicAutomateMail extends Notification

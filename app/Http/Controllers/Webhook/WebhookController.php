@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Webhook;
 
-use App\Enums\ActivityEventEnum;
-use App\Events\ActivityEvent;
 use App\Events\EmailSent;
-use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
 use App\Model\Event;
 use App\Model\Invoice;
