@@ -1168,8 +1168,8 @@ class UserController extends Controller
         $billing['billcountry'] = $billingDetails['billcountry'] ?? '';
         $billing['billemail'] = $billingDetails['billemail'] ?? '';
 
-        if (isset($user['image']) && get_profile_image($user['image'])) {
-            $user['profileImage'] = get_profile_image($user['image']);
+        if ($user->profile_image) {
+            $user['profileImage'] = $user->profile_image->url;
         } else {
             $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
         }

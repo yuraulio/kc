@@ -16,13 +16,18 @@ class EventProgressCollection extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $decimal = $this->eventInfo['course_hours'] ?? 0;
+        $hours = floor($decimal);
+        $minutes = ($decimal - $hours) * 60;
+
         return [
             'id'           => $this->id,
             'title'        => $this->title,
             'admin_title'  => $this->admin_title,
             'subtitle'     => $this->subtitle,
             'status'       => $this->status,
-            'hours'        => $this->eventInfo['course_hours'] ?? null,
+            'hours'        => $hours,
+            'minutes'      => $minutes,
             'completed_at' => $this->completed_at,
             'launch_date'  => $this->launch_date,
             'delivery'     => $this->delivery()->first(),
