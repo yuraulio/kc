@@ -20,6 +20,7 @@ class UserActivitiesResource extends JsonResource
             'id'          => $this->id,
             'title'       => $this->title,
             'description' => $this->description,
+            'created_at'  => $this->created_at,
             'user'        => UserCollection::make($this->who),
         ];
     }
