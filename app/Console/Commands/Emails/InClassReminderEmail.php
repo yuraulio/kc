@@ -40,6 +40,7 @@ class InClassReminderEmail extends Command
             })
             ->with('users')
             ->get();
+        // dd($events->pluck('id'));
 
         foreach ($events as $event) {
             $first_lesson = $event->lessons->first();

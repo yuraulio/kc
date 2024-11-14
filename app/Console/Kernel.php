@@ -42,9 +42,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:remindAbandonedUser')->everyFiveMinutes();
         $schedule->command('email:remindAbandonedUserSecond')->cron('*/8 * * * *');
         $schedule->command('email:sendPaymentReminder')->dailyAt('16:00');
-        $schedule->command('email:sendElearningFQ')->dailyAt('18:00');
         $schedule->command('email:sendAutomateMailBasedOnTopic')->dailyAt('10:00');
-        $schedule->command('email:sendAutomateEmailForInstructors')->dailyAt('12:00');
+
+        $schedule->command('email:sendTopicTriggerEmail')->dailyAt('10:00');
+        $schedule->command('email:courseStartsTriggerEmail')->dailyAt('08:00');
+        $schedule->command('email:courseEndsTriggerEmail')->dailyAt('09:00');
+        $schedule->command('email:sendCourseDurationTriggerEmail')->dailyAt('11:00');
     }
 
     /**

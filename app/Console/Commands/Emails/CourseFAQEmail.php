@@ -60,9 +60,8 @@ class CourseFAQEmail extends Command
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' enjoying ' . $event->title . '?';
                 $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
                 $data['expirationDate'] = date('d-m-Y', strtotime($expiration->pivot->expiration));
-                // $data['template'] = 'emails.user.elearning_f&qemail';
 
-                $user->notify(new ElearningFQ($data, $user));
+                $user->notify(new ElearningFQ($data, $user->toArray()));
                 event(new EmailSent($user->email, 'ElearningFQ'));
             }
         }

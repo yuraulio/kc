@@ -12,6 +12,7 @@ use App\Services\EmailSendService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class TopicTriggerEmail extends Command
 {
@@ -32,7 +33,9 @@ class TopicTriggerEmail extends Command
 
     private function sendTopicTriggerEmail()
     {
-        $emailTriggers = EmailTrigger::where('trigger_type', 'lesson')->get();
+        $emailTriggers = EmailTrigger::where('trigger_type', 'lesson')->whereHas('email', function (Builder $query) {
+            $query->where('status', 1);
+        })->get();
         foreach ($emailTriggers as $emailTrigger) {
             $date = ($emailTrigger->value || $emailTrigger->value === 0) ? date('Y-m-d', strtotime("+$emailTrigger->value days")) : null;
             if ($date === null) { //Skip if trigger value is not set.
@@ -67,9 +70,9 @@ class TopicTriggerEmail extends Command
             ])
                 ->with('users')
                 ->get();
-            $checkForDoubleTopics = [];
             foreach ($events as $event) {
                 $checkForDoubleTopics = [];
+                $data = [];
                 $info = $event->event_info();
                 $venues = $event->venues;
                 if (isset($info['inclass'])) {
@@ -85,15 +88,12 @@ class TopicTriggerEmail extends Command
                 $data['fb_group'] = $event->fb_group ? $event->fb_group : '';
                 $data['eventTitle'] = $event->title;
                 $data['eventId'] = $event->id;
+
                 foreach ($event['lessons'] as $lesson) {
                     if (in_array($lesson->id, $checkForDoubleTopics)) {
                         continue;
                     }
                     $checkForDoubleTopics[] = $lesson->id;
-
-                    if (!$emailTrigger->email) {
-                        continue;
-                    }
 
                     $data['Date'] = (isset($lesson->pivot->date)) ? $lesson->pivot->date : '-';
                     if (isset($lesson->pivot->time_starts)) {
@@ -106,8 +106,7 @@ class TopicTriggerEmail extends Command
                     $interval = $date1->diff($date2);
 
                     $data['email_template'] = $emailTrigger->email->template['label'];
-
-                    if (strpos(strtolower($data['email_template']), 'instructor') === false) {
+                    if (!isset($filters['to_instructor']) || $filters['to_instructor'] === '0') {
                         foreach ($event->users as $user) {
                             $data['firstname'] = $user->firstname;
                             $data['lastname'] = $user->lastname;
@@ -125,7 +124,6 @@ class TopicTriggerEmail extends Command
                         $user = $instructor->user[0];
                         $data['firstname'] = $user->firstname;
                         $data['lastname'] = $user->lastname;
-
                         $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, array_merge([
                             'FNAME'=> $data['firstname'],
                             'CourseName'=>$data['eventTitle'],
@@ -133,7 +131,9 @@ class TopicTriggerEmail extends Command
                         ], $data), ['event_id'=>$data['eventId']]);
                         event(new EmailSent($user->email, $emailTrigger->email->title));
                     }
+                    $emailTrigger->lesson_trigger_logs()->save($lesson);
                 }
+                $emailTrigger->course_trigger_logs()->save($event);
             }
         }
     }

@@ -10,6 +10,7 @@ use App\Notifications\HalfPeriod;
 use App\Services\EmailSendService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class CourseDurationTriggerEmail extends Command
 {
@@ -30,7 +31,9 @@ class CourseDurationTriggerEmail extends Command
 
     private function sendCourseDurationTriggerEmail()
     {
-        $emailTriggers = EmailTrigger::where('trigger_type', 'course_duration')->get();
+        $emailTriggers = EmailTrigger::where('trigger_type', 'course_duration')->whereHas('email', function (Builder $q) {
+            $query->where('status', 1);
+        })->get();
 
         foreach ($emailTriggers as $emailTrigger) {
             $courseProgress = $emailTrigger->value / 100; //Convert to percentage
@@ -60,21 +63,33 @@ class CourseDurationTriggerEmail extends Command
             $today1 = date('Y-m-d');
             foreach ($events as $event) {
                 $eventInfo = $event->event_info();
-                if (isset($eventInfo['elearning'])) {
+                if ($event->eventInfo->course_delivery === '143') {
                     $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : null;
                 } else {
-                    $expiration = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : null;
+                    $lastLessonEndTime = $event->finishClassDuration();
+                    //Total number of months from launch date till the end of the last lesson of the course.
+                    $launchDate = date_create($event->launch_date);
+                    $endDate = date_create($lastLessonEndTime);
+                    $expiration = $launchDate->diff($endDate)->m + ($launchDate->diff($endDate)->y * 12);
                 }
 
                 $courseExpirationDays = $expiration * 30 * $courseProgress;
 
                 foreach ($event['users'] as $user) {
-                    if ($user->pivot->expiration < $today1 || !$user->pivot->expiration || !$expiration) {
+                    if ($event->eventInfo->course_delivery === '143' && ($user->pivot->expiration < $today1 || !$user->pivot->expiration || !$expiration)) {
+                        continue;
+                    } elseif ($event->eventInfo->course_delivery !== '143' &&
+                    ($lastLessonEndTime < $today1 || !$lastLessonEndTime)
+                    ) {
                         continue;
                     }
 
-                    $date = date_create($user->pivot->expiration);
-                    $date = date_diff($date, $today);
+                    if ($event->eventInfo->course_delivery === '143') {
+                        $date = date_create($user->pivot->expiration);
+                        $date = date_diff($date, $today);
+                    } else {
+                        $date = date_diff($endDate, $today);
+                    }
 
                     if ($date->days == $courseExpirationDays) {
                         $data['email_template'] = $emailTrigger->email->template['label'];
@@ -88,6 +103,7 @@ class CourseDurationTriggerEmail extends Command
                         event(new EmailSent($user->email, $emailTrigger->email->title));
                     }
                 }
+                $emailTrigger->course_trigger_logs()->save($event);
             }
         }
     }

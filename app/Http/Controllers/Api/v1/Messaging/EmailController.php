@@ -6,6 +6,8 @@ use App\Enums\Email\EmailTriggersEnum;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Resources\Api\v1\Messaging\EmailResource;
 use App\Model\Email;
+use App\Model\EmailTrigger;
+use App\Model\Event;
 use App\Services\EmailSendService;
 use App\Services\Messaging\EmailService;
 use Artisan;
@@ -67,5 +69,14 @@ class EmailController extends ApiBaseController
     public function getEmailTriggers()
     {
         return ['data'=>EmailTriggersEnum::getEmailTriggers()];
+    }
+
+    public function getScheduled($eventId, EmailService $emailService)
+    {
+        $data = $emailService->getTopicEmails($eventId);
+        $data = array_merge($emailService->getCourseStartorEndEmails($eventId), $data);
+        $data = array_map(fn ($item, $index) => array_merge($item, ['index' => $index]), $data, array_keys($data));
+
+        return ['data'=>$data];
     }
 }

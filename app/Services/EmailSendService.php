@@ -42,7 +42,7 @@ class EmailSendService
                 'params' => $payload,
                 'to' => [
                     [
-                        'email' => $to['email'],
+                        'email' => (config('app.env') === 'local') ? config('app.TEST_EMAIL') : $to['email'],
                         'name'  => $to['firstname'] . ' ' . $to['lastname'],
                     ],
                 ],

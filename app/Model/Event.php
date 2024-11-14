@@ -1055,6 +1055,11 @@ class Event extends Model
         return $this->morphToMany(Invoice::class, 'invoiceable', 'invoiceables');
     }
 
+    public function email_trigger_logs(): MorphToMany
+    {
+        return $this->morphToMany(EmailTrigger::class, 'email_triggerables');
+    }
+
     public function transactions(): MorphToMany
     {
         return $this->morphToMany(Transaction::class, 'transactionable')->with('user.ticket', 'isSubscription');

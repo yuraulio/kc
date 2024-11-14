@@ -8,6 +8,7 @@ use App\Model\Event;
 use App\Services\EmailSendService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class CourseEndsTriggerEmail extends Command
 {
@@ -28,7 +29,9 @@ class CourseEndsTriggerEmail extends Command
 
     private function courseEndsTriggerEmail()
     {
-        $emailTriggers = EmailTrigger::where('trigger_type', 'course_end_date')->get();
+        $emailTriggers = EmailTrigger::where('trigger_type', 'course_end_date')->whereHas('email', function (Builder $query) {
+            $query->where('status', 1);
+        })->get();
 
         foreach ($emailTriggers as $emailTrigger) {
             $filters = ($emailTrigger->trigger_filters);
@@ -60,13 +63,7 @@ class CourseEndsTriggerEmail extends Command
             foreach ($events as $event) {
                 foreach ($event['users'] as $user) {
                     if ($event->eventInfo->course_delivery !== '143') { // Not an Elearning course
-                        $lesson = $event->lessons->last();
-                        if (!isset($lesson['pivot']['time_ends']) ||
-                            $today !== date('Y-m-d', strtotime($lesson['pivot']['time_ends']))
-                        ) {
-                            continue;
-                        }
-                        $expDate = date('Y-m-d', strtotime($lesson['pivot']['time_ends']));
+                        $expDate = $event->finishClassDuration();
                     } else { // Elearning course
                         if ($user->pivot->expiration !== $today || !$user->pivot->expiration) {
                             continue;
@@ -89,6 +86,7 @@ class CourseEndsTriggerEmail extends Command
 
                     event(new EmailSent($user->email, $emailTrigger->email->title));
                 }
+                $emailTrigger->course_trigger_logs()->save($event);
             }
         }
     }

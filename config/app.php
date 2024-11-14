@@ -48,6 +48,7 @@ return [
     'NEW_PAGES_LINK' => env('NEW_PAGES_LINK'),
     'THE_TEAM' => env('THE_TEAM', 'Knowcrunch'),
     'SITE_NAME' => env('SITE_NAME', 'Knowcrunch'),
+    'TEST_EMAIL' => env('TEST_EMAIL', 'info@knowcrunch.com'),
 
     /*
     |--------------------------------------------------------------------------

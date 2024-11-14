@@ -320,6 +320,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('messaging/categories', MessageCategoryController::class);
     Route::apiResource('messaging/emails', EmailController::class);
     Route::get('messaging/emails-templates', [EmailController::class, 'getTemplates']);
+    Route::get('messaging/course-scheduled/{id}', [EmailController::class, 'getScheduled']);
     Route::get('messaging/emails-triggers', [EmailController::class, 'getEmailTriggers']);
     // Mobile Notification
     Route::apiResource('messaging/mobile-notifications', MobileNotificationController::class);
@@ -328,7 +329,6 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
 
     // Messaging Activity
     Route::get('messaging-activity/by-user/{id}', [MessagingActivityController::class, 'showByUser']);
-    Route::get('messaging-activity/by-event/{id}', [MessagingActivityController::class, 'showByEvent']);
     Route::delete('messaging-activity/{id}', [MessagingActivityController::class, 'destroy']);
     Route::post('messaging-activity/send-again', [MessagingActivityController::class, 'sendAgain']);
     Route::get('messaging-activity/email-criteria/{id}', [MessagingActivityController::class, 'getEmail']);

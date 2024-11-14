@@ -11,6 +11,7 @@ use App\Services\QueryString\Traits\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Lesson extends Model
 {
@@ -30,6 +31,11 @@ class Lesson extends Model
     public function topic()
     {
         return $this->belongsToMany(Topic::class, 'categories_topics_lesson')->withPivot('category_id', 'lesson_id', 'topic_id', 'priority')->orderBy('priority', 'asc');
+    }
+
+    public function email_trigger_logs(): MorphToMany
+    {
+        return $this->morphToMany(EmailTrigger::class, 'email_triggerables');
     }
 
     public function category()
