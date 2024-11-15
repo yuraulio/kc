@@ -48,6 +48,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:courseStartsTriggerEmail')->dailyAt('08:00');
         $schedule->command('email:courseEndsTriggerEmail')->dailyAt('09:00');
         $schedule->command('email:sendCourseDurationTriggerEmail')->dailyAt('11:00');
+        $schedule->command('email:sendAutomateEmailForInstructors')->dailyAt('12:00');
+        
     }
 
     /**
