@@ -24,7 +24,7 @@ class CityController extends ApiBaseController
                     $q->where('cities.name', 'like', '%' . $data['query'] . '%');
                 });
             })
-            ->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->orderBy($data['order_by'] ?? 'name', $data['order_type'] ?? 'asc')
             ->paginate($data['per_page'] ?? 25);
 
         return new JsonResponse($cities);

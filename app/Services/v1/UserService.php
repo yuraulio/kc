@@ -438,7 +438,7 @@ class UserService
                 },
             ])->get()->sum('users_count');
 
-            $counts[] = [
+            $counts['data'][] = [
                 'label' => $delivery->name,
                 'count' => $count,
             ];
@@ -460,7 +460,7 @@ class UserService
                 },
             ])->get()->sum('users_count');
 
-            $counts[] = [
+            $counts['data'][] = [
                 'label' => $delivery->name,
                 'count' => $count,
             ];

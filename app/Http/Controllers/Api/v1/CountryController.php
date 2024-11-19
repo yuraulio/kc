@@ -25,7 +25,7 @@ class CountryController extends ApiBaseController
                     $q->where('countries.name', 'like', '%' . $data['query'] . '%');
                 });
             })
-            ->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->orderBy($data['order_by'] ?? 'name', $data['order_type'] ?? 'asc')
             ->paginate($data['per_page'] ?? 25);
 
         return new JsonResponse($countries);
