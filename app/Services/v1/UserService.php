@@ -438,7 +438,7 @@ class UserService
                 },
             ])->get()->sum('users_count');
 
-            $counts[$delivery->delivery_type->value] = [
+            $counts[] = [
                 'label' => $delivery->name,
                 'count' => $count,
             ];
@@ -460,7 +460,7 @@ class UserService
                 },
             ])->get()->sum('users_count');
 
-            $counts[$delivery->delivery_type->value] = [
+            $counts[] = [
                 'label' => $delivery->name,
                 'count' => $count,
             ];
@@ -500,19 +500,19 @@ class UserService
         })->count();
 
         return [
-            'all'           => [
+            [
                 'label' => 'All',
                 'count' => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
             ],
-            'classroom'     => [
+            [
                 'label' => Delivery::where('delivery_type', 'classroom')->first()->name,
                 'count' => $classroomInstructors,
             ],
-            'video'         => [
+            [
                 'label' => Delivery::where('delivery_type', 'video')->first()->name,
                 'count' => $videoInstructors,
             ],
-            'virtual_class' => [
+            [
                 'label' => Delivery::where('delivery_type', 'virtual_class')->first()->name,
                 'count' => $virtualClassInstructors,
             ],
