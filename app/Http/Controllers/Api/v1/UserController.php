@@ -106,12 +106,12 @@ class UserController extends Controller
 
     public function studentsCounts(): JsonResponse
     {
-        return \response()->json($this->service->studentsCounts(), Response::HTTP_OK);
+        return \response()->json(['data' => $this->service->studentsCounts()], Response::HTTP_OK);
     }
 
     public function instructorsCounts(): JsonResponse
     {
-        return \response()->json($this->service->getInstructorsByCourse(), Response::HTTP_OK);
+        return \response()->json(['data' => $this->service->getInstructorsByCourse()], Response::HTTP_OK);
     }
 
     public function importUsers(UserImportRequest $request): JsonResponse

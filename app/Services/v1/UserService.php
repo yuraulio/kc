@@ -16,6 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -55,7 +56,7 @@ class UserService
                     ->pluck('identifier')
                     ->toArray();
 
-                if ((bool) $data['abandoned'] === true) {
+                if ((bool)$data['abandoned'] === true) {
                     $q->whereIn('id', $listIds);
                 } else {
                     $q->whereNotIn('id', $listIds);
@@ -151,13 +152,13 @@ class UserService
     public function adminsCounts(): array
     {
         return [
-            'admins'                => User::query()->whereHas('roles', function ($q) {
+            'admins'   => User::query()->whereHas('roles', function ($q) {
                 $q->whereIn('role_users.role_id', [RoleEnum::Admin->value, RoleEnum::SuperAdmin->value]);
             })->count(),
-            'managers'              => User::query()->whereHas('roles', function ($q) {
+            'managers' => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::Manager->value);
             })->count(),
-            'editors'               => User::query()->whereHas('roles', function ($q) {
+            'editors'  => User::query()->whereHas('roles', function ($q) {
                 $q->where('role_users.role_id', RoleEnum::Author->value);
             })->count(),
         ];
@@ -428,59 +429,51 @@ class UserService
 
     private function getTotalStudents(): array
     {
-        $eLearning = EventUser::query()
-            ->where(function ($q) {
-                $q->whereIn('comment', [' ', ''])
-                    ->orWhere('comment', null);
-            })
-            ->count();
+        $deliveries = Delivery::all();
 
-        $inClass = EventUser::query()
-            ->where('comment', 'like', '%enroll from%')
-            ->count();
+        foreach ($deliveries as $delivery) {
+            $count = $delivery->event()->withCount([
+                'users' => function ($query) {
+                    $query->select(DB::raw('count(distinct(users.id))'));
+                },
+            ])->get()->sum('users_count');
 
-        $total = $eLearning + $inClass;
+            $counts[$delivery->delivery_type->value] = [
+                'label' => $delivery->name,
+                'count' => $count,
+            ];
+        }
 
-        return [
-            'total' => $total,
-            'e_learning'      => $eLearning,
-            'in_class'        => $inClass,
-            'percentage' => [
-                'e_learning' => $eLearning / $total * 100,
-                'in_class'   => $inClass / $total * 100,
-            ],
-        ];
+        $counts['total'] = User::query()->count();
+
+        return $counts;
     }
 
     private function getActiveStudents(): array
     {
-        $eLearning = EventUser::query()
-            ->whereDate('expiration', '>', Carbon::now())
-            ->where(function ($q) {
-                $q->whereIn('comment', [' ', ''])
-                    ->orWhere('comment', null);
-            })
-            ->count();
+        $deliveries = Delivery::all();
 
-        $inClass = EventUser::query()
-            ->whereDate('expiration', '>', Carbon::now())
-            ->where('comment', 'like', '%enroll from%')
-            ->count();
+        foreach ($deliveries as $delivery) {
+            $count = $delivery->event()->withCount([
+                'users' => function ($q) {
+                    $q->where('event_user.expiration', '>', Carbon::now());
+                },
+            ])->get()->sum('users_count');
 
-        $total = $eLearning + $inClass;
+            $counts[$delivery->delivery_type->value] = [
+                'label' => $delivery->name,
+                'count' => $count,
+            ];
+        }
 
-        return [
-            'total' => $total,
-            'e_learning'      => $eLearning,
-            'in_class'        => $inClass,
-            'percentage' => [
-                'e_learning' => $eLearning / $total * 100,
-                'in_class'   => $inClass / $total * 100,
-            ],
-        ];
+        $counts['total'] = User::query()->whereHas('events', function ($q) {
+            $q->where('event_user.expiration', '>', Carbon::now());
+        })->count();
+
+        return $counts;
     }
 
-    public function getInstructorsByCourse()
+    public function getInstructorsByCourse(): array
     {
         $classroomInstructors = User::query()->whereHas('roles', function ($q) {
             $q->where('roles.name', 'Instructor');
@@ -507,10 +500,22 @@ class UserService
         })->count();
 
         return [
-            'all'           => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
-            'classroom'     => $classroomInstructors,
-            'video'         => $videoInstructors,
-            'virtual_class' => $virtualClassInstructors,
+            'all'           => [
+                'label' => 'All',
+                'count' => $classroomInstructors + $videoInstructors + $virtualClassInstructors,
+            ],
+            'classroom'     => [
+                'label' => Delivery::where('delivery_type', 'classroom')->first()->name,
+                'count' => $classroomInstructors,
+            ],
+            'video'         => [
+                'label' => Delivery::where('delivery_type', 'video')->first()->name,
+                'count' => $videoInstructors,
+            ],
+            'virtual_class' => [
+                'label' => Delivery::where('delivery_type', 'virtual_class')->first()->name,
+                'count' => $virtualClassInstructors,
+            ],
         ];
     }
 }
