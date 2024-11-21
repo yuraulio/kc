@@ -550,17 +550,6 @@ class UserService
             }
             $invoiceFileName .= '_' . $elearningInvoice->invoice . '.pdf';
             $fn = $invoiceFileName;
-
-            //system-user-admin-all-courses-payment-receipt
-            SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
-                'firstname'=>$user->firstname,
-                'lastname'=>$user->lastname], 'Knowcrunch | ' . $user->firstname . ' – download your receipt', [
-                    'FNAME'=> $user->firstname,
-                    'CourseName'=>$data['eventTitle'],
-                    'LINK'=>$this->data['slugInvoice'],
-                ], ['event_id'=>$data['eventId']]);
-
-            event(new EmailSent($adminemail, 'elearning_invoice'));
         }
     }
 

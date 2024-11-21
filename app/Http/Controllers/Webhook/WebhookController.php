@@ -846,16 +846,6 @@ class WebhookController extends BaseWebhookController
             $user->notify(new CourseInvoice($data));
             event(new EmailSent($user->first()->email, 'CourseInvoice'));
         }
-
-        //system-user-admin-all-courses-payment-receipt
-        SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
-            'firstname'=>$elearningInvoice->user->first()->firstname,
-            'lastname'=>$elearningInvoice->user->first()->lastname], 'Knowcrunch | ' . $muser['first'] . ' – download your receipt', [
-                'FNAME'=> $muser['first'],
-                'CourseName'=>$data['eventTitle'],
-                'LINK'=>$this->data['slugInvoice'],
-            ], ['event_id'=>$data['eventId']]);
-        event(new EmailSent($adminemail, 'elearning_invoice billingEmail ' . $billingEmail));
     }
 
     protected function handleInvoicePaymentActionRequired(array $payload)
@@ -864,7 +854,6 @@ class WebhookController extends BaseWebhookController
                 $payload['data']['object']['billing_reason'] == 'subscription_create')) {
             return $this->successMethod();
         }
-        //return $payload['data']['object']['subscription'];
 
         if (is_null($notification = config('cashier.payment_notification'))) {
             return $this->successMethod();

@@ -21,8 +21,7 @@ class EventController extends ApiBaseController
 {
     public function __construct(
         private readonly EventDuplicationService $eventDuplicationService,
-    )
-    {
+    ) {
     }
 
     /**
