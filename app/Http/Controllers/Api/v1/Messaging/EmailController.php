@@ -22,7 +22,7 @@ class EmailController extends ApiBaseController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery(Email::query(), $request);
+        $query = $this->applyRequestParametersToQuery(Email::whereNull('predefined_trigger'), $request);
 
         return new JsonResponse(
             $this->paginateByRequestParameters($query, $request)

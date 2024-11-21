@@ -18,16 +18,14 @@ class ExamService
 {
     public function delete(Exam $exam)
     {
-        if (!$exam->results->isEmpty()) {
-            return ['message'=>'This exam has items attached and can\'t be deleted.'];
-        }
-
         return $exam->delete();
     }
 
     public function updateQuestions(Request $request, Exam $exam)
     {
-        $questions = $request->questions;
+        $questions = array_filter($request->questions, function ($value) {
+            return !is_null($value);
+        });
         $exam->questions = json_encode($questions);
         $exam->save();
 
@@ -65,7 +63,7 @@ class ExamService
             $exam->topic()->attach($request->topic_id);
         }
 
-        return ['data' => ['message'=>['Exam updated successfully'], 'id' => empty($request->id) ? $exam->id : null]];
+        return ['data' => $exam];
     }
 
     public function getExamWithRelations(Exam $exam)

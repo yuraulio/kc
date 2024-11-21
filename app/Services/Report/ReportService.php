@@ -233,6 +233,7 @@ class ReportService
         $sql .= ' LEFT JOIN event_user ON event_user.user_id = users.id LEFT JOIN events ON event_user.event_id = events.id ';
 
         $sql .= ' LEFT JOIN `event_info` ON `event_info`.event_id = `events`.id LEFT JOIN `deliveries` ON `event_info`.course_delivery = `deliveries`.id ';
+        $sql .= ' LEFT JOIN `event_audiences` ON `event_audiences`.event_id = `events`.id LEFT JOIN `audiences` ON `event_audiences`.course_delivery = `audiences`.id ';
 
         $sql .= ' LEFT JOIN (SELECT user_id, stripe_status, stripe_price, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY id DESC) AS rn FROM subscriptions) latest_subscription ON users.id = latest_subscription.user_id AND latest_subscription.rn = 1 ';
 

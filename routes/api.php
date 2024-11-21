@@ -258,11 +258,11 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     // Topics
     Route::prefix('topics')->group(function () {
         Route::get('/', [TopicController::class, 'index']);
+        Route::get('/with-event', [TopicController::class, 'topicWithEvent']);
         Route::get('/{topic}', [TopicController::class, 'show']);
         Route::post('/', [TopicController::class, 'store']);
         Route::post('/{topic}/clone', [TopicController::class, 'clone']);
         Route::put('/{topic}', [TopicController::class, 'update']);
-        Route::get('/with-event', [TopicController::class, 'topicWithEvent']);
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
     });
 

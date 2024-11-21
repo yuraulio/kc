@@ -71,6 +71,11 @@ class Exam extends Model
         return $this->hasMany(ExamResult::class);
     }
 
+    public function syncData(): HasMany
+    {
+        return $this->hasMany(ExamSyncData::class);
+    }
+
     public function getResults(): array
     {
         $results = [];
@@ -112,5 +117,19 @@ class Exam extends Model
         }
 
         return [$results, $averageHour, $averageScore];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($exam) {
+            $exam->results()->delete();
+            $exam->syncData()->delete();
+            $exam->event()->detach();
+            $exam->topic()->detach();
+
+            $exam->career_path()->detach();
+        });
     }
 }
