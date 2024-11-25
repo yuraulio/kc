@@ -27,7 +27,7 @@ class FilterRequest extends FormRequest
             'not_equal_roles.*'  => ['sometimes', 'integer', Rule::exists('roles', 'id')],
             'tags'               => ['sometimes', 'array'],
             'tags.*'             => ['sometimes', 'integer', Rule::exists('tags', 'id')],
-            'order_by'           => ['sometimes', Rule::in(['id', 'firstname', 'account_status', 'profile_status', 'created_at'])],
+            'order_by'           => ['sometimes', Rule::in(['id', 'lastname', 'account_status', 'profile_status', 'created_at'])],
             'order_type'         => ['sometimes', Rule::in(['asc', 'desc'])],
             'per_page'           => ['sometimes', 'integer'],
             'abandoned'          => ['sometimes', 'boolean'],

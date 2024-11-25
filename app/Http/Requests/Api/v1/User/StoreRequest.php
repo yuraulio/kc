@@ -16,6 +16,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'slug'                => ['sometimes', 'min:3'],
+            'photo'               => ['sometimes', 'file'],
             'firstname'           => ['required', 'min:3'],
             'lastname'            => ['required', 'min:3'],
             'email'               => ['required', 'email', 'unique:users,email'],
@@ -25,7 +26,7 @@ class StoreRequest extends FormRequest
             'notes'               => ['sometimes'],
             'city'                => ['sometimes'],
             'country'             => ['sometimes'],
-            'country_code'        => ['sometimes', 'integer'],
+            'country_code'        => ['sometimes', 'min:1'],
             'job_title'           => ['sometimes'],
             'company'             => ['sometimes'],
             'company_url'         => ['sometimes'],

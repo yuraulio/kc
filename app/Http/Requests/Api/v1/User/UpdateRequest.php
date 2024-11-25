@@ -30,7 +30,7 @@ class UpdateRequest extends FormRequest
             'notes'               => ['sometimes'],
             'city'                => ['sometimes'],
             'country'             => ['sometimes'],
-            'country_code'        => ['sometimes', 'integer'],
+            'country_code'        => ['sometimes', 'min:1'],
             'job_title'           => ['sometimes'],
             'company'             => ['sometimes'],
             'company_url'         => ['sometimes'],
