@@ -1414,10 +1414,11 @@
 
                                                                 <?php $userExam = isset($user['hasExamResults'][$p->id][0]) ? $user['hasExamResults'][$p->id][0] : null ?>
 
-                                                                @if( $userExam  && $nowTime->diffInHours($userExam->end_time) < 48)
-                                                                <a target="_blank" href="{{ route('exam-results', [$p->id,'s'=>1]) }}" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                                                @elseif($userExam )
-                                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                                                @if($userExam )
+                                                                    @if($user->canRetakeExam($p->id))
+                                                                        <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">RETAKE EXAM</a>
+                                                                    @endif
+                                                                    <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                                                 @elseif($p->islive == 1)
                                                                   @if($allInstallmentsPayed)
                                                                     <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
@@ -1735,11 +1736,10 @@
                                                                 @endif
                                                               @endif
                                                             @elseif($userExam)
-                                                              @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                                                @if($user->canRetakeExam($p->id))
+                                                                    <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">RETAKE EXAM</a>
+                                                                @endif
                                                                 <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                                              @else
-                                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                                              @endif
                                                             @else
                                                               <div class="right">
                                                                   <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
@@ -1940,15 +1940,14 @@
                                                               @endif
                                                             @endif
                                                             @elseif($userExam)
-                                                            @if($nowTime->diffInHours($userExam->end_time) < 48)
-                                                            <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                                                @if($user->canRetakeExam($p->id))
+                                                                    <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">RETAKE EXAM</a>
+                                                                @endif
+                                                                <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                                             @else
-                                                            <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                                            @endif
-                                                            @else
-                                                            <div class="right">
-                                                                <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
-                                                            </div>
+                                                                <div class="right">
+                                                                    <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                                                </div>
                                                             @endif
                                                         </div>
                                                         @endforeach

@@ -45,6 +45,14 @@ class WebNotificationController extends ApiBaseController
     }
 
     /**
+     * Update the specified resource.
+     */
+    public function update(Request $request, WebNotification $webNotification, WebNotificationService $webNotificationService): Bool
+    {
+        return $webNotificationService->updateNotification($webNotification, $request);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(WebNotification $webNotification, WebNotificationService $webNotificationService): Response

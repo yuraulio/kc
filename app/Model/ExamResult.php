@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 
 class ExamResult extends Model
@@ -38,6 +39,11 @@ class ExamResult extends Model
     public function examSettings(): BelongsTo
     {
         return $this->belongsTo(Exam::class, 'exam_id')->with('event');
+    }
+
+    public function relatedResults(): HasMany
+    {
+        return $this->hasMany(self::class, 'user_id', 'user_id');
     }
 
     public function getResults($user_id): array

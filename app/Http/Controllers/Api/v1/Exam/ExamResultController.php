@@ -16,7 +16,9 @@ class ExamResultController extends ApiBaseController
      */
     public function index(Request $request, Exam $exam): JsonResponse
     {
-        $query = $this->applyRequestParametersToQuery($exam->results(), $request);
+        $query = $this->applyRequestParametersToQuery($exam->results()->with('relatedResults', function ($q) use ($exam) {
+            $q->where('exam_id', $exam->id);
+        })->groupBy('user_id'), $request);
 
         return new JsonResponse(
             $this->paginateByRequestParameters($query, $request)

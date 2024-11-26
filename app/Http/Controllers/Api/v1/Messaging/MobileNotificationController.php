@@ -45,6 +45,14 @@ class MobileNotificationController extends ApiBaseController
     }
 
     /**
+     * Update the specified resource.
+     */
+    public function update(Request $request, MobileNotification $mobileNotification, MobileNotificationService $mobileNotificationService): Bool
+    {
+        return $mobileNotificationService->updateNotification($mobileNotification, $request);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(MobileNotification $mobileNotification, MobileNotificationService $MobileNotificationService): Response

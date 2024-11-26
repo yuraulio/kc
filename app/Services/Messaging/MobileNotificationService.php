@@ -37,6 +37,11 @@ class MobileNotificationService
         return $mobileNotification;
     }
 
+    public function updateNotification(MobileNotification $mobileNotification, Request $request)
+    {
+        return $mobileNotification->update($request->all());
+    }
+
     public function delete(MobileNotification $mobileNotification)
     {
         return $mobileNotification->delete();

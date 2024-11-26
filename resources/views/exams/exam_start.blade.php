@@ -9,6 +9,10 @@ $minutes = $duration%60;
 $seconds = 0;
 ?>
 <script>
+@if($retake || $redata === 0)
+    localStorage.removeItem("examStorage<?php echo $exam->id;?>-{{$user_id}}");
+    localStorage.removeItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
+@endif
 var EFFECT                          = 'bounceInDown';
 var DURATION                        = 500;
 var DIV_REFERENCE                   = jQuery(".question_div");
@@ -502,11 +506,6 @@ function finishExam() {
 
         $('.btn.btn-exit-exam.btn-sm').prop('disabled', true);
 
-        // if(!navigator.onLine) {
-        //     showAlert('You can continue the exam and wait until internet connection is back', 'warning')
-        //     return false;
-        // }
-
         jQuery.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -688,6 +687,7 @@ function intilizetimer(hrs, mins, sec) {
    HOURS       = hrs;
    MINUTES     = mins;
    SECONDS     = sec;
+   console.log(HOURS, MINUTES, SECONDS);
 
    $("#hours").text(HOURS);
    if(MINUTES<10)
@@ -778,7 +778,7 @@ function initializeView() {
     document.getElementById("ExamFinish").setAttribute('disabled', 'disabled');
 
     var eJson = JSON.parse( window.examVar );
-    //console.log(eJson)
+
     window.startTime = localStorage.getItem("examStart<?php echo $exam->id;?>-{{$user_id}}");
     currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
     var sTime = new Date(window.startTime);
@@ -823,13 +823,6 @@ function initializeView() {
                                 //init edw
                                 window.answer_status = 1;
                                 window.is_marked = quest.mark_status;
-                               /* if(quest.mark_status==2){
-                                    window.is_marked = 2;
-
-                                }else if(quest.mark_status==1){
-
-                                    window.is_marked = 1;
-                                }*/
 
                             }else{
                                 if(quest.mark_status==2){
@@ -858,14 +851,6 @@ function initializeView() {
                                 });
                                 window.answer_status = 1;
                                 window.is_marked = quest.mark_status;
-                                /*if(quest.mark_status==2){
-                                    window.is_marked = 2;
-
-                                }else if(quest.mark_status==1){
-
-
-                                    window.is_marked = 1;
-                                }*/
 
                             }else{
                                 if(quest.mark_status==2){

@@ -40,6 +40,7 @@ class ExamAttemptController extends Controller
         //$exam = ExamSetting::find($ex_id);
         $event = $exam->event->first();
         $st_id = Auth::user()->id;
+        $user = Auth::user();
 
         if ($exam->random_questions) {
             $ex_scontents = json_decode($exam->questions, true);
@@ -49,7 +50,6 @@ class ExamAttemptController extends Controller
             $ex_scontents = json_decode($exam->questions, true);
             $exam_keys = array_keys($ex_scontents);
         }
-
         $ex_contents = [];
 
         //foreach($ex_scontents as $ex_content) {
@@ -79,9 +79,6 @@ class ExamAttemptController extends Controller
                 $opt4 = $ex_content['answers'][$answer_keys[3]];
                 array_push($options, $opt1, $opt2, $opt3, $opt4);
             } elseif ($ex_content['question-type'] == 3) { //For Several Answer Type
-                //dd($ex_content);
-                //$unser_data = unserialize($ex_content->answer_keys);
-
                 $answer_keys = array_keys($ex_content['answers']);
                 if ($exam->random_answers) {
                     shuffle($answer_keys);
@@ -101,9 +98,8 @@ class ExamAttemptController extends Controller
             ];
         }
         $redata = 0;
-
         $getSyncData = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('id');
-
+        $userCanTakeReExam = false;
         if (isset($getSyncData) && !empty($getSyncData)) {
             $exData = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('data');
 
@@ -112,17 +108,22 @@ class ExamAttemptController extends Controller
             $redata = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('started_at');
 
             $fndata = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('finish_at');
-            $examResultData = ExamResult::where('exam_id', $exam->id)->where('user_id', $st_id)->first();
-
-            if ($fndata != '0000-00-00 00:00:00' || $examResultData) {
+            $examResultData = ExamResult::where('exam_id', $exam->id)->where('user_id', $st_id)->orderBy('id', 'desc')->first();
+            $userCanTakeReExam = $user->canRetakeExam($exam->id);
+            if (($fndata != '0000-00-00 00:00:00' && !$userCanTakeReExam) || ($examResultData && !$userCanTakeReExam)) {
                 return view('exams.exam_end', [
                     'event'       => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
                     'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name' => Auth::user()->lastname,
                 ]);
             }
+            if ($userCanTakeReExam) {
+                ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->delete();
+                $redata = 0;
+            }
         }
 
         return view('exams.exam_start', [
+            'retake' => $userCanTakeReExam,
             'event'       => $event, 'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
             'event_title' => $event->title, 'first_name' => Auth::user()->firstname, 'last_name' => Auth::user()->lastname,
         ]);
@@ -286,36 +287,36 @@ class ExamAttemptController extends Controller
                 $student = User::find($st_id);
 
                 $totalQues = $totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
-                $examResultData = ExamResult::where('exam_id', $ex_id)->where('user_id', $st_id)->first();
-                if ($examResultData) {
-                    $examResultData->user_id = $st_id;
-                    $examResultData->exam_id = $ex_id;
-                    $examResultData->first_name = $student->firstname;
-                    $examResultData->last_name = $student->lastname;
-                    $examResultData->score = $total_credit;
-                    $examResultData->answers = json_encode($answers);
-                    $examResultData->start_time = $start_time;
-                    $examResultData->end_time = $finish;
-                    $examResultData->total_time = $total_time;
-                    $examResultData->total_score = $totalQues; //$totalCredits,
+                // $examResultData = ExamResult::where('exam_id', $ex_id)->where('user_id', $st_id)->orderBy('id', 'desc')->first();
+                // if ($examResultData) {
+                //     $examResultData->user_id = $st_id;
+                //     $examResultData->exam_id = $ex_id;
+                //     $examResultData->first_name = $student->firstname;
+                //     $examResultData->last_name = $student->lastname;
+                //     $examResultData->score = $total_credit;
+                //     $examResultData->answers = json_encode($answers);
+                //     $examResultData->start_time = $start_time;
+                //     $examResultData->end_time = $finish;
+                //     $examResultData->total_time = $total_time;
+                //     $examResultData->total_score = $totalQues; //$totalCredits,
 
-                    $examResultData->save();
-                } else {
-                    $examResultData = ExamResult::create([
+                //     $examResultData->save();
+                // } else {
+                $examResultData = ExamResult::create([
 
-                        'user_id'     => $st_id,
-                        'exam_id'     => $ex_id,
-                        'first_name'  => $student->firstname,
-                        'last_name'   => $student->lastname,
-                        'score'       => $total_credit,
-                        'answers'     => json_encode($answers),
-                        'start_time'  => $start_time,
-                        'end_time'    => $finish,
-                        'total_time'  => $total_time,
-                        'total_score' => $totalQues, //$totalCredits,
+                    'user_id'     => $st_id,
+                    'exam_id'     => $ex_id,
+                    'first_name'  => $student->firstname,
+                    'last_name'   => $student->lastname,
+                    'score'       => $total_credit,
+                    'answers'     => json_encode($answers),
+                    'start_time'  => $start_time,
+                    'end_time'    => $finish,
+                    'total_time'  => $total_time,
+                    'total_score' => $totalQues, //$totalCredits,
 
-                    ]);
-                }
+                ]);
+                // }
 
                 $exam = Exam::find($ex_id);
                 $eventType = Event::select('id', 'view_tpl', 'certificate_title', 'title')->where('id', $exam->event->first()->id)->first();
@@ -402,7 +403,7 @@ class ExamAttemptController extends Controller
             $examEndOfTime = Exam::select('end_of_time_text')->find($exam)['end_of_time_text'];
         }
 
-        $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
+        $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->orderBy('id', 'desc')->first();
         $data = $examResult->getResults($user->id);
         $data['first_name'] = $user->firstname;
         $data['last_name'] = $user->lastname;
@@ -411,7 +412,6 @@ class ExamAttemptController extends Controller
         if (isset($request->t)) {
             $data['endOfTime'] = ($examEndOfTime != null) ? $examEndOfTime : '';
         }
-
         $exam = Exam::with('event')->find($exam);
 
         if ($exam && count($exam['event']) > 0) {

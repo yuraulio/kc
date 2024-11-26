@@ -89,7 +89,7 @@ class InsertExams extends Command
         }
 
         foreach ($data['examResults'] as $examResult) {
-            if (ExamResult::where('user_id', $examResult[0])->where('exam_id', $examResult[1])->first()) {
+            if (ExamResult::where('user_id', $examResult[0])->where('exam_id', $examResult[1])->orderBy('id', 'desc')->first()) {
                 continue;
             }
 

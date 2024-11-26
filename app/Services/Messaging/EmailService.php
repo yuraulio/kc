@@ -40,6 +40,11 @@ class EmailService
         return $email;
     }
 
+    public function updateEmail(Email $email, Request $request)
+    {
+        return $email->update($request->all());
+    }
+
     public function delete(Email $email)
     {
         return $email->delete();

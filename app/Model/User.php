@@ -963,4 +963,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserActivity::class);
     }
+
+    public function canRetakeExam($examId)
+    {
+        $exam = Exam::find($examId);
+        $examResult = ExamResult::where(['exam_id' => $examId, 'user_id' => $this->id])->orderBy('id', 'desc')->first();
+        $data = $examResult->getResults($this->id);
+
+        if ($data['success']) {
+            $daysPassed = Carbon::now()->diffInDays($examResult->end_time);
+
+            return $daysPassed >= $exam->repeat_exam_in;
+        } else {
+            $daysPassed = Carbon::now()->diffInDays($examResult->end_time);
+
+            return $daysPassed >= $exam->repeat_exam_in_failure;
+        }
+    }
 }

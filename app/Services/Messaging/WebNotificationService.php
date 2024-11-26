@@ -37,6 +37,11 @@ class WebNotificationService
         return $webNotification;
     }
 
+    public function updateNotification(WebNotification $webNotification, Request $request)
+    {
+        return $webNotification->update($request->all());
+    }
+
     public function delete(WebNotification $webNotification)
     {
         return $webNotification->delete();
