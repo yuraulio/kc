@@ -313,7 +313,6 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::post('exams/{exam}/duplicate', [ExamController::class, 'duplicateExam'])->name('exam.clone');
     Route::post('exams/{exam}/update-questions', [ExamController::class, 'updateQuestions'])->name('exam.update-questions');
     Route::get('exams/{exam}/live-results', [ExamResultController::class, 'getLiveResults']);
-    Route::apiResource('exam-categories', ExamCategoryController::class);
 
     // Messaging
 

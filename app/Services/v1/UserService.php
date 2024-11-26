@@ -56,7 +56,7 @@ class UserService
                     ->pluck('identifier')
                     ->toArray();
 
-                if ((bool)$data['abandoned'] === true) {
+                if ((bool) $data['abandoned'] === true) {
                     $q->whereIn('id', $listIds);
                 } else {
                     $q->whereNotIn('id', $listIds);
