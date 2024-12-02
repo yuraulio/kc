@@ -6,16 +6,18 @@ enum ReportEnum: string
 {
     case Tags = 'tags';
     case CourseDelivery = '`deliveries`.id';
-    case Courses = '`events`.id';
-    case PaymentStatus = '`event_user`.paid';
+    case CourseName = '`events`.id';
+    case CoursePaymentStatus = '`event_user`.paid';
+    case CoursePricingStatus = '`event_info`.course_payment_method';
     case SubscriptionPlans = '`subscriptions`.stripe_price';
-    case SubscriptionStatus = '`subscriptions`.stripe_status';
+    case SubscriptionPaymentStatus = '`subscriptions`.stripe_status';
     case CourseDurationStatus = '`event_user`.expiration';
     case ContestStatus = '';
+    case EnrollmentStatus = '`event_user`.comment';
     case Transaction = "`transactionables`.`transactionable_type` LIKE '%User' AND `transactions`.status";
     case UserRole = '`role_users`.role_id';
-    case UserActivity = '`activations`.completed';
-    case Coupon = "`transactionables`.`transactionable_type` LIKE '%User' AND `transactions`.coupon_code";
+    case UserAccountActivity = '`activations`.completed';
+    case CouponName = "`transactionables`.`transactionable_type` LIKE '%User' AND `transactions`.coupon_code";
 
     public static function getEnumKeyNames(): array
     {
@@ -63,7 +65,6 @@ enum ReportEnum: string
             ['key' => 'course_name', 'label' => 'Course name', 'column_name' => '`events`.title as event_title'],
             ['key' => 'course_audience', 'label' => 'Course target audience', 'column_name' => '`audiences`.name as audience_name'],
             ['key' => 'delivery', 'label' => 'Course delivery', 'column_name' => '`deliveries`.name as delivery_name'],
-            ['key' => 'audience', 'label' => 'Course target audience', 'column_name' => "(SELECT GROUP_CONCAT(audiences.name, ',') from event_audiences JOIN audiences ON audiences.id = event_audiences.audience_id WHERE event_audiences.event_id = `events`.id) as audience"],
             ['key' => 'ticket_type', 'label' => 'Ticket type', 'column_name' => '`tickets`.title as ticket_title'],
             ['key' => 'ticket_price', 'label' => 'Ticket price', 'column_name' => '(SELECT event_tickets.price from event_tickets where event_tickets.ticket_id = `tickets`.id AND event_tickets.event_id = `events`.id LIMIT 1) as ticket_price'],
             ['key' => 'coupon_name', 'label' => 'Coupon name', 'column_name' => '`transactions`.coupon_code'],
@@ -75,7 +76,7 @@ enum ReportEnum: string
             ['key' => 'city', 'label' => 'City', 'column_name' => '`transactions`.billing_city'],
             ['key' => 'country', 'label' => 'Country', 'column_name' => '`transactions`.billing_country'],
             ['key' => 'zip_code', 'label' => 'Zip code', 'column_name' => '`transactions`.billing_zipcode'],
-            ['key' => 'giveaway_name', 'label' => 'Contest name', 'column_name' => 'giveaway_name'],
+            ['key' => 'giveaway_status', 'label' => 'Contest name', 'column_name' => " CASE WHEN give_aways.email IS NOT NULL THEN 'Participated' ELSE 'Not Participated'  END AS giveaway_status "],
         ];
     }
 }

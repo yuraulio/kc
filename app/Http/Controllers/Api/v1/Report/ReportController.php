@@ -58,4 +58,9 @@ class ReportController extends ApiBaseController
     {
         return $reportService->exportReportResults($request, $report);
     }
+
+    public function getLiveCount(Request $request, ReportService $reportService)
+    {
+        return $reportService->getLiveCount($request);
+    }
 }

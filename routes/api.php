@@ -336,7 +336,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     //Reports
     Route::apiResource('reports', ReportController::class);
     Route::post('reports/{report}/export', [ReportController::class, 'exportReportResults']);
-    Route::post('reports/{report}/calculate', [ReportController::class, 'fetchReportResults']);
+    Route::post('reports/live-count', [ReportController::class, 'getLiveCount']);
 
     Route::apiResource('exams.results', ExamResultController::class)
         ->only(['index']);

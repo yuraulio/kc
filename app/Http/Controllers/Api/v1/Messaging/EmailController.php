@@ -60,6 +60,14 @@ class EmailController extends ApiBaseController
     }
 
     /**
+     * Update the specified resource.
+     */
+    public function update(Request $request, Email $email, EmailService $emailService): Bool
+    {
+        return $emailService->updateEmail($email, $request);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Email $email, EmailService $emailService): Response

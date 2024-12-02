@@ -43,14 +43,8 @@ class ReportService
         return $report->delete();
     }
 
-    /**
-     * Report query.
-     */
-    public function exportReportResults(Request $request, Report $report)
+    private function buildQuery($filterCriteria, $date_filter)
     {
-        $filterCriteria = $report->filter_criteria;
-        $fileExportSettings = $report->file_export_criteria;
-        $date_filter = ($report->date_range) ? explode(' - ', $report->date_range) : [];
         $filterCriteriaGroups = [];
         $sql = '';
         foreach ($filterCriteria as $singleCriteria) {
@@ -66,7 +60,29 @@ class ReportService
         }
         $sql .= $this->generateQuery($filterCriteriaGroups, $date_filter);
 
-        return $this->runQueryAndReturnArray($sql, $fileExportSettings, $report);
+        return $sql;
+    }
+
+    public function getLiveCount(Request $request)
+    {
+        $filterCriteria = $request->filter_criteria;
+        $date_filter = ($request->date_range) ? explode(' - ', $request->date_range) : [];
+        $sql = $this->buildQuery($filterCriteria, $date_filter);
+        $data = \DB::select($sql);
+
+        return ['count' => count($data), 'sql' => $sql];
+    }
+
+    /**
+     * Report query.
+     */
+    public function exportReportResults(Request $request, Report $report)
+    {
+        $filterCriteria = $report->filter_criteria;
+        $date_filter = ($report->date_range) ? explode(' - ', $report->date_range) : [];
+        $sql = $this->buildQuery($filterCriteria, $date_filter);
+
+        return $this->runQueryAndReturnArray($sql, $report);
     }
 
     private function addJoins($key)
@@ -83,17 +99,25 @@ class ReportService
                 $this->joins[] = ' JOIN `event_info` ON `event_info`.event_id = `events`.id ';
                 $this->joins[] = ' JOIN `deliveries` ON `event_info`.course_delivery = `deliveries`.id ';
                 break;
-            case 'Courses':
+            case 'CourseName':
                 $this->joins[] = ' JOIN `event_user` ON `event_user`.user_id = `users`.id ';
                 $this->joins[] = ' JOIN `events` ON `event_user`.event_id = `events`.id ';
                 break;
-            case 'PaymentStatus':
+            case 'CoursePricingStatus':
+                $this->joins[] = ' JOIN `event_user` ON `event_user`.user_id = `users`.id ';
+                $this->joins[] = ' JOIN `events` ON `event_user`.event_id = `events`.id ';
+                $this->joins[] = ' JOIN `event_info` ON `event_info`.event_id = `events`.id ';
+                break;
+            case 'EnrollmentStatus':
+                $this->joins[] = ' JOIN `event_user` ON `event_user`.user_id = `users`.id ';
+                break;
+            case 'CoursePaymentStatus':
                 $this->joins[] = ' JOIN `event_user` ON `event_user`.user_id = `users`.id ';
                 break;
             case 'SubscriptionPlans':
                 $this->joins[] = ' JOIN `subscriptions` ON `subscriptions`.user_id = `users`.id ';
                 break;
-            case 'SubscriptionStatus':
+            case 'SubscriptionPaymentStatus':
                 $this->joins[] = ' JOIN `subscriptions` ON `subscriptions`.user_id = `users`.id ';
                 break;
             case 'Transaction':
@@ -110,10 +134,10 @@ class ReportService
             case 'ContestStatus':
                 $this->joins[] = ' LEFT JOIN `give_aways` ON `users`.email = `give_aways`.email ';
                 break;
-            case 'UserActivity':
+            case 'UserAccountActivity':
                 $this->joins[] = ' JOIN `activations` ON `activations`.user_id = `users`.id ';
                 break;
-            case 'Coupon':
+            case 'CouponName':
                 $this->joins[] = ' JOIN `transactionables` ON `transactionables`.transactionable_id = `users`.id ';
                 $this->joins[] = ' JOIN `transactions` ON `transactions`.id = `transactionables`.transaction_id ';
                 break;
@@ -153,44 +177,69 @@ class ReportService
     private function buildWhereClause($filter)
     {
         $table = $filter['key']['label'];
-        //Course Duration Case
-        if (ReportEnum::getFilterKey($table) === 'CourseDurationStatus') {
-            foreach ($filter['values'] as $val) {
-                if ($val['id'] == 1) {
-                    return " ( `event_user`.expiration > now()  OR `event_user`.expiration IS NULL OR `event_user`.expiration = '' ) ";
-                } else {
-                    return ' `event_user`.expiration < now() ';
+        $filterKey = ReportEnum::getFilterKey($table);
+        $operator = $filter['operator'];
+        $values = $filter['values'];
+
+        switch ($filterKey) {
+            case 'CourseDurationStatus':
+                foreach ($values as $val) {
+                    if (($val['id'] == 1 && $operator === 'are') || ($val['id'] != 1 && $operator === 'not_are')) {
+                        return " ( `event_user`.expiration > now()  OR `event_user`.expiration IS NULL OR `event_user`.expiration = '' ) ";
+                    } else {
+                        return ' `event_user`.expiration < now() ';
+                    }
                 }
-            }
-        } //Contest Participation Status Case
-        if (ReportEnum::getFilterKey($table) === 'ContestStatus') {
-            foreach ($filter['values'] as $val) {
-                if ($val['id'] == 1) {
-                    return ' `give_aways`.email IS NOT NULL ';
-                } else {
-                    return ' `give_aways`.email IS NULL ';
+                break;
+
+            case 'EnrollmentStatus':
+                $where = '';
+                foreach ($values as $val) {
+                    if ($val['id'] === '2') {
+                        $where .= $operator === 'are' ? ' `users`.id IN (SELECT `user_id` from cart_caches) ' : ' `users`.id NOT IN (SELECT `user_id` from cart_caches) ';
+                    } else {
+                        $selectedValue = ($operator === 'are') ? (bool) $val['id'] : !(bool) $val['id'];
+                        if ($selectedValue) {
+                            $where .= " ( `event_user`.paid = 1 AND `event_user`.comment != 'free'  ) ";
+                        } else {
+                            $where .= " `event_user`.comment = 'free' ";
+                        }
+                    }
+                    if (next($values)) {
+                        $where .= ' OR ';
+                    }
                 }
-            }
-        } else { //Other Cases
-            $operator = $filter['operator'];
-            $values = array_map(function ($value) {
-                return is_string($value['id']) ? "'" . $value['id'] . "'" : $value['id'];
-            }, $filter['values']);
 
-            $operator = ($operator == 'are' ? 'IN' : 'NOT IN');
+                return $where;
 
-            $where = ReportEnum::getFilterSQL($table) . ' ' . $operator . ' (';
-            $where .= implode(',', $values);
-            $where .= ')';
+            case 'ContestStatus':
+                foreach ($values as $val) {
+                    if (($val['id'] == 1 && $operator === 'are') || ($val['id'] != 1 && $operator === 'not_are')) {
+                        return ' `give_aways`.email IS NOT NULL ';
+                    } else {
+                        return ' `give_aways`.email IS NULL ';
+                    }
+                }
+                break;
 
-            return $where;
+            default:
+                $operator = ($operator == 'are' ? 'IN' : 'NOT IN');
+                $valueList = implode(',', array_map(function ($value) {
+                    return is_string($value['id']) ? "'" . $value['id'] . "'" : $value['id'];
+                }, $values));
+
+                return ReportEnum::getFilterSQL($table) . ' ' . $operator . ' (' . $valueList . ')';
         }
     }
 
-    private function runQueryAndReturnArray($sql, $fileExportSettings, $report)
+    private function runQueryAndReturnArray($sql, $report)
     {
+        $fileExportSettings = $report->file_export_criteria;
         $sql = CustomReportService::getCustomReport($sql, $report);
         list($sql, $columnNames) = $this->reportResultColumns($sql, $fileExportSettings);
+
+        // return $columnNames;
+        return [$sql];
         $data = \DB::select($sql);
 
         $csvName = ($fileExportSettings['fileType'] === 'xls') ? "report-{$report->id}.xlsx" : "report-{$report->id}.csv";
@@ -233,10 +282,12 @@ class ReportService
         $sql .= ' LEFT JOIN event_user ON event_user.user_id = users.id LEFT JOIN events ON event_user.event_id = events.id ';
 
         $sql .= ' LEFT JOIN `event_info` ON `event_info`.event_id = `events`.id LEFT JOIN `deliveries` ON `event_info`.course_delivery = `deliveries`.id ';
-        $sql .= ' LEFT JOIN `event_audiences` ON `event_audiences`.event_id = `events`.id LEFT JOIN `audiences` ON `event_audiences`.course_delivery = `audiences`.id ';
+        $sql .= ' LEFT JOIN `event_audiences` ON `event_audiences`.event_id = `events`.id LEFT JOIN `audiences` ON `event_audiences`.audience_id = `audiences`.id ';
 
-        $sql .= ' LEFT JOIN (SELECT user_id, stripe_status, stripe_price, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY id DESC) AS rn FROM subscriptions) latest_subscription ON users.id = latest_subscription.user_id AND latest_subscription.rn = 1 ';
-
+        $sql .= ' LEFT JOIN subscription_user_event ON subscription_user_event.user_id = users.id AND subscription_user_event.event_id = events.id LEFT JOIN (SELECT user_id, id AS subscription_id, stripe_status, stripe_price, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY id DESC) AS rn FROM subscriptions) latest_subscription ON subscription_user_event.subscription_id = latest_subscription.subscription_id AND latest_subscription.rn = 1 ';
+        if (strpos(implode(', ', $columnNames), 'giveaway_status') !== false) {
+            $sql .= ' LEFT JOIN `give_aways` ON `users`.email = `give_aways`.email ';
+        }
         $sql .= ' LEFT JOIN ( ';
         $sql .= ' SELECT ';
         $sql .= '     event_user_ticket.user_id, ';
