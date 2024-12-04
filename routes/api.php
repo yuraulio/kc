@@ -189,7 +189,6 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix('users')->group(function () {
             Route::post('delete-batch', [UserController::class, 'batchDestroy']);
 
-            Route::post('activity-test/{user}', [V1UserControllerAlias::class, 'activityTest']);
             Route::post('login-as/{user}', [V1UserControllerAlias::class, 'loginAs']);
             Route::post('import', [V1UserControllerAlias::class, 'importUsers']);
             Route::get('payments/{user}', [V1UserControllerAlias::class, 'getPayments']);

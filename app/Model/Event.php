@@ -84,10 +84,12 @@ class Event extends Model
         'priority',
         'status',
         'published',
+        'is_promoted',
         'release_date_files',
         'expiration',
         'title',
         'admin_title',
+        'video_url',
         'htmlTitle',
         'subtitle',
         'header',
@@ -467,6 +469,11 @@ class Event extends Model
         return $this->belongsToMany(User::class, 'event_topic_lesson_instructor', 'user_id');
     }
 
+    public function summary(): BelongsToMany
+    {
+        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id');
+    }
+
     public function summary1(): BelongsToMany
     {
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')
@@ -559,6 +566,11 @@ class Event extends Model
             ->withPivot('expiration', 'expiration_email', 'payment_method', 'comment', 'paid');
     }
 
+    public function creators(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'event_creators', 'event_id', 'user_id');
+    }
+
     public function users_with_transactions(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'event_user')
@@ -581,7 +593,7 @@ class Event extends Model
 
     public function syllabus(): BelongsToMany
     {
-        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')
+        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager', 'event_id', 'instructor_id')
             ->with('mediable', 'slugable');
     }
 
@@ -993,6 +1005,30 @@ class Event extends Model
         }
 
         if (!$videos && !$videos = $user->statistic()->wherePivot('event_id', $this['id'])->first()) {
+            $eventUser = EventUser::where('event_id', $this->id)
+                ->where('user_id', $user->id)
+                ->where('expiration', '!=', null)
+                ->first();
+
+            $subscriptionEventUser = SubscriptionEventUser::where('event_id', $this->id)
+                ->where('user_id', $user->id)
+                ->where('expiration', '!=', null)
+                ->first();
+
+            if ($eventUser || $subscriptionEventUser) {
+                $fullCourseDuration = Carbon::parse($this->launch_date)
+                    ->diffInDays(Carbon::parse($eventUser->expiration ?? $subscriptionEventUser->expiration));
+
+                $currentDays = Carbon::parse($this->launch_date)
+                    ->diffInDays(Carbon::now());
+
+                if ($currentDays > $fullCourseDuration) {
+                    return 100;
+                }
+
+                return $fullCourseDuration > 0 ? $currentDays / $fullCourseDuration * 100 : 0;
+            }
+
             return 0;
         }
 

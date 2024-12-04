@@ -105,6 +105,20 @@ class EventInfo extends Model
         'cta_lists',
         'cta_price_visible_on_button',
         'cta_discount_price_visible',
+        'summary_title',
+        'summary_visible',
+        'topics_title',
+        'topics_text',
+        'topics_visible',
+        'location_title',
+        'location_text',
+        'location_visible',
+        'ticket_title',
+        'ticket_text',
+        'ticket_visible',
+        'review_title',
+        'review_text',
+        'review_visible',
     ];
 
     protected $casts = [

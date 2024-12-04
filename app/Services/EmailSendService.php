@@ -39,8 +39,8 @@ class EmailSendService
         try {
             $metaData = $this->convertToTags($metaData);
             $emailPayload = [
-                'params' => $payload,
-                'to' => [
+                'params'     => $payload,
+                'to'         => [
                     [
                         'email' => (config('app.env') === 'local') ? config('app.TEST_EMAIL') : $to['email'],
                         'name'  => $to['firstname'] . ' ' . $to['lastname'],
@@ -58,13 +58,13 @@ class EmailSendService
                 $emailPayload['tags'] = $metaData;
             }
             $response = Http::withHeaders([
-                'accept' => 'application/json',
-                'api-key' => env('BREVO_API_KEY'),
+                'accept'       => 'application/json',
+                'api-key'      => env('BREVO_API_KEY'),
                 'content-type' => 'application/json',
             ])->post('https://api.brevo.com/v3/smtp/email', $emailPayload);
             $emailResponse = $response->json();
             if (isset($emailResponse['messageId'])) {
-                return ['status'=>'success'];
+                return ['status' => 'success'];
             }
             throw new \Exception($emailResponse['message']);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -124,9 +124,25 @@ class EmailSendService
                     $messagingActivity->user()->save($user);
                 }
                 if ($event['event'] === 'unique_opened') {
-                    event(new ActivityEvent($user, ActivityEventEnum::EmailOpened->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                    event(
+                        new ActivityEvent(
+                            $user,
+                            ActivityEventEnum::EmailOpened->value,
+                            $event['subject'] . Carbon::now()->format('d F Y'),
+                            $user,
+                            Email::find($event['tags']['mail_id'])
+                        ),
+                    );
                 } elseif ($event['event'] === 'request' && $event['reason'] === 'sent') {
-                    event(new ActivityEvent($user, ActivityEventEnum::EmailSent->value, $event['subject'] . Carbon::now()->format('d F Y')));
+                    event(
+                        new ActivityEvent(
+                            $user,
+                            ActivityEventEnum::EmailSent->value,
+                            $event['subject'] . Carbon::now()->format('d F Y'),
+                            $user,
+                            Email::find($event['tags']['mail_id'])
+                        ),
+                    );
                 }
             }
             //Creating event relationship
@@ -146,16 +162,16 @@ class EmailSendService
         }
     }
 
-    public function getBrevoTransactionalTemplates() :array
+    public function getBrevoTransactionalTemplates(): array
     {
         $response = Http::withHeaders([
-            'accept' => 'application/json',
+            'accept'  => 'application/json',
             'api-key' => env('BREVO_API_KEY'),
         ])->get('https://api.brevo.com/v3/smtp/templates', [
-            'limit' => 100,
-            'offset' => 0,
-            'templateStatus'=>'true',
-            'sort' => 'desc',
+            'limit'          => 100,
+            'offset'         => 0,
+            'templateStatus' => 'true',
+            'sort'           => 'desc',
         ]);
 
         return $response->json();

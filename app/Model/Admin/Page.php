@@ -7,6 +7,7 @@ use App\Traits\SearchFilter;
 use CodexShaper\Menu\Models\Menu;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -194,5 +195,12 @@ class Page extends Model implements Auditable
                 }
             }
         }
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['name'],
+        );
     }
 }

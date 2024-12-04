@@ -6,6 +6,8 @@ namespace App\Events;
 
 use App\Model\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,11 +19,11 @@ class ActivityEvent
      * Create a new event instance.
      */
     public function __construct(
-        public User $user,
+        public User|Authenticatable $user,
         public string $title,
         public string $description,
-        public ?User $who = null
+        public null|User|Authenticatable $who = null,
+        public ?Model $entity = null,
     ) {
-        //
     }
 }

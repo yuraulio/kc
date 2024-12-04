@@ -17,11 +17,14 @@ class UserActivitiesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'          => $this->id,
-            'title'       => $this->title,
-            'description' => $this->description,
-            'created_at'  => $this->created_at,
-            'user'        => UserCollection::make($this->who),
+            'id'           => $this->id,
+            'title'        => $this->title,
+            'description'  => $this->description,
+            'created_at'   => $this->created_at,
+            'user'         => UserCollection::make($this->who),
+            'entity_type'  => $this->entity_type,
+            'entity_title' => $this->entity?->title,
+            'entity'       => $this->entity,
         ];
     }
 }

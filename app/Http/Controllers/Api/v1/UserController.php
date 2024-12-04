@@ -161,11 +161,4 @@ class UserController extends Controller
 
         return UserActivitiesResource::collection($activities);
     }
-
-    public function activityTest(User $user, Request $request): JsonResponse
-    {
-        event(new ActivityEvent($user, ActivityEventEnum::AbandonedCart->value, 'Test activity' . Carbon::now()->format('d F Y'), User::findOrFail($request->who_id)));
-
-        return \response()->json(['success' => true]);
-    }
 }

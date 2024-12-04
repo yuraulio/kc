@@ -2,80 +2,41 @@
 
 namespace App\Policies;
 
-use App\Model\Admin\Admin;
 use App\Model\Delivery;
+use App\Model\Event;
+use App\Model\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(Admin $user)
+    public function viewAny(User $user)
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @param  \App\Delivery  $delivery
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(Admin $user, Delivery $delivery)
+    public function view(User $user, Delivery $delivery)
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function create(Admin $user)
+    public function create(User $user)
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @param  \App\Delivery  $delivery
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function update(Admin $user, Delivery $delivery)
+    public function update(User $user, Event $event)
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can change published state of the model.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @param  \App\Page  $page
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function publish(Admin $user, Delivery $delivery)
+    public function publish(User $user, Delivery $delivery)
     {
         return true;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \App\Model\Admin\Admin  $user
-     * @param  \App\Delivery  $delivery
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(Admin $user, Delivery $delivery)
+    public function delete(User $user, Delivery $delivery)
     {
         return true;
     }

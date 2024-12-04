@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Services\QueryString\Traits\Filterable;
 use App\Services\QueryString\Traits\Searchable;
 use App\Services\QueryString\Traits\Sortable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -131,5 +132,12 @@ class Exam extends Model
 
             $exam->career_path()->detach();
         });
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['exam_name'],
+        );
     }
 }

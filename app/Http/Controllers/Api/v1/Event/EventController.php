@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Api\v1\Event;
 
 use App\Contracts\Api\v1\Event\IEventSettingsService;
+use App\Enums\ActivityEventEnum;
+use App\Events\ActivityEvent;
 use App\Http\Controllers\Api\v1\ApiBaseController;
+use App\Http\Requests\Api\v1\Event\StoreRequest;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
 use App\Http\Resources\Api\v1\Event\EventProgressCollection;
+use App\Http\Resources\Api\v1\Event\EventResource;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
 use App\Model\User;
 use App\Services\v1\EventDuplicationService;
+use App\Services\v1\EventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -21,6 +27,7 @@ class EventController extends ApiBaseController
 {
     public function __construct(
         private readonly EventDuplicationService $eventDuplicationService,
+        private readonly EventService $service
     ) {
     }
 
@@ -31,7 +38,7 @@ class EventController extends ApiBaseController
     {
         $query = $this->applyRequestParametersToQuery(Event::query(), $request);
 
-        $userId = $request->userId;
+        $userId = $request->user_id;
         $query = $query->when($userId, function ($q) use ($userId) {
             $q->whereHas('users', function ($q) use ($userId) {
                 $q->where('users.id', $userId);
@@ -46,9 +53,11 @@ class EventController extends ApiBaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreRequest $request): EventResource
     {
-        return new JsonResponse([], Response::HTTP_CREATED);
+        $this->authorize('create', Event::class);
+
+        return new EventResource($this->service->store($request->validated()));
     }
 
     /**
@@ -65,14 +74,15 @@ class EventController extends ApiBaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEventRequest $request, Event $event, IEventSettingsService $settingsService): JsonResponse
+    public function update(UpdateEventRequest $request, Event $event, IEventSettingsService $settingsService): EventResource
     {
-        // update other fields
-        // ...
-        // update settings tab
+        $this->authorize('update', $event);
+
+        $event = $this->service->update($event, $request->validated());
+
         $settingsService->updateSettings($event, $request->toDto());
 
-        return new JsonResponse([]);
+        return new EventResource($event);
     }
 
     /**
@@ -80,7 +90,11 @@ class EventController extends ApiBaseController
      */
     public function destroy(Event $event): JsonResponse
     {
-        return new JsonResponse([]);
+        event(new ActivityEvent(Auth::user(), ActivityEventEnum::CourseAdded->value, $event->title, Auth::user(), $event));
+
+        $event->delete();
+
+        return \response()->json(['success' => true]);
     }
 
     public function certificatePreview(string $template)
@@ -103,14 +117,14 @@ class EventController extends ApiBaseController
         ];
 
         $certificate = [
-            'success' => true,
-            'meta_title' => '#META TITLE#',
-            'firstname' => '#FIRSTNAME#',
-            'lastname' => '#LASTNAME#',
+            'success'             => true,
+            'meta_title'          => '#META TITLE#',
+            'firstname'           => '#FIRSTNAME#',
+            'lastname'            => '#LASTNAME#',
             'certification_title' => '#CERTIFICATION TITLE#',
-            'certification_date' => '#DATE#',
-            'expiration_date' => '#EXP. DATE#',
-            'credential' => '#CREDENTIAL#',
+            'certification_date'  => '#DATE#',
+            'expiration_date'     => '#EXP. DATE#',
+            'credential'          => '#CREDENTIAL#',
         ];
 
         if (in_array($template, $templates)) {
@@ -153,9 +167,16 @@ class EventController extends ApiBaseController
         return response('Duplication event attempt', $status);
     }
 
-    public function userSubscriptions(User $user): JsonResponse
+    public function userSubscriptions(User $user, Request $request): JsonResponse
     {
-        return $this->response(['subscriptions' => $user->subscriptionEvents]);
+        $events = $user->subscriptionEvents()
+            ->with('users', function ($q) use ($user) {
+                $q->where('users.id', $user->id);
+            })
+            ->orderBy($request->order_by ?? 'id', $request->order_type ?? 'desc')
+            ->paginate($request->per_page ?? 5);
+
+        return response()->json($events);
     }
 
     public function getEventProgress(User $user, Request $request): AnonymousResourceCollection

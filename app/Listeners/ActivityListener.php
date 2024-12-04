@@ -14,6 +14,7 @@ class ActivityListener
         $activity = new UserActivity(['title' => $event->title, 'description' => $event->description]);
         $activity->user()->associate($event->user);
         $activity->who()->associate($event->who ?? null);
+        $activity->entity()->associate($event->entity ?? null);
         $activity->save();
     }
 }

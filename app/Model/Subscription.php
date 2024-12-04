@@ -7,6 +7,7 @@ use App\Model\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -1359,5 +1360,12 @@ class Subscription extends Model
     public function invoices()
     {
         return $this->morphToMany(Sub::class, 'invoiceable');
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['name'],
+        );
     }
 }
