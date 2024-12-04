@@ -79,6 +79,8 @@ class User extends Authenticatable
         'facebook_id',
         'facebook_access_token',
         'facebook_page_token',
+        'meta_title',
+        'meta_description',
     ];
 
     /**
@@ -271,6 +273,11 @@ class User extends Authenticatable
                     });
                 },
             ])->wherePivot('paid', true);
+    }
+
+    public function eventList(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_user');
     }
 
     public function eventsUnPaid()

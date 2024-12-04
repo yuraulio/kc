@@ -49,6 +49,9 @@ class UserResource extends JsonResource
             'will_work_remote'    => $this->will_work_remote,
             'will_work_in_person' => $this->will_work_in_person,
             'work_experience'     => $this->work_experience,
+            'terms'               => $this->terms,
+            'meta_title'          => $this->meta_title,
+            'meta_description'    => $this->meta_description,
             'profile_status'      => $this->profile_status,
             'account_status'      => $this->account_status,
             'social_links'        => $this->social_links,
@@ -60,11 +63,12 @@ class UserResource extends JsonResource
             'skills'              => $this->skills,
             'receipt_details'     => json_decode($this->receipt_details ?? '', true) ?? null,
             'invoice_details'     => json_decode($this->invoice_details ?? '', true) ?? null,
-            'activities'          => $this->activities,
+            'activities'          => UserActivitiesResource::collection($this->activities),
             'image'               => $this->image,
             'instructor'          => $this->instructor()->first(),
             'paymentMethods'      => $paymentMethods,
             'concent'             => json_decode($this->consent ?? '', true) ?? null,
+            'career_paths'        => $this->careerPaths,
         ];
     }
 }

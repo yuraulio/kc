@@ -30,8 +30,8 @@ class FilterRequest extends FormRequest
             'order_by'           => ['sometimes', Rule::in(['id', 'lastname', 'account_status', 'profile_status', 'created_at'])],
             'order_type'         => ['sometimes', Rule::in(['asc', 'desc'])],
             'per_page'           => ['sometimes', 'integer'],
-            'abandoned'          => ['sometimes', 'boolean'],
             'transaction_status' => ['sometimes', Rule::in(['free', 'paid'])],
+            'enrolment_status'   => ['sometimes', Rule::in(['completed', 'sponsored', 'abandoned'])],
         ];
 
         if ($this->filled('from') && $this->filled('to')) {

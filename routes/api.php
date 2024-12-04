@@ -194,6 +194,7 @@ Route::middleware('auth:api')->group(function () {
             Route::get('payments/{user}', [V1UserControllerAlias::class, 'getPayments']);
             Route::get('terms/{user}/generateConsentPdf', [V1UserControllerAlias::class, 'generateConsentPdf']);
             Route::get('{user}/activities', [V1UserControllerAlias::class, 'getUserActivities']);
+            Route::post('{user}/event/{event}', [V1UserControllerAlias::class, 'attachToCourse']);
 
             Route::get('{user}/events', [EventController::class, 'getEventProgress']);
             Route::get('', [V1UserControllerAlias::class, 'index']);

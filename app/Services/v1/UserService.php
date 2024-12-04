@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\v1;
 
+use App\Enums\EventStatusEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\ChunkReadFilter;
 use App\Model\Delivery;
-use App\Model\EventUser;
+use App\Model\Event;
 use App\Model\Option;
 use App\Model\ShoppingCart;
 use App\Model\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
@@ -28,38 +28,50 @@ class UserService
         return User::query()
             ->with($this->getRelations())
             ->when(array_key_exists('event_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
+                $q->whereHas('eventList', function ($q) use ($data) {
                     $q->where('events.id', $data['event_id']);
                 });
             })
             ->when(array_key_exists('delivery_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
+                $q->whereHas('eventList', function ($q) use ($data) {
                     $q->whereHas('delivery', function ($q) use ($data) {
                         $q->where('deliveries.id', $data['delivery_id']);
                     });
                 });
             })
             ->when(array_key_exists('coupon_id', $data), function ($q) use ($data) {
-                $q->whereHas('events', function ($q) use ($data) {
+                $q->whereHas('eventList', function ($q) use ($data) {
                     $q->whereHas('coupons', function ($q) use ($data) {
                         $q->where('coupons.id', $data['coupon_id']);
                     });
                 });
             })
-            ->when(array_key_exists('abandoned', $data), function ($q) use ($data) {
-                $timestamp = Cache::get(
-                    'timestamp-last-time-check-abandoned-cart',
-                    Carbon::now()->subYears(10)->format('Y-m-d H:i:s')
-                );
-                $listIds = ShoppingCart::with('user')
-                    ->where('created_at', '>', $timestamp)
-                    ->pluck('identifier')
-                    ->toArray();
+            ->when(array_key_exists('enrolment_status', $data), function ($q) use ($data) {
+                if ($data['enrolment_status'] === 'abandoned') {
+                    $timestamp = Cache::get(
+                        'timestamp-last-time-check-abandoned-cart',
+                        Carbon::now()->subYears(10)->format('Y-m-d H:i:s')
+                    );
+                    $listIds = ShoppingCart::with('user')
+                        ->where('created_at', '>', $timestamp)
+                        ->pluck('identifier')
+                        ->toArray();
 
-                if ((bool) $data['abandoned'] === true) {
-                    $q->whereIn('id', $listIds);
-                } else {
-                    $q->whereNotIn('id', $listIds);
+                    if ((bool)$data['abandoned'] === true) {
+                        $q->whereIn('id', $listIds);
+                    } else {
+                        $q->whereNotIn('id', $listIds);
+                    }
+                } elseif ($data['enrolment_status'] === 'completed') {
+                    $q->whereHas('eventList', function ($q) {
+                        $q->where('status', EventStatusEnum::Completed->value);
+                    });
+                } elseif ($data['enrolment_status'] === 'sponsored') {
+                    $q->whereHas('eventList', function ($q) {
+                        $q->whereHas('ticket', function ($q) {
+                            $q->where('type', 'Sponsored');
+                        });
+                    });
                 }
             })
             ->when(array_key_exists('transaction_status', $data), function ($q) use ($data) {
@@ -113,6 +125,9 @@ class UserService
         if (array_key_exists('roles', $data)) {
             $user->roles()->sync($data['roles']);
         }
+        if (array_key_exists('career_paths', $data)) {
+            $user->careerPaths()->sync($data['career_paths']);
+        }
         if (array_key_exists('skills', $data)) {
             $user->skills()->sync($data['skills']);
         }
@@ -142,6 +157,9 @@ class UserService
 
         if (array_key_exists('roles', $data)) {
             $user->roles()->sync($data['roles']);
+        }
+        if (array_key_exists('career_paths', $data)) {
+            $user->careerPaths()->sync($data['career_paths']);
         }
         if (array_key_exists('skills', $data)) {
             $user->skills()->sync($data['skills']);
@@ -523,5 +541,16 @@ class UserService
                 'count' => $virtualClassInstructors,
             ],
         ];
+    }
+
+    public function attachToCourse(User $user, Event $event): bool
+    {
+        $user->eventList()->sync([$event->id], false);
+
+        $tagIds = $event->tags()->pluck('tags.id')->toArray();
+
+        $user->tags()->syncWithoutDetaching($tagIds);
+
+        return true;
     }
 }

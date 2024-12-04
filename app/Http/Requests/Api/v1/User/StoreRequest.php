@@ -38,6 +38,7 @@ class StoreRequest extends FormRequest
             'address'             => ['sometimes'],
             'address_num'         => ['sometimes'],
             'postcode'            => ['sometimes', 'integer'],
+            'terms'               => ['sometimes', 'boolean'],
             'is_employee'         => ['sometimes', 'boolean'],
             'is_freelancer'       => ['sometimes', 'boolean'],
             'will_work_remote'    => ['sometimes', 'boolean'],
@@ -47,6 +48,8 @@ class StoreRequest extends FormRequest
             'skills.*'            => ['sometimes', 'integer', 'exists:skills,id'],
             'roles'               => ['sometimes', 'array'],
             'roles.*'             => ['sometimes', 'integer', Rule::exists('roles', 'id')],
+            'career_paths'        => ['sometimes', 'array'],
+            'career_paths.*'      => ['sometimes', 'integer', Rule::exists('career_paths', 'id')],
             'tags'                => ['sometimes', 'array'],
             'tags.*'              => ['sometimes', 'integer', 'exists:tags,id'],
 

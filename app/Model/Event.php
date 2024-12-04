@@ -323,9 +323,9 @@ class Event extends Model
         return $this->belongsToMany(Event::class, 'related_courses', 'event_id', 'related_id');
     }
 
-    public function tags(): BelongsToMany
+    public function tags(): MorphToMany
     {
-        return $this->belongsToMany(Tag::class, 'event_tags', 'event_id', 'tag_id');
+        return $this->morphToMany(Tag::class, 'entity', 'taggables');
     }
 
     public function type(): MorphToMany
@@ -634,7 +634,7 @@ class Event extends Model
             $topicEvent = $topicEvent->toArray();
             $topicEvent = array_map(function ($topic) {
                 return array_map(function ($t) {
-                    return (object) $t;
+                    return (object)$t;
                 }, $topic);
             }, $topicEvent);
             $topicEvent = array_values($topicEvent);
@@ -746,7 +746,7 @@ class Event extends Model
                 $vimeoVideo = explode('/', $lesson->vimeo_video);
                 $vimeoVideo = end($vimeoVideo);
 
-                if (isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1) {
+                if (isset($videos[$vimeoVideo]) && (int)$videos[$vimeoVideo]['seen'] == 1) {
                     $topicsSeen[$key]++;
                 }
 
@@ -1044,15 +1044,15 @@ class Event extends Model
                     continue;
                 }
 
-                $seen = (float) $video['total_seen'];
-                $seen = $seen > (float) $video['total_duration'] ? (float) $video['total_duration'] : $seen;
+                $seen = (float)$video['total_seen'];
+                $seen = $seen > (float)$video['total_duration'] ? (float)$video['total_duration'] : $seen;
 
-                if ((int) $video['seen'] == 1) {
-                    $seen = (float) $video['total_duration'];
+                if ((int)$video['seen'] == 1) {
+                    $seen = (float)$video['total_duration'];
                 }
 
                 $seenTime += $seen;
-                $totalDuration += (float) $video['total_duration'];
+                $totalDuration += (float)$video['total_duration'];
             }
         }
 
@@ -1359,7 +1359,7 @@ class Event extends Model
             $data['certificate']['has_certificate'] = $infos['has_certificate'];
             $data['certificate']['has_certificate_exam'] = $infos['has_certificate_exam'];
 
-            $data['students']['number'] = (int) $infos['course_students_number'];
+            $data['students']['number'] = (int)$infos['course_students_number'];
             $data['students']['text'] = $infos['course_students_text'];
             $data['students']['title'] = $infos['course_students_title'];
             $data['students']['visible'] = $infos['course_students_visible'] != null ? $infos['course_students_visible'] : null;
@@ -1376,12 +1376,12 @@ class Event extends Model
 
     public function hasCertificate(): bool
     {
-        return (bool) $this->eventInfo?->has_certificate;
+        return (bool)$this->eventInfo?->has_certificate;
     }
 
     public function hasCertificateExam(): bool
     {
-        return (bool) $this->eventInfo?->has_certificate_exam;
+        return (bool)$this->eventInfo?->has_certificate_exam;
     }
 
     // Return seconds

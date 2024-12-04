@@ -18,8 +18,8 @@ class StoreRequest extends FormRequest
             'launch_date'           => ['sometimes', 'date_format:d-m-Y'],
             'release_date_files'    => ['sometimes', 'date_format:d-m-Y'],
             'language_id'           => ['sometimes', 'exists:languages,id'],
-            'delivery_id'           => ['sometimes', 'exists:deliveries,id'],
-            'audience_id'           => ['sometimes', 'exists:audiences,id'],
+            'delivery_id'           => ['required', 'exists:deliveries,id'],
+            'audience_id'           => ['required', 'exists:audiences,id'],
             'topic_id'              => ['sometimes', 'exists:topics,id'],
             'media_id'              => ['sometimes', 'exists:medias,id'],
         ];
