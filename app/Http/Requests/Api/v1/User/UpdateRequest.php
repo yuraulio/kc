@@ -15,7 +15,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug'                => ['sometimes', 'min:3'],
+            'slug'                => ['sometimes', 'min:3', Rule::unique('users', 'slug')],
             'firstname'           => ['sometimes', 'min:3'],
             'lastname'            => ['sometimes', 'min:3'],
             'email'               => [

@@ -113,6 +113,8 @@ class UserService
     public function store(array $data): User
     {
         $user = new User($data);
+        $user->meta_title = $data['firstname'] . ' ' . $data['lastname'];
+        $user->meta_description = $data['firstname'] . ' ' . $data['lastname'];
         $user->password = Hash::make($data['password']);
         if (array_key_exists('receipt_details', $data)) {
             $user->receipt_details = json_encode($data['receipt_details']);

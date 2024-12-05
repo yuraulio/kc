@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug'                => ['sometimes', 'min:3'],
+            'slug'                => ['sometimes', 'min:3', Rule::unique('users', 'slug')],
             'photo'               => ['sometimes', 'file'],
             'firstname'           => ['required', 'min:3'],
             'lastname'            => ['required', 'min:3'],
