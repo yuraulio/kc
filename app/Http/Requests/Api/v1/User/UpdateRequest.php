@@ -52,6 +52,8 @@ class UpdateRequest extends FormRequest
             'work_experience'     => ['sometimes', Rule::in(WorkExperience::values())],
             'skills'              => ['sometimes', 'array'],
             'skills.*'            => ['sometimes', 'integer', 'exists:skills,id'],
+            'work_cities'         => ['sometimes', 'array'],
+            'work_cities.*'       => ['sometimes', 'integer', 'exists:cities,id'],
             'roles'               => ['sometimes', 'array'],
             'roles.*'             => ['sometimes', 'integer', Rule::exists('roles', 'id')],
             'career_paths'        => ['sometimes', 'array'],

@@ -57,7 +57,7 @@ class UserService
                         ->pluck('identifier')
                         ->toArray();
 
-                    if ((bool)$data['abandoned'] === true) {
+                    if ((bool) $data['abandoned'] === true) {
                         $q->whereIn('id', $listIds);
                     } else {
                         $q->whereNotIn('id', $listIds);
@@ -127,6 +127,9 @@ class UserService
         if (array_key_exists('roles', $data)) {
             $user->roles()->sync($data['roles']);
         }
+        if (array_key_exists('work_cities', $data)) {
+            $user->cities()->sync($data['work_cities']);
+        }
         if (array_key_exists('career_paths', $data)) {
             $user->careerPaths()->sync($data['career_paths']);
         }
@@ -159,6 +162,9 @@ class UserService
 
         if (array_key_exists('roles', $data)) {
             $user->roles()->sync($data['roles']);
+        }
+        if (array_key_exists('work_cities', $data)) {
+            $user->cities()->sync($data['work_cities']);
         }
         if (array_key_exists('career_paths', $data)) {
             $user->careerPaths()->sync($data['career_paths']);

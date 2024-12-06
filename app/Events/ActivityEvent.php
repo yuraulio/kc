@@ -19,12 +19,11 @@ class ActivityEvent
      * Create a new event instance.
      */
     public function __construct(
-        public User|Authenticatable      $user,
-        public string                    $title,
-        public string                    $description,
+        public User|Authenticatable $user,
+        public string $title,
+        public string $description,
         public null|User|Authenticatable $who = null,
-        public ?Model                    $entity = null,
-    )
-    {
+        public ?Model $entity = null,
+    ) {
     }
 }

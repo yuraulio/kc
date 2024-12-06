@@ -12,7 +12,7 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'country_id' => ['required', 'exists:countries,id'],
+            'country_id' => ['sometimes', 'exists:countries,id'],
             'query'      => ['sometimes', 'min:1'],
             'order_by'   => ['sometimes', Rule::in(['name', 'id', 'created_at'])],
             'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],

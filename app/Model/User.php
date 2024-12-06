@@ -173,9 +173,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Career::class, 'career_path_user', 'user_id', 'career_path_id')->withTimestamps();
     }
 
-    public function cities()
+    public function cities(): BelongsToMany
     {
-        return $this->belongsToMany(City::class)->withTimestamps();
+        return $this->belongsToMany(City::class, CityUser::class);
     }
 
     /**

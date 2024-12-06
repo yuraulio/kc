@@ -13,8 +13,8 @@ use App\Http\Resources\Api\v1\Event\EventResource;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
 use App\Model\User;
-use App\Services\v1\EventService;
 use App\Services\v1\EventDuplicationService;
+use App\Services\v1\EventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,8 +28,7 @@ class EventController extends ApiBaseController
     public function __construct(
         private readonly EventDuplicationService $eventDuplicationService,
         private readonly EventService $service
-    )
-    {
+    ) {
     }
 
     /**
@@ -47,7 +46,7 @@ class EventController extends ApiBaseController
             });
         })->when($notUserId, function ($q) use ($notUserId) {
             $q->whereDoesntHave('users', function ($q) use ($notUserId) {
-                $q->where('users.id', (int)$notUserId);
+                $q->where('users.id', (int) $notUserId);
             });
         });
 

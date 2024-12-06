@@ -18,7 +18,10 @@ class CityController extends ApiBaseController
     {
         $data = $request->validated();
 
-        $cities = City::query()->where('country_id', $request->country_id)
+        $cities = City::query()
+            ->when(array_key_exists('country_id', $data), function ($q) use ($data) {
+                $q->where('country_id', $data['country_id']);
+            })
             ->when(array_key_exists('query', $data), function ($q) use ($data) {
                 $q->where(function ($q) use ($data) {
                     $q->where('cities.name', 'like', '%' . $data['query'] . '%');
