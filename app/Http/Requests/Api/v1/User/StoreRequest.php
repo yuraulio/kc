@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'slug'                => ['sometimes', 'min:3', Rule::unique('users', 'slug')],
-            'photo'               => ['sometimes', 'file'],
+            'photo'               => ['sometimes', 'exists:cms_files,id'],
             'firstname'           => ['required', 'min:3'],
             'lastname'            => ['required', 'min:3'],
             'email'               => ['required', 'email', 'unique:users,email'],

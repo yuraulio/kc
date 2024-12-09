@@ -122,6 +122,9 @@ class UserService
         if (array_key_exists('invoice_details', $data)) {
             $user->invoice_details = json_encode($data['invoice_details']);
         }
+        if (array_key_exists('photo', $data)) {
+            $user->profile_image_id = $data['photo'] ?? null;
+        }
         $user->save();
 
         if (array_key_exists('roles', $data)) {
@@ -157,7 +160,9 @@ class UserService
         if (array_key_exists('invoice_details', $data)) {
             $user->invoice_details = json_encode($data['invoice_details']);
         }
-
+        if (array_key_exists('photo', $data)) {
+            $user->profile_image_id = $data['photo'] ?? null;
+        }
         $user->save();
 
         if (array_key_exists('roles', $data)) {
