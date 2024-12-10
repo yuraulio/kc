@@ -79,7 +79,11 @@ class EventService
         $event->save();
 
         if (array_key_exists('topic_id', $data)) {
+            //TODO should be removed after a complete transition to the new relations logic
             $event->topic()->sync([$data['topic_id']] ?? null);
+
+            $priority = $event->topics()->orderBy('priority', 'desc')->first()->priority + 1;
+            $event->topics()->sync([$data['topic_id'], 'priority' => $priority] ?? null);
         }
         if (array_key_exists('audience_id', $data)) {
             $event->audiences()->sync([$data['audience_id']] ?? null);

@@ -68,8 +68,8 @@ class Event extends Model
         PaginateTable,
         Filterable,
         Sortable {
-            Filterable::scopeFilter insteadof PaginateTable;
-        }
+        Filterable::scopeFilter insteadof PaginateTable;
+    }
 
     const STATUS_OPEN = 0;
     const STATUS_CLOSE = 1;
@@ -369,6 +369,11 @@ class Event extends Model
                 ->with('lessons.instructor')
                 ->orderBy('event_topic_lesson_instructor.time_starts');
         }
+    }
+
+    public function topics(): BelongsToMany
+    {
+        return $this->belongsToMany(Topic::class, EventTopic::class);
     }
 
     //forEventEdit

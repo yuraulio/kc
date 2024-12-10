@@ -2,15 +2,12 @@
 
 namespace App\Model;
 
-use App\Model\Category;
-use App\Model\Slug;
-use App\Model\Topic;
-use App\Model\Type;
 use App\Services\QueryString\Parameter\SearchParameter;
 use App\Services\QueryString\Traits\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Lesson extends Model
@@ -89,5 +86,10 @@ class Lesson extends Model
                 $query->orWhere($searchableField, 'LIKE', $search->getTerm());
             }
         });
+    }
+
+    public function topics(): BelongsToMany
+    {
+        return $this->belongsToMany(Topic::class, TopicLesson::class);
     }
 }

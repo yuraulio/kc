@@ -109,4 +109,14 @@ class Topic extends Model
             }
         });
     }
+
+    public function lessonList(): BelongsToMany
+    {
+        return $this->belongsToMany(Lesson::class, TopicLesson::class);
+    }
+
+    public function eventList(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, EventTopic::class);
+    }
 }

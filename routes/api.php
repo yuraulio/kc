@@ -262,6 +262,8 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         Route::get('/{topic}', [TopicController::class, 'show']);
         Route::post('/', [TopicController::class, 'store']);
         Route::post('/{topic}/clone', [TopicController::class, 'clone']);
+        Route::post('/{topic}/lesson/{lesson}/attach', [TopicController::class, 'attachLesson']);
+        Route::post('/{topic}/lesson/{lesson}/ordering', [TopicController::class, 'changeLessonOrder']);
         Route::put('/{topic}', [TopicController::class, 'update']);
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
     });

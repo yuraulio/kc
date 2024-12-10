@@ -3,18 +3,25 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Contracts\Api\v1\Topic\ITopicService;
+use App\Http\Requests\Api\v1\Topic\ChangeLessonOrderRequest;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
 use App\Model\Delivery;
-use App\Model\Event;
+use App\Model\Lesson;
 use App\Model\Topic;
+use App\Services\v1\TopicService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TopicController extends ApiBaseController
 {
+    public function __construct(private TopicService $service)
+    {
+    }
+
     public function index(Request $request)
     {
         $query = Topic::query()->with('lessons.event')->withCount(['lessons', 'exam']);
@@ -118,5 +125,19 @@ class TopicController extends ApiBaseController
         $topic->delete();
 
         return response()->noContent();
+    }
+
+    public function attachLesson(Topic $topic, Lesson $lesson): JsonResponse
+    {
+        return \response()->json(
+            ['success' => $this->service->attachLesson($topic, $lesson)],
+            Response::HTTP_OK);
+    }
+
+    public function changeLessonOrder(Topic $topic, Lesson $lesson, ChangeLessonOrderRequest $request): JsonResponse
+    {
+        return \response()->json(
+            ['success' => $this->service->changePriority($topic, $lesson, $request->order)],
+            Response::HTTP_OK);
     }
 }
