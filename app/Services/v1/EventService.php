@@ -7,7 +7,10 @@ namespace App\Services\v1;
 use App\Enums\ActivityEventEnum;
 use App\Events\ActivityEvent;
 use App\Model\Event;
+use App\Model\EventTopic;
+use App\Model\Topic;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EventService
 {
@@ -107,5 +110,39 @@ class EventService
             'delivery',
             'audiences',
         ];
+    }
+
+    public function changePriority(Event $event, Topic $topic, int $newPriority): bool
+    {
+        $item = EventTopic::query()
+            ->where('topic_id', $topic->id)
+            ->where('event_id', $event->id)
+            ->first();
+
+        $oldPriority = $item->priority;
+
+        if (!$item || $oldPriority === $newPriority) {
+            return true;
+        }
+
+        if ($newPriority > $oldPriority) {
+            EventTopic::where('priority', '>', $oldPriority)
+                ->where('priority', '<=', $newPriority)
+                ->where('event_id', $event->id)
+                ->update([
+                    'priority' => DB::raw('priority - 1'),
+                ]);
+        } else {
+            EventTopic::where('priority', '<', $oldPriority)
+                ->where('priority', '>=', $newPriority)
+                ->where('event_id', $event->id)
+                ->update([
+                    'priority' => DB::raw('priority + 1'),
+                ]);
+        }
+
+        $item->update(['priority' => $newPriority]);
+
+        return true;
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Contracts\Api\v1\Topic\ITopicService;
-use App\Http\Requests\Api\v1\Topic\ChangeLessonOrderRequest;
+use App\Http\Requests\Api\v1\Topic\ChangeOrderRequest;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
@@ -134,7 +134,7 @@ class TopicController extends ApiBaseController
             Response::HTTP_OK);
     }
 
-    public function changeLessonOrder(Topic $topic, Lesson $lesson, ChangeLessonOrderRequest $request): JsonResponse
+    public function changeLessonOrder(Topic $topic, Lesson $lesson, ChangeOrderRequest $request): JsonResponse
     {
         return \response()->json(
             ['success' => $this->service->changePriority($topic, $lesson, $request->order)],

@@ -13,8 +13,22 @@ class TopicService
 {
     public function attachLesson(Topic $topic, Lesson $lesson): bool
     {
-        $priority = $topic->lessonList()->orderBy('priority', 'desc')->first()->priority + 1;
-        $topic->lessonList()->sync([$lesson, 'priority' => $priority]);
+        $existsAlready = $item = TopicLesson::query()
+            ->where('topic_id', $topic->id)
+            ->where('lesson_id', $lesson->id)
+            ->exists();
+
+        if ($existsAlready) {
+            return true;
+        }
+
+        $priority = TopicLesson::query()
+            ->where('topic_id', $topic->id)
+            ->orderBy('priority', 'desc')
+            ->first()
+            ->priority ?? 0;
+
+        $topic->lessonList()->syncWithoutDetaching([$lesson->id => ['priority' => $priority + 1]]);
 
         return true;
     }
@@ -23,30 +37,32 @@ class TopicService
     {
         $item = TopicLesson::query()
             ->where('topic_id', $topic->id)
-            ->where('lessons_id', $lesson->id)
+            ->where('lesson_id', $lesson->id)
             ->first();
 
         $oldPriority = $item->priority;
 
-        if ($oldPriority === $newPriority) {
+        if (!$item || $oldPriority === $newPriority) {
             return true;
         }
 
         if ($newPriority > $oldPriority) {
-            TopicLesson::where('order', '>', $oldPriority)
-                ->where('order', '<=', $newPriority)
+            TopicLesson::where('priority', '>', $oldPriority)
+                ->where('priority', '<=', $newPriority)
+                ->where('topic_id', $topic->id)
                 ->update([
-                    'order' => DB::raw('order - 1'),
+                    'priority' => DB::raw('priority - 1'),
                 ]);
         } else {
-            TopicLesson::where('order', '<', $oldPriority)
-                ->where('order', '>=', $newPriority)
+            TopicLesson::where('priority', '<', $oldPriority)
+                ->where('priority', '>=', $newPriority)
+                ->where('topic_id', $topic->id)
                 ->update([
-                    'order' => DB::raw('order + 1'),
+                    'priority' => DB::raw('priority + 1'),
                 ]);
         }
 
-        $item->update(['order' => $newPriority]);
+        $item->update(['priority' => $newPriority]);
 
         return true;
     }

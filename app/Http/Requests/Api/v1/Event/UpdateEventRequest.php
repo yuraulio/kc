@@ -14,7 +14,7 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
 {
     public function rules(): array
     {
-        return [
+        return array_merge([
             'launch_date' => ['sometimes', 'date_format:d-m-Y'],
             'status'      => ['sometimes', Rule::in(EventStatusEnum::values())],
             'published'   => ['sometimes', 'boolean'],
@@ -36,21 +36,6 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
             'audience_id' => ['sometimes', 'exists:audiences,id'],
             'topic_id'    => ['sometimes', 'exists:topics,id'],
 
-            'summary_title'    => ['sometimes'],
-            'summary_visible'  => ['sometimes', 'boolean'],
-            'topics_title'     => ['sometimes'],
-            'topics_text'      => ['sometimes'],
-            'topics_visible'   => ['sometimes', 'boolean'],
-            'location_title'   => ['sometimes'],
-            'location_text'    => ['sometimes'],
-            'location_visible' => ['sometimes', 'boolean'],
-            'ticket_title'     => ['sometimes'],
-            'ticket_text'      => ['sometimes'],
-            'ticket_visible'   => ['sometimes', 'boolean'],
-            'review_title'     => ['sometimes'],
-            'review_text'      => ['sometimes'],
-            'review_visible'   => ['sometimes', 'boolean'],
-
             'feed'            => ['sometimes', 'boolean'],
             'syllabus'        => ['sometimes', 'exists:instructors,id'],
             'htmlTitle'       => ['sometimes'],
@@ -65,7 +50,10 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
             'partners'        => ['sometimes', 'array'],
             'partners.*'      => ['sometimes', 'exists:partners,id'],
             'course'          => ['sometimes'],
-        ];
+        ],
+            $this->settingsRules(),
+            $this->eventInfoRules()
+        );
     }
 
     public function toDto(): SettingsDto
@@ -151,6 +139,112 @@ class UpdateEventRequest extends FormRequest implements IDtoRequest
 
             'settings.tags'   => 'nullable|array',
             'settings.tags.*' => 'nullable|numeric',
+        ];
+    }
+
+    private function eventInfoRules(): array
+    {
+        return [
+            'summary_title'    => ['sometimes'],
+            'summary_visible'  => ['sometimes', 'boolean'],
+            'topics_title'     => ['sometimes'],
+            'topics_text'      => ['sometimes'],
+            'topics_visible'   => ['sometimes', 'boolean'],
+            'location_title'   => ['sometimes'],
+            'location_text'    => ['sometimes'],
+            'location_visible' => ['sometimes', 'boolean'],
+            'ticket_title'     => ['sometimes'],
+            'ticket_text'      => ['sometimes'],
+            'ticket_visible'   => ['sometimes', 'boolean'],
+            'review_title'     => ['sometimes'],
+            'review_text'      => ['sometimes'],
+            'review_visible'   => ['sometimes', 'boolean'],
+            'course_status'    => ['sometimes'],
+            'course_hours'     => ['sometimes'],
+
+            'course_hours_text'    => ['sometimes'],
+            'course_hours_title'   => ['sometimes'],
+            'course_hours_visible' => ['sometimes'],
+            'course_hours_icon'    => ['sometimes', 'array'],
+
+            'course_language'         => ['sometimes'],
+            'course_language_title'   => ['sometimes'],
+            'course_language_visible' => ['sometimes', 'array'],
+            'course_language_icon'    => ['sometimes', 'array'],
+
+            'course_delivery'         => ['sometimes'],
+            'course_delivery_icon'    => ['sometimes', 'array'],
+            'course_delivery_title'   => ['sometimes'],
+            'course_delivery_text'    => ['sometimes'],
+            'course_delivery_visible' => ['sometimes', 'array'],
+
+            'course_elearning_expiration'       => ['sometimes'],
+            'course_elearning_expiration_title' => ['sometimes'],
+            'course_elearning_text'             => ['sometimes'],
+            'course_elearning_visible'          => ['sometimes', 'array'],
+            'course_elearning_icon'             => ['sometimes', 'array'],
+
+            'course_inclass_city'      => ['sometimes'],
+            'course_inclass_city_icon' => ['sometimes', 'array'],
+            'course_inclass_dates'     => ['sometimes', 'array'],
+            'course_inclass_days'      => ['sometimes', 'array'],
+            'course_inclass_times'     => ['sometimes', 'array'],
+            'course_inclass_absences'  => ['sometimes'],
+
+            'course_elearning_access'      => ['sometimes'],
+            'course_elearning_access_icon' => ['sometimes', 'array'],
+
+            'course_elearning_exam'                      => ['sometimes'],
+            'course_elearning_exam_title'                => ['sometimes'],
+            'course_elearning_exam_icon'                 => ['sometimes', 'array'],
+            'course_elearning_exam_visible'              => ['sometimes', 'array'],
+            'course_elearning_exam_activate_months'      => ['sometimes'],
+            'course_elearning_exam_activate_months_icon' => ['sometimes', 'array'],
+
+            'course_payment_method'       => ['sometimes'],
+            'course_payment_icon'         => ['sometimes', 'array'],
+            'course_payment_installments' => ['sometimes'],
+
+            'course_files_icon' => ['sometimes', 'array'],
+
+            'course_partner'         => ['sometimes'],
+            'course_partner_text'    => ['sometimes'],
+            'course_partner_icon'    => ['sometimes', 'array'],
+            'course_partner_visible' => ['sometimes', 'array'],
+
+            'course_manager'      => ['sometimes'],
+            'course_manager_icon' => ['sometimes', 'array'],
+
+            'course_awards'      => ['sometimes'],
+            'course_awards_text' => ['sometimes'],
+            'course_awards_icon' => ['sometimes', 'array'],
+
+            'course_certification_name_failure' => ['sometimes'],
+            'course_certification_title'        => ['sometimes'],
+            'course_certification_text'         => ['sometimes'],
+            'course_certification_completion'   => ['sometimes'],
+
+            'diploma_title' => ['sometimes'],
+
+            'course_certification_attendance_title' => ['sometimes'],
+            'course_certification_type'             => ['sometimes'],
+            'course_certification_icon'             => ['sometimes', 'array'],
+
+            'has_certificate'      => ['sometimes'],
+            'has_certificate_exam' => ['sometimes'],
+
+            'course_students_number'  => ['sometimes'],
+            'course_students_title'   => ['sometimes'],
+            'course_students_text'    => ['sometimes'],
+            'course_students_visible' => ['sometimes', 'array'],
+            'course_students_icon'    => ['sometimes', 'array'],
+
+            'cta_course_page'             => ['sometimes'],
+            'cta_course_page_re_enroll'   => ['sometimes'],
+            'cta_home_page'               => ['sometimes'],
+            'cta_lists'                   => ['sometimes'],
+            'cta_price_visible_on_button' => ['sometimes', 'boolean'],
+            'cta_discount_price_visible'  => ['sometimes', 'boolean'],
         ];
     }
 }

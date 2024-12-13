@@ -8,10 +8,12 @@ use App\Events\ActivityEvent;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Event\StoreRequest;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
+use App\Http\Requests\Api\v1\Topic\ChangeOrderRequest;
 use App\Http\Resources\Api\v1\Event\EventProgressCollection;
 use App\Http\Resources\Api\v1\Event\EventResource;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
 use App\Model\Event;
+use App\Model\Topic;
 use App\Model\User;
 use App\Services\v1\EventDuplicationService;
 use App\Services\v1\EventService;
@@ -194,5 +196,12 @@ class EventController extends ApiBaseController
             ->paginate($request->per_page ?? 5);
 
         return EventProgressCollection::collection($events);
+    }
+
+    public function changeTopicOrder(Event $event, Topic $topic, ChangeOrderRequest $request): JsonResponse
+    {
+        return \response()->json(
+            ['success' => $this->service->changePriority($event, $topic, $request->order)],
+            Response::HTTP_OK);
     }
 }
