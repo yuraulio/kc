@@ -16,7 +16,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'slug'                => ['sometimes', 'min:3', Rule::unique('users', 'slug')],
-            'photo'               => ['sometimes', 'exists:cms_files,id'],
+            'photo'               => ['sometimes', 'integer'],
             'firstname'           => ['sometimes', 'min:3'],
             'lastname'            => ['sometimes', 'min:3'],
             'email'               => [

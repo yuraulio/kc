@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\v1;
 
+use App\CMSFile;
 use App\Enums\EventStatusEnum;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\ChunkReadFilter;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserService
@@ -161,7 +163,13 @@ class UserService
             $user->invoice_details = json_encode($data['invoice_details']);
         }
         if (array_key_exists('photo', $data)) {
-            $user->profile_image_id = $data['photo'] ?? null;
+            if ($data['photo'] === 0) {
+                $user->profile_image_id = null;
+            } elseif (CMSFile::query()->find($data['photo'])) {
+                $user->profile_image_id = $data['photo'] ?? null;
+            } else {
+                throw ValidationException::withMessages(['photo' =>['The selected photo is invalid.']]);
+            }
         }
         $user->save();
 
