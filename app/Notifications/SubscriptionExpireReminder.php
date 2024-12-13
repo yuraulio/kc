@@ -56,9 +56,9 @@ class SubscriptionExpireReminder extends Notification
         }
 
         SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstname'],
+            'FIRST_NAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['event_name'],
-            'LINK'=>$link,
+            'COURSE_LINK'=>$link,
             'SubscriptionPrice'=>$this->data['subscription_price'],
         ], ['event_id'=>$this->data['eventId']]);
     }

@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Resources\Api\v1\Messaging\MobileNotificationResource;
 use App\Model\MobileNotification;
 use App\Services\Messaging\MobileNotificationService;
+use App\Services\Report\ReportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Enums\Email\PageTriggerEnum;
 use Symfony\Component\HttpFoundation\Response;
 
 class MobileNotificationController extends ApiBaseController
@@ -60,5 +62,19 @@ class MobileNotificationController extends ApiBaseController
         $MobileNotificationService->delete($mobileNotification);
 
         return response()->noContent();
+    }
+
+    public function getPageTriggers()
+    {
+        return ['data' => PageTriggerEnum::getPageTriggers()];
+    }
+
+    public function triggerMobileNotification(Request $request, MobileNotificationService $mobileNotificationService)
+    {
+        $notification = $mobileNotificationService->findTriggerByScreen($request);
+        if($notification) {
+            return ['data'=>$notification];
+        }        
+        return response()->json(['data' => null, 'message' => 'No notification found.']);
     }
 }

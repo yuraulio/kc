@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Resources\Api\v1\Messaging\WebNotificationResource;
 use App\Model\WebNotification;
 use App\Services\Messaging\WebNotificationService;
+use App\Services\Report\ReportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,5 +61,14 @@ class WebNotificationController extends ApiBaseController
         $webNotificationService->delete($webNotification);
 
         return response()->noContent();
+    }
+
+    public function triggerWebNotification(Request $request, WebNotificationService $webNotificationService)
+    {
+        $notification = $webNotificationService->findTriggerByScreen($request);
+        if($notification) {
+            return ['data'=>$notification];
+        }        
+        return response()->json(['data' => null, 'message' => 'No notification found.']);
     }
 }

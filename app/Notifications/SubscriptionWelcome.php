@@ -46,10 +46,10 @@ class SubscriptionWelcome extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('SubscriptionWelcome', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'ExpirationDate'=>$this->data['subscriptionEnds'],
-            'LINK'=>$this->data['eventSlug'],
+            'COURSE_LINK'=>$this->data['eventSlug'],
             'LINK_FAQ'=>$this->data['eventFaq'],
         ], ['event_id'=>$this->data['eventId']]);
     }

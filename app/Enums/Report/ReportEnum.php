@@ -4,6 +4,10 @@ namespace App\Enums\Report;
 
 enum ReportEnum: string
 {
+
+    
+    const HIGHEST_SPENDING_STUDENTS = 'Highest spending students';
+
     case Tags = 'tags';
     case CourseDelivery = '`deliveries`.id';
     case CourseName = '`events`.id';
@@ -18,6 +22,11 @@ enum ReportEnum: string
     case UserRole = '`role_users`.role_id';
     case UserAccountActivity = '`activations`.completed';
     case CouponName = "`transactionables`.`transactionable_type` LIKE '%User' AND `transactions`.coupon_code";
+
+
+    public static function getCustomReportTitles(){
+        return [self::HIGHEST_SPENDING_STUDENTS];
+    }
 
     public static function getEnumKeyNames(): array
     {

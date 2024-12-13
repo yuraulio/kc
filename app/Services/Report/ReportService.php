@@ -25,12 +25,12 @@ class ReportService
     {
         return Report::updateOrCreate(
             [
-                'id'=>$request->id,
+                'id' => $request->id,
             ],
             [
                 'title' => $request->title,
                 'file_export_criteria' => $request->file_export_criteria,
-                'date_range'=>$request->date_range,
+                'date_range' => $request->date_range,
                 'description' => $request->description,
                 'creator_id' => $request->creator_id,
                 'filter_criteria' => $request->filter_criteria,
@@ -63,14 +63,13 @@ class ReportService
         return $sql;
     }
 
-    public function getLiveCount(Request $request)
+    public function getLiveCount(Request $request, $is_user = false)
     {
         $filterCriteria = $request->filter_criteria;
         $date_filter = ($request->date_range) ? explode(' - ', $request->date_range) : [];
         $sql = $this->buildQuery($filterCriteria, $date_filter);
         $data = \DB::select($sql);
-
-        return ['count' => count($data), 'sql' => $sql];
+        return ['count' => count($data), 'user_ids' => $is_user ? $data : null];
     }
 
     /**
@@ -81,14 +80,14 @@ class ReportService
         $filterCriteria = $report->filter_criteria;
         $date_filter = ($report->date_range) ? explode(' - ', $report->date_range) : [];
         $sql = $this->buildQuery($filterCriteria, $date_filter);
-
+        $sql = CustomReportService::getCustomReport($sql, $report);
         return $this->runQueryAndReturnArray($sql, $report);
     }
 
     private function addJoins($key)
     {
         $key = str_replace(' ', '', ucwords($key));
-        switch($key) {
+        switch ($key) {
             case 'Tags':
                 $this->joins[] = ' JOIN `taggables` ON `taggables`.taggable_id = `users`.id ';
                 $this->joins[] = ' JOIN `tags` ON `taggables`.tag_id = `tags`.id ';
@@ -200,9 +199,13 @@ class ReportService
                     } else {
                         $selectedValue = ($operator === 'are') ? (bool) $val['id'] : !(bool) $val['id'];
                         if ($selectedValue) {
-                            $where .= " ( `event_user`.paid = 1 AND `event_user`.comment != 'free'  ) ";
+                            $where .= " ( `event_user`.paid = 1 AND `event_user`.comment != 'free' 
+                                    AND (`event_user`.expiration = '' || `event_user`.expiration > now())
+                            ) ";
                         } else {
-                            $where .= " `event_user`.comment = 'free' ";
+                            $where .= " `event_user`.comment = 'free' 
+                            AND (`event_user`.expiration = '' || `event_user`.expiration > now())
+                            ";
                         }
                     }
                     if (next($values)) {
@@ -211,7 +214,6 @@ class ReportService
                 }
 
                 return $where;
-
             case 'ContestStatus':
                 foreach ($values as $val) {
                     if (($val['id'] == 1 && $operator === 'are') || ($val['id'] != 1 && $operator === 'not_are')) {
@@ -234,12 +236,9 @@ class ReportService
 
     private function runQueryAndReturnArray($sql, $report)
     {
-        $fileExportSettings = $report->file_export_criteria;
-        $sql = CustomReportService::getCustomReport($sql, $report);
+        $fileExportSettings = $report->file_export_criteria
         list($sql, $columnNames) = $this->reportResultColumns($sql, $fileExportSettings);
 
-        // return $columnNames;
-        return [$sql];
         $data = \DB::select($sql);
 
         $csvName = ($fileExportSettings['fileType'] === 'xls') ? "report-{$report->id}.xlsx" : "report-{$report->id}.csv";
@@ -315,5 +314,12 @@ class ReportService
         }
 
         return [$sql, $friendlyColumnNames];
+    }
+
+    public function getReportWithData($report) {
+        if(in_array($report->title, ReportEnum::getCustomReportTitles())) {
+            $report->is_custom_report = true;
+        }
+        return $report;
     }
 }

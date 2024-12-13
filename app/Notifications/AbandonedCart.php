@@ -47,10 +47,10 @@ class AbandonedCart extends Notification
     {
         $subject = $this->data['firstName'] . ' - do you need help with your enrollment';
         SendEmail::dispatch($this->data['emailEvent'], $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'FAQ_LINK'=>$this->data['faqs'],
-            'LINK'=>$this->data['slug'],
+            'COURSE_LINK'=>$this->data['slug'],
             'DiscountedPrice'=>isset($this->data['DiscountedPrice']) ? '$' . $this->data['DiscountedPrice'] : '-',
         ], ['event_id'=>$this->data['eventId']]);
     }

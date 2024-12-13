@@ -84,7 +84,12 @@ class EmailController extends ApiBaseController
 
     public function getEmailTriggers()
     {
-        return ['data'=>EmailTriggersEnum::getEmailTriggers()];
+        return ['data' => EmailTriggersEnum::getEmailTriggers()];
+    }
+
+    public function getEmailParams()
+    {
+        return ['data' => EmailTriggersEnum::getEmailParameters()];
     }
 
     public function getScheduled($eventId, EmailService $emailService)
@@ -93,6 +98,6 @@ class EmailController extends ApiBaseController
         $data = array_merge($emailService->getCourseStartorEndEmails($eventId), $data);
         $data = array_map(fn ($item, $index) => array_merge($item, ['index' => $index]), $data, array_keys($data));
 
-        return ['data'=>$data];
+        return ['data' => $data];
     }
 }

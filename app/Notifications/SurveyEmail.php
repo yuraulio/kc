@@ -46,7 +46,7 @@ class SurveyEmail extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('SurveyEmail', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

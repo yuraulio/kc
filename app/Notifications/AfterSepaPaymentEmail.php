@@ -54,10 +54,10 @@ class AfterSepaPaymentEmail extends Notification
         $this->data['slug'] = url(config('app.url')) . '/myaccount';
 
         SendEmail::dispatch('AfterSepaPaymentEmail', $this->user->toArray(), null, [
-            'FNAME'=> $this->user->firstname,
+            'FIRST_NAME'=> $this->user->firstname,
             'CourseName'=>$this->data['eventTitle'],
             'DurationDescription'=>$this->data['duration'],
-            'LINK'=>$this->data['slug'],
+            'COURSE_LINK'=>$this->data['slug'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

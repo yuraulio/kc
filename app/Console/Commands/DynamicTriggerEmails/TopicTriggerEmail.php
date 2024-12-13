@@ -45,22 +45,21 @@ class TopicTriggerEmail extends Command
             $filters = ($emailTrigger->trigger_filters);
 
             $statuses = array_column($filters['status'], 'id');
-            $lessons = array_column($filters['lesson_ids'], 'id');
+            $topics = [];
+            if(isset($filters['topic_ids'])) {
+                $topics = array_column($filters['topic_ids'], 'id');
+            }
             $courses = array_column($filters['course_ids'], 'id');
 
             $events = Event::
-            where('published', true);
+            where('published', true)->whereHas('lessons', function ($query) use ($dates) {
+                    $query->whereIn('date', $dates);
+                });
             if (count($statuses)) {
                 $events = $events->whereIn('status', $statuses);
             }
             if (count($courses)) {
                 $events = $events->whereIn('id', $courses);
-            }
-
-            if (count($lessons)) {
-                $events = $events->whereHas('lessons', function ($query) use ($lessons, $dates) {
-                    $query->whereIn('lesson_id', $lessons)->whereIn('date', $dates);
-                });
             }
 
             $events = $events->with([
@@ -90,10 +89,10 @@ class TopicTriggerEmail extends Command
                 $data['eventId'] = $event->id;
 
                 foreach ($event['lessons'] as $lesson) {
-                    if (in_array($lesson->id, $checkForDoubleTopics)) {
+                    if (in_array($lesson->topic_id, $checkForDoubleTopics) || !in_array($lesson->topic_id, $topics)) {
                         continue;
                     }
-                    $checkForDoubleTopics[] = $lesson->id;
+                    $checkForDoubleTopics[] = $lesson->topic_id;
 
                     $data['Date'] = (isset($lesson->pivot->date)) ? $lesson->pivot->date : '-';
                     if (isset($lesson->pivot->time_starts)) {
@@ -106,26 +105,26 @@ class TopicTriggerEmail extends Command
                     $interval = $date1->diff($date2);
 
                     $data['email_template'] = $emailTrigger->email->template['label'];
-                    if (!isset($filters['to_instructor']) || $filters['to_instructor'] === '0') {
+                    if (!isset($filters['role_id']) || $filters['role_id'] === '7') {
                         foreach ($event->users as $user) {
                             $data['firstname'] = $user->firstname;
                             $data['lastname'] = $user->lastname;
 
                             $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, array_merge([
-                                'FNAME'=> $data['firstname'],
+                                'FIRST_NAME'=> $data['firstname'],
                                 'CourseName'=>$data['eventTitle'],
                                 'SubscriptionPrice'=>isset($data['subscription_price']) ? $data['subscription_price'] : '0',
                             ], $data), ['event_id'=>$data['eventId']]);
 
                             event(new EmailSent($user->email, 'SendTopicAutomateMail'));
                         }
-                    } else {
+                    } else if (!isset($filters['role_id']) || $filters['role_id'] === '10') {
                         $instructor = Instructor::find($lesson->pivot->instructor_id);
                         $user = $instructor->user[0];
                         $data['firstname'] = $user->firstname;
                         $data['lastname'] = $user->lastname;
                         $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, array_merge([
-                            'FNAME'=> $data['firstname'],
+                            'FIRST_NAME'=> $data['firstname'],
                             'CourseName'=>$data['eventTitle'],
                             'SubscriptionPrice'=>isset($data['subscription_price']) ? $this->data['subscription_price'] : '0',
                         ], $data), ['event_id'=>$data['eventId']]);

@@ -74,7 +74,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::post('login', [PassportAuthController::class, 'login']);
 
 Route::get('auth/facebook', [FacebookAuthController::class, 'redirect']);
@@ -104,7 +103,10 @@ Route::middleware('auth:api')->group(function () {
 
     // Media manager
     Route::resource('media-manager', MediaController::class)->only([
-        'index', 'store', 'update', 'destroy',
+        'index',
+        'store',
+        'update',
+        'destroy',
     ]);
     Route::delete('media-manager/folder/{id}', [MediaController::class, 'deleteFolder']);
     Route::post('media-manager/folder/edit', [MediaController::class, 'editFolder']);
@@ -123,7 +125,11 @@ Route::middleware('auth:api')->group(function () {
 
     // Page manager
     Route::resource('pages', PagesController::class, ['as' => 'admin'])->only([
-        'index', 'store', 'update', 'show', 'destroy',
+        'index',
+        'store',
+        'update',
+        'show',
+        'destroy',
     ]);
 
     //
@@ -324,10 +330,19 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::get('messaging/emails-templates', [EmailController::class, 'getTemplates']);
     Route::get('messaging/course-scheduled/{id}', [EmailController::class, 'getScheduled']);
     Route::get('messaging/emails-triggers', [EmailController::class, 'getEmailTriggers']);
+    Route::get('messaging/emails-params', [EmailController::class, 'getEmailParams']);
+    Route::get('messaging/page-triggers', [MobileNotificationController::class, 'getPageTriggers']);
+
     // Mobile Notification
     Route::apiResource('messaging/mobile-notifications', MobileNotificationController::class);
+    Route::post('messaging/trigger-mobile-notification', [MobileNotificationController::class, 'triggerMobileNotification']);
+
+
     // Web Notification
     Route::apiResource('messaging/web-notifications', WebNotificationController::class);
+    Route::post('messaging/trigger-web-notification', [WebNotificationController::class, 'triggerWebNotification']);
+
+    // Get Notification
 
     // Messaging Activity
     Route::get('messaging-activity/by-user/{id}', [MessagingActivityController::class, 'showByUser']);

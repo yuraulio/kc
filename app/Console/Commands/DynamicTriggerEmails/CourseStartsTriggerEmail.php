@@ -91,10 +91,10 @@ class CourseStartsTriggerEmail extends Command
                 $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
 
                 $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, [
-                    'FNAME'=> $user->firstname,
+                    'FIRST_NAME'=> $user->firstname,
                     'CourseName'=>$event->title,
                     'CourseExpiration'=>date('d-m-Y', strtotime($expiration->pivot->expiration)),
-                    'LINK'=>$data['elearningSlug'],
+                    'COURSE_LINK'=>$data['elearningSlug'],
                 ], ['event_id'=>$event->id]);
                 event(new EmailSent($user->email, $emailTrigger->email->title));
             }
@@ -159,9 +159,9 @@ class CourseStartsTriggerEmail extends Command
             $data['FB_GROUP'] = ($event->fb_group) ? $event->fb_group : '';
             foreach ($event->users as $user) {
                 $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, array_merge([
-                    'FNAME'=> $user->firstname,
+                    'FIRST_NAME'=> $user->firstname,
                     'CourseName'=>$event->title,
-                    'LINK'=>url(config('app.url')) . '/myaccount',
+                    'COURSE_LINK'=>url(config('app.url')) . '/myaccount',
                 ], $data), ['event_id'=>$event->id]);
                 event(new EmailSent($user->email, $emailTrigger->email->title));
             }

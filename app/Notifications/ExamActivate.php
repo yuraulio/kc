@@ -45,9 +45,9 @@ class ExamActivate extends Notification
     public function toBrevo($notifiable)
     {
         SendEmail::dispatch('ExamActivate', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstname'],
+            'FIRST_NAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['slug'],
+            'COURSE_LINK'=>$this->data['slug'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

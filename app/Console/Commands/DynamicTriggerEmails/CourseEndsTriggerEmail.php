@@ -81,7 +81,7 @@ class CourseEndsTriggerEmail extends Command
                     $data['ExpirationDate'] = date('d-m-Y', strtotime($user->pivot->expiration));
 
                     $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, array_merge([
-                        'FNAME'=> $user->firstname,
+                        'FIRST_NAME'=> $user->firstname,
                     ], $data), ['event_id'=>$event->id]);
 
                     event(new EmailSent($user->email, $emailTrigger->email->title));

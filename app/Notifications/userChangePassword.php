@@ -50,7 +50,7 @@ class userChangePassword extends Notification
         $subject = 'Knowcrunch - ' . $this->user->firstname . ' change your password';
         $fullName = $this->user->firstname . ' ' . $this->user->lastname;
         SendEmail::dispatch('userChangePassword', $this->user->toArray(), null, [
-            'FNAME'=> $this->user->firstname, 'LINK' => \URL::to("myaccount/reset/{$this->user->id}/{$token}"),
+            'FIRST_NAME'=> $this->user->firstname, 'RESET_PASSWORD_LINK' => \URL::to("myaccount/reset/{$this->user->id}/{$token}"),
         ], []);
 
         return true;

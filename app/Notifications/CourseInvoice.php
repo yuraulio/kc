@@ -44,9 +44,9 @@ class CourseInvoice extends Notification
         //system-user-admin-all-courses-payment-receipt
         $subject = 'Knowcrunch | ' . $this->data['firstName'] . ' - download your receipt';
         SendEmail::dispatch('CourseInvoice', $this->data['user'], null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['slugInvoice'],
+            'COURSE_LINK'=>$this->data['slugInvoice'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

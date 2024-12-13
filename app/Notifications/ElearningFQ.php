@@ -45,10 +45,10 @@ class ElearningFQ extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('ElearningFQ', $this->user, null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'CourseExpiration'=>$this->data['expirationDate'],
-            'LINK'=>$this->data['elearningSlug'],
+            'COURSE_LINK'=>$this->data['elearningSlug'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

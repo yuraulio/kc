@@ -37,10 +37,10 @@ class ReportController extends ApiBaseController
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Report $report): JsonResponse
+    public function show(Request $request, Report $report, ReportService $reportService): JsonResponse
     {
         return new JsonResponse(
-            $this->applyRequestParametersToModel($report, $request)
+            $this->applyRequestParametersToModel($reportService->getReportWithData($report), $request)
         );
     }
 

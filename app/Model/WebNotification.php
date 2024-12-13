@@ -31,6 +31,7 @@ class WebNotification extends Model
 
     protected $casts = [
         'filter_criteria' => 'array',
+        'color' => 'array',
         'location' => 'array',
     ];
 

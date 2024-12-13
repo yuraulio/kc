@@ -46,9 +46,9 @@ class HalfPeriod extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('HalfPeriod', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['fbGroup'],
+            'COURSE_LINK'=>$this->data['fbGroup'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

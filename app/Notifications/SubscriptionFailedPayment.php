@@ -46,7 +46,7 @@ class SubscriptionFailedPayment extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('SubscriptionFailedPayment', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'Amount'=>$this->data['amount'],
         ], ['event_id'=>$this->data['eventId']]);

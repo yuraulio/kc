@@ -46,9 +46,9 @@ class InClassReminder extends Notification
     {
         $subject = 'Knowcrunch - Welcome ' . $this->data['firstname'] . '. Reminder about your course';
         SendEmail::dispatch('InClassReminder', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstname'],
+            'FIRST_NAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['slug'],
+            'COURSE_LINK'=>$this->data['slug'],
             'FAQ'=>$this->data['faq'],
             'FB_GROUP'=>$this->data['fb_group'],
             'DATE'=>$this->data['first_lesson_date'] . ' ' . $this->data['first_lesson_time'],

@@ -57,9 +57,9 @@ class SendWaitingListEmail extends Notification
 
         $subject = 'Knowcrunch - Hi ' . $data['firstname'] . '. Course is available';
         SendEmail::dispatch('SendWaitingListEmail', $this->user, null, [
-            'FNAME'=> $this->data['firstname'],
+            'FIRST_NAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['urlEnrol'],
+            'COURSE_LINK'=>$this->data['urlEnrol'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

@@ -46,9 +46,9 @@ class CertificateAvaillable extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('CertificateAvaillable', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>$this->data['certUrl'],
+            'COURSE_LINK'=>$this->data['certUrl'],
         ], ['event_id'=>$this->data['eventId']]);
     }
 }

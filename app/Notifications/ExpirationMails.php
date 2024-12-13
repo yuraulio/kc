@@ -49,9 +49,9 @@ class ExpirationMails extends Notification
             $emailEvent = 'ExpirationMailsMasterClass';
         }
         SendEmail::dispatch($emailEvent, $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
-            'LINK'=>isset($this->data['slug']) ? $this->data['slug'] : url('/'),
+            'COURSE_LINK'=>isset($this->data['slug']) ? $this->data['slug'] : url('/'),
             'ExpirationDate'=>$this->data['expirationDate'],
             'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : 0,
         ], ['event_id'=>$this->data['eventId']]);

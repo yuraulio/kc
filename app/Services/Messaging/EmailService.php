@@ -87,10 +87,26 @@ class EmailService
         });
     }
 
+    private function getTopicEmailTargetUsers(EmailTrigger $emailTrigger) {
+        $to = '';
+        switch ($emailTrigger->trigger_filters['role_id'] ?? '0') {
+            case '7':
+                $to = 'To all students of the course';
+                break;
+            case '10':
+                $to = 'To the instructor of the lesson';
+                break;
+            default:
+                $to = '-';
+                break;
+        }
+        return $to;
+    }
+
     public function getTopicEmails($eventId)
     {
-        return $this->getEmailsByTriggerType($eventId, ['lesson'], function ($emailTrigger, $event) {
-            $to = (!isset($emailTrigger->trigger_filters['to_instructor']) || $emailTrigger->trigger_filters['to_instructor'] === '0') ? 'To all students of the course' : 'To the instructor of the lesson';
+        return $this->getEmailsByTriggerType($eventId, ['lesson'], function (EmailTrigger $emailTrigger, $event) {
+            $to = $this->getTopicEmailTargetUsers($emailTrigger);
             $eventLessons = count($emailTrigger->trigger_filters['lesson_ids'])
                 ? $event->lessons()->wherePivotIn('lesson_id', array_column($emailTrigger->trigger_filters['lesson_ids'], 'id'))->get()
                 : $event->lessons()->wherePivot('date', '!=', null)->get();

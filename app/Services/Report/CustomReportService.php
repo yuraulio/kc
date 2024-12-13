@@ -12,7 +12,7 @@ class CustomReportService
     public static function getCustomReport($sql, $report)
     {
         switch ($report->title) {
-            case 'Highest spending students':
+            case ReportEnum::HIGHEST_SPENDING_STUDENTS:
                 $customSql = ' select `users`.id from `users` ';
                 $customSql .= " JOIN transactionables ON `transactionables`.transactionable_id = `users`.id AND `transactionables`.transactionable_type LIKE '%User'";
                 $customSql .= ' JOIN transactions ON `transactionables`.transaction_id = `transactions`.id ';

@@ -46,7 +46,7 @@ class PaymentReminder extends Notification
     {
         //$this->data['subject']
         SendEmail::dispatch('PaymentReminder', $this->user->toArray(), null, [
-            'FNAME'=> $this->data['firstName'],
+            'FIRST_NAME'=> $this->data['firstName'],
             'CourseName'=>$this->data['eventTitle'],
             'PaymentDate'=>$this->data['paymentDate'],
         ], ['event_id'=>$this->data['eventId']]);

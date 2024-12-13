@@ -59,7 +59,7 @@ class SendTopicAutomateMail extends Notification
         }
 
         SendEmail::dispatch($emailEvent, $this->user->toArray(), null, array_merge([
-            'FNAME'=> $this->data['firstname'],
+            'FIRST_NAME'=> $this->data['firstname'],
             'CourseName'=>$this->data['eventTitle'],
             'SubscriptionPrice'=>isset($this->data['subscription_price']) ? $this->data['subscription_price'] : '0',
         ], $this->data), ['event_id'=>$this->data['eventId']]);

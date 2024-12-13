@@ -95,9 +95,9 @@ class CourseDurationTriggerEmail extends Command
                         $data['email_template'] = $emailTrigger->email->template['label'];
 
                         $this->emailSendService->sendEmailByEmailId($emailTrigger->email->id, $user->toArray(), null, [
-                            'FNAME'=> $user->firstname,
+                            'FIRST_NAME'=> $user->firstname,
                             'CourseName' => $event->title,
-                            'LINK'=> $event->fb_group,
+                            'COURSE_LINK'=> $event->fb_group,
                         ], ['event_id'=>$event->id]);
 
                         event(new EmailSent($user->email, $emailTrigger->email->title));
