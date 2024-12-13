@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Model\Event;
 use App\Model\Lesson;
+use App\Services\Vimeo\VimeoService;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -31,8 +32,9 @@ class UpdateVimeoDuration extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly VimeoService $vimeoService
+    ) {
         parent::__construct();
     }
 
@@ -53,7 +55,7 @@ class UpdateVimeoDuration extends Command
 
                 if ($response['status'] === 200) {
                     $duration = $response['body']['duration'];
-                    $lesson->vimeo_duration = app('App\Http\Controllers\LessonController')->formatDuration($duration);
+                    $lesson->vimeo_duration = $this->vimeoService->formatDuration($duration);
                     $lesson->save();
                 }
             }

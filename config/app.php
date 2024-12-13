@@ -213,6 +213,8 @@ return [
         OwenIt\Auditing\AuditingServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+
+        App\Providers\BladeServiceProvider::class,
     ],
 
     /*

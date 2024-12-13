@@ -115,6 +115,17 @@
                                                     </a>
                                                     <span style="font-family: Tahoma, geneva, sans-serif;"> now, if you want to get the <strong>Black Friday special discount</strong>, valid only for today until midnight. </span>
                                                     </p>
+
+                                                    <p style="margin: 0;"><br></p>
+                                                    <p style="margin: 0;">
+                                                    <span style="font-family: Tahoma, geneva, sans-serif;">USE the coupon <strong>"BLACKFRIDAY24"</strong> and get 50% discount now for the <strong>{{$eventTitle}}</strong>.
+                                                    </p>
+                                                    
+                                                    <p style="margin: 0;">
+                                                    <span style="font-family: Tahoma, geneva, sans-serif;">Have access to the course with only <strong>€{{$DiscountedPrice}}</strong>. </span>
+                                                    </p>
+                                                    
+
                                                 </div>
                                                 </td>
                                             </tr>

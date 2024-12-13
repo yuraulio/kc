@@ -105,7 +105,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                          <form action="{{ route('user.login_as', $user->id) }}" method="post">
+                          <form action="{{ route('user.login_as', $user->id) }}" target="_blank" method="post">
                             {{ csrf_field() }}
                             <button type="button" class="dropdown-item login-as-btn">
                               Login as

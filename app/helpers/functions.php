@@ -805,7 +805,7 @@ if (!function_exists('get_countdowns')) {
             ->where('published', true)
             // ->where('published_from', '<=', date('Y-m-d'))
             // ->where('published_to', '>=', date('Y-m-d'))
-            ->where('countdown_to', '>=', date('Y-m-d H:s'))
+            ->where('countdown_to', '>', Carbon::now())
             ->get()
             ->toArray() : [];
 
@@ -1447,6 +1447,7 @@ if (!function_exists('automateEmailTemplates')) {
         $emailTemplates['instructor_course_kickoff_reminder_email'] = 'Instructor course kick off reminder email';
         $emailTemplates['instructor_course_graduation_reminder_email'] = 'Instructor course graduation reminder email';
         $emailTemplates['student_course_kickoff_reminder_email'] = 'User course kick off reminder email';
+        $emailTemplates['instructor_workshop_reminder'] = 'Instructor course workshop reminder email';
 
         return $emailTemplates;
     }
@@ -1518,5 +1519,63 @@ if (!function_exists('escapeLike')) {
     function escapeLike($val)
     {
         return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $val);
+    }
+}
+
+if (!function_exists('isBlackFriday')) {
+    function isBlackFriday()
+    {
+        // Get today's date
+        $today = new DateTime();
+
+        // Get the year of today's date
+        $year = $today->format('Y');
+
+        // Create a DateTime object for the first day of November in the current year
+        $novemberFirst = new DateTime("first day of November $year");
+
+        // Find the fourth Friday of November
+        $fourthFriday = clone $novemberFirst;
+        $fourthFriday->modify('fourth thursday of november');
+        $fourthFriday->modify('+1 day');
+
+        // Check if today is the fourth Friday of November (Black Friday)
+        return $today->format('Y-m-d') === $fourthFriday->format('Y-m-d');
+    }
+}
+
+if (!function_exists('isCyberMonday')) {
+    function isCyberMonday()
+    {
+        // Get today's date
+        $today = new DateTime();
+
+        // Get the year of today's date
+        $year = $today->format('Y');
+
+        // Create a DateTime object for the first day of November in the current year
+        $novemberFirst = new DateTime("first day of November $year");
+
+        // Find the fourth Friday of November (Black Friday)
+        $blackFriday = clone $novemberFirst;
+        $blackFriday->modify('fourth thursday of november');
+
+        // Clone Black Friday date and modify it to find the following Monday (Cyber Monday)
+        $cyberMonday = clone $blackFriday;
+        $cyberMonday->modify('next monday');
+
+        // Check if today is Cyber Monday
+        return $today->format('Y-m-d') === $cyberMonday->format('Y-m-d');
+    }
+}
+
+if (!function_exists('transliterateGreekToEnglish')) {
+    function transliterateGreekToEnglish(string $text): string
+    {
+        $greek = ['α', 'ά', 'Ά', 'Α', 'β', 'Β', 'γ', 'Γ', 'δ', 'Δ', 'ε', 'έ', 'Ε', 'Έ', 'ζ', 'Ζ', 'η', 'ή', 'Η', 'θ', 'Θ', 'ι', 'ί', 'ϊ', 'ΐ', 'Ι', 'Ί', 'κ', 'Κ', 'λ', 'Λ', 'μ', 'Μ', 'ν', 'Ν', 'ξ', 'Ξ', 'ο', 'ό', 'Ο', 'Ό', 'π', 'Π', 'ρ', 'Ρ', 'σ', 'ς', 'Σ', 'τ', 'Τ', 'υ', 'ύ', 'Υ', 'Ύ', 'φ', 'Φ', 'χ', 'Χ', 'ψ', 'Ψ', 'ω', 'ώ', 'Ω', 'Ώ', ' ', "'", "'", ','];
+        $english = ['a', 'a', 'A', 'A', 'b', 'B', 'g', 'G', 'd', 'D', 'e', 'e', 'E', 'E', 'z', 'Z', 'i', 'i', 'I', 'th', 'Th', 'i', 'i', 'i', 'i', 'I', 'I', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N', 'x', 'X', 'o', 'o', 'O', 'O', 'p', 'P', 'r', 'R', 's', 's', 'S', 't', 'T', 'u', 'u', 'Y', 'Y', 'f', 'F', 'ch', 'Ch', 'ps', 'Ps', 'o', 'o', 'O', 'O', '_', '_', '_', '_'];
+        $string = str_replace($greek, $english, $text);
+
+        return $string;
     }
 }

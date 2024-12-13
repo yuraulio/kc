@@ -1755,33 +1755,55 @@ $show_popup = isset($uri['show_popup']) ? $uri['show_popup'] : 0;
                                                               data-label-off="No" data-label-on="Yes"></span>
                                                     </label>
                                                 </div>
-
-
                                                 @if (count($elearning_events) != 0)
-                                                <div class="free-course-wrapper">
-                                                    <div class="form-group col-12">
-                                                        <label class="form-control-label"
-                                                               for="exampleFormControlSelect3">Please select the courses
+                                                <div class="col free-course-wrapper">
+                                                    <div class="row">
+                                                      <div class="col pb-3">
+                                                        {{ __('The course completed at: ') . ($event->completed_at ? Carbon::createFromFormat('Y-m-d', $event->completed_at)->format('d-m-Y') : __('Not completed yet.')) }}
+                                                      </div>
+                                                    </div>
+                                                    <div class="row">
+                                                    <div
+                                                      class="col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('course.free_courses.release_date_files') ? ' has-danger' : '' }}">
+                                                      <label class="form-control-label"
+                                                             for="input-delivery">{{ __('Expiration date') }}</label>
+                                                      <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                      <span class="input-group-text"><i
+                                                          class="ni ni-calendar-grid-58"></i></span>
+                                                        </div>
+                                                        <input class="form-control datepicker" id="input-release_date_file"
+                                                               name="course[free_courses][expiration_limit]" placeholder="Select date" type="text"
+                                                               @if (old('course.free_courses.expiration_limit', $info['bonus_access_expiration'])) value="{{ old('course.free_courses.expiration_limit', $info['bonus_access_expiration'] ? Carbon::parse($info['bonus_access_expiration'])->format('d-m-Y') : null) }}" @endif>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                    <div class="row">
+
+                                                      <div>
+                                                        <div class="form-group col-12">
+                                                          <label class="form-control-label"
+                                                                 for="exampleFormControlSelect3">Please select the courses
                                                             you want to allow free access</label>
-                                                        <select multiple=""
-                                                                name="course[{{ 'free_courses' }}][{{ 'list' }}][]"
-                                                                class="form-control" id="free_course_list">
+                                                          <select multiple=""
+                                                                  name="course[{{ 'free_courses' }}][{{ 'list' }}][]"
+                                                                  class="form-control" id="free_course_list">
 
                                                             @foreach ($elearning_events as $elearning_event)
-                                                            <option
-                                                                    {{ isset($access_events) && in_array($elearning_event['id'], $access_events) ? 'selected' : '' }}
-                                                            value="{{ $elearning_event['id'] }}">
-                                                            {{ $elearning_event['title'] }}</option>
+                                                              <option
+                                                                {{ isset($access_events) && in_array($elearning_event['id'], $access_events) ? 'selected' : '' }}
+                                                                value="{{ $elearning_event['id'] }}">
+                                                                {{ $elearning_event['title'] }}</option>
                                                             @endforeach
-                                                        </select>
-                                                    </div>
+                                                          </select>
+                                                        </div>
 
+                                                      </div>
+
+                                                  </div>
+                                                </div>
                                                 </div>
                                                 @endif
-
-                                            </div>
-
-
                                         </div>
 
                                         <div class="exp_input col-12">

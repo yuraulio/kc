@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use Laravel\Cashier\Concerns\InteractsWithPaymentBehavior;
 use Laravel\Cashier\Concerns\Prorates;
@@ -260,11 +261,12 @@ class Subscription extends Model
      *
      * @return void
      */
-    public function syncStripeStatus()
+    public function syncStripeStatus(): void
     {
+        Log::info("Sync status of the subscription: {$this->stripe_id}.");
+
         try {
             $subscription = $this->asStripeSubscription();
-
             $status = 1;
             switch($subscription->status) {
                 case 'incomplete': $status = 0;
@@ -285,14 +287,25 @@ class Subscription extends Model
                     break;
             }
 
+            Log::info("The status of the subscription: {$this->stripe_id} retrieved from Stripe is: {$subscription->status} local status id is: {$status}");
+
+            $data = [
+                'status' => $status,
+                'stripe_status' => $subscription->status,
+            ];
+
+            // if status is false and ends_at is not set, sync the ends_at with Stripe
+            if (!$status && !$this->ends_at && isset($subscription->ended_at)) {
+                $data['ends_at'] = Carbon::parse($subscription->ended_at)->format('Y-m-d H:i:s');
+            }
+
             DB::table('subscriptions')
-                ->where('id', $subscription->id)
-                ->update([
-                    'status' => $status,
-                    'stripe_status' => $subscription->status,
-                ]);
+                ->where('id', $this->id)
+                ->update($data);
+
+            Log::info("Sync status of the subscription: {$this->stripe_id} success.");
         } catch(\Exception $e) {
-            return;
+            Log::info("Sync status of the subscription: {$this->stripe_id} fail. Error {$e}");
         }
     }
 

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Services\PaymentService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        \League\OAuth2\Server\Exception\OAuthServerException::class,
+        \Lcobucci\JWT\Validation\RequiredConstraintsViolated::class,
+        UserAlreadyEnrolledToTheCourseException::class,
     ];
 
     /**
@@ -70,6 +73,30 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ModelNotFoundException) {
             if ($request->acceptsJson() || $request->wantsJson() || $request->is('api/*')) {
                 return new JsonResponse(['message' => $exception->getMessage()], 404);
+            }
+        }
+
+        if ($exception instanceof UserAlreadyEnrolledToTheCourseException) {
+            $message = 'The user(s) with email: ' .
+                implode(',', $exception->getEmails()) .
+                (count($exception->getEmails()) > 1 ? ' are' : ' is') .
+                ' already enrolled' .
+                ' to the course(s): ' . implode(',', $exception->getEvents());
+
+            if ($request->ajax()) {
+                session()->put('dperror', $message);
+
+                return response()->json([
+                    'status' => 'fail',
+                    'errors' => [
+                        $message,
+                    ],
+                ], 422);
+            } else {
+                return redirect()->back()->with(
+                    'dperror',
+                    $message,
+                );
             }
         }
 

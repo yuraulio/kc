@@ -177,28 +177,28 @@
 
 				<div class="checkout-full-wrap">
 
-				
+
 					<form id="checkout-form" action="{{route('subscription.store',[$event->title,$plan->name])}}" method="post">
 						@csrf
 
-						
+
 						<input type="hidden" id="payment_method" name="payment_method" value="">
 					</form>
-					
+
 
 					<h2>Payment method</h2>
 
 					<div class="tab card-information flex-container">
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab active" onclick="openPaymentMethod(event, 'card')">
-							<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">	
-							<p class="payment-title p-TabLabel">DEBIT / CREDIT CARD</p>	
+							<img src="{{cdn('new_cart/images/credit-card.png')}}" width="30px" height="20px" class="without-hover" alt="">
+							<p class="payment-title p-TabLabel">DEBIT / CREDIT CARD</p>
 						</button>
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'digital-wallets')">
-							<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">	
+							<img src="{{cdn('new_cart/images/wallet.png')}}" width="30px" height="20px" class="without-hover" alt="">
 							<p class="payment-title p-TabLabel">APPLE / GOOGLE WALLET</p>
 						</button>
 						<button type="button" class="tablinks btn-4 btn-outline-dark Tab" onclick="openPaymentMethod(event, 'sepa')">
-						<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">	
+						<img src="{{cdn('new_cart/images/sepa-2.svg')}}" width="30px" height="20px" class="without-hover" alt="">
 							<p class="payment-title p-TabLabel">SEPA DIRECT DEBIT</p>
 						</button>
 					</div>
@@ -208,9 +208,9 @@
 							<div class="card-info">
 
 								<p class="info">Submit your card data and proceed securely with your transaction. We do not store your card's data. </p>
-								
+
 								<div class="card-input"><div id="card-element"></div></div>
-								
+
 								<div class="form-row my-5 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
 										<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
@@ -237,12 +237,12 @@
 										<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
 										<a href="/billing" class="link-color">Previous: Billing</a>
 
-										
+
 									</div>
 									<div id="payment-request-button"><!-- A Stripe Element will be inserted here. --></div>
-									
+
 								</div>
-								
+
 							</div>
 
 							<!-- DIGITAL WALLETS BUTTON  END END END -->
@@ -253,7 +253,7 @@
 							<form action="/charge" method="post" class="card-info" id="payment-form">
 
 								<p class="info">Please provide your IBAN so we can directly debit your EU bank account and ensure a secure transaction. Kindly note that a SEPA payment may take up to 14 days to process. Your access will be granted once we have confirmation of your payment in our system. </p>
-								
+
 								<div class="">
 									<div class="">
 									<label for="accountholder-name">
@@ -272,7 +272,7 @@
 										<label for="email">
 											Email Address
 										</label>
-										
+
 										<input
 											id="email"
 											name="email"
@@ -297,9 +297,9 @@
 										<div id="iban-element" class="card-input"><!-- A Stripe Element will be inserted here. --></div>
 									</div>
 
-									
+
 								</div>
-								
+
 
 								<div class="form-row my-3 align-items-center prev-next-wrap">
 									<div class="d-flex align-items-center previous-participant-link">
@@ -313,13 +313,13 @@
 
 								<!-- Display mandate acceptance text. -->
 								<div id="mandate-acceptance">
-							
+
 								</div>
 								<!-- Used to display form errors. -->
 								<div id="error-message" role="alert"></div>
 							</form>
 						</div>
-				
+
 				</div>
 			</div>
 			@include('theme.cart.new_cart.subscription.selection')
@@ -399,7 +399,7 @@
 
     	}
 	});
-	
+
 
 	//DIGITAL WALLET
 	const paymentRequest = stripe.paymentRequest({
@@ -424,7 +424,7 @@
 	(async () => {
 	// Check the availability of the Payment Request API first.
 	const result = await paymentRequest.canMakePayment();
-	
+
 
 	if (result) {
 
@@ -437,37 +437,38 @@
 
 	paymentRequest.on('paymentmethod', async (ev) => {
 
+
 		await apiRequest(`/walletPaySubscription`, ev.paymentMethod.id)
-		
+
 	});
 
 	async function apiRequest(url, payment_method){
 		$("#card-error").remove();
 		let a;
-		
+
 		$.ajax({
 			headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			method: 'POST',
 			url: url,
-			async:false,  
+			async:false,
 			data:{
 				payment_method: payment_method,
 				event: @json($event->title),
 				plan: '{{$plan->name}}'
-			},  
+			},
 			success: function(data) {
 				//a = data
 				window.location = data
 			},
 			error: function(data){
-				
+
 				location.reload()
 
 			}
 		})
-		
+
 		return a;
 	}
 
@@ -529,7 +530,7 @@
 		if($(email).val() == ''){
 			$(email).val('{{$cur_user["email"]}}')
 		}
-		
+
 
 		form.addEventListener('submit', async (event) => {
 			event.preventDefault();
@@ -552,7 +553,7 @@
 			return_data = await createIntent('/createSepaSubscription', paymentMethod.id)
 
 			var clientSecret = document.getElementById('submit-button');
-			
+
 			clientSecret = $(clientSecret).attr('data-secret')
 
 
@@ -566,11 +567,11 @@
 								name: accountholderName.value,
 								email: email.value,
 							},
-						}, 
+						},
 					}).then(function(result){
 
 						if(result.error){
-							
+
 							submitButton.disabled = false;
 						}
 						if(result.paymentIntent){
@@ -583,9 +584,9 @@
 				$('#error-message').css('color', 'red')
 				$('#error-message').text('Please try again!!')
 			}
-			
-			
-			
+
+
+
 
 
 		});
@@ -601,25 +602,30 @@
 				},
 				method: 'POST',
 				url: url,
-				async:false,  
+				async:false,
 				data:{
 					payment_method: payment_method,
 					event: '{{$event->title}}',
 					plan: '{{$plan->name}}'
-				},  
+				},
 				success: function(data) {
-					
+
 					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
-					
+
 					data1['return_url'] = JSON.parse(data)['return_url']
-					
-				}
+
+				},
+        error: function(xhr, status, error) {
+            if (xhr.status === 422) {
+              window.location.reload();
+            }
+        },
 			})
-		
+
 			return data1;
 		}
-											
-	
+
+
 
 
 	//END SEPA
@@ -637,13 +643,13 @@
 
 	async function updateAmount(){
 		total = await getTotalCart()
-		
+
 		paymentRequest.update({
 			total: {
 				label: @json($event->title),
 				amount: Math.round(total),
 			},
-			
+
 		});
 	}
 
@@ -656,7 +662,7 @@
 			},
 			method: 'POST',
 			url: '/getTotalCartSubscription',
-			async:false,    
+			async:false,
 			data:{
 				plan: '{{$plan->name}}',
 			},

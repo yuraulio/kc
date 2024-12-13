@@ -99,6 +99,7 @@ class EventInfo extends Model
         'course_students_text',
         'course_students_visible',
         'course_students_icon',
+        'bonus_access_expiration',
         'cta_course_page',
         'cta_course_page_re_enroll',
         'cta_home_page',

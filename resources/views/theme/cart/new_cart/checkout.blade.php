@@ -700,13 +700,19 @@ $( document ).ready(function() {
 						window.location = data.return_url
 					}
 
-					//console.log(data)
+          if (typeof data !== 'object') {
+            data = JSON.parse(data)
+          }
 
-					$('#submit-button').attr('data-secret', JSON.parse(data)['clientSecret'])
+          $('#submit-button').attr('data-secret', data['clientSecret'])
+          data1['return_url'] = data['return_url']
 
-					data1['return_url'] = JSON.parse(data)['return_url']
-
-				}
+				},
+        error: function(xhr, status, error) {
+          if (xhr.status === 422) {
+            window.location.reload();
+          }
+        },
 			})
 
 			return data1;
@@ -738,7 +744,12 @@ $( document ).ready(function() {
 
 				//a = data
 				window.location = data
-			}
+			},
+      error: function(xhr, status, error) {
+        if (xhr.status === 422) {
+          window.location.reload();
+        }
+      },
 		})
 
 		return a;

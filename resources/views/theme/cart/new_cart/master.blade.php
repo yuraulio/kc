@@ -26,7 +26,6 @@
 {{--      })(window,document,'script','dataLayer','GTM-MLLXRGTK');</script>--}}
   @endif
 	<!-- End Google Tag Manager -->
-
 </head>
 <body>
 
@@ -43,7 +42,8 @@
 
 	<!---------------- header start --------------->
 	<header>
-		<div class="container">
+    @include('new_web.layouts.tickers')
+		<div class="container" id="checkout-header">
 			<div class="header-wrap">
 				<div class="header-logo">
 					<a href="{{ config('app.url') }}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
@@ -321,8 +321,51 @@ $(document).keyup(function(event){
     })
 
 </script>
+<script src="{{ cdn(mix('theme/assets/js/marquee3k.js')) }}" > </script>
+<script>
+  setTimeout(function(){
 
+    Marquee3k.init()
+
+  },500);
+</script>
 @stack('scripts')
+@stack('components-scripts')
+<style>
+  /* Ticker */
+  .carouselTicker-wrap{
+  background-color: #f53000;
+  }
+  #header.has_ticker {
+  top: 47px;
+  }
 
+  #header.has_countdown {
+  top: 92px;
+  }
+
+  #header.has_ticker.has_countdown{
+  top: 141px;
+  }
+
+  /* marquee ticker */
+  .marquee3k__copy {
+  padding: 0.65rem;
+  }
+
+  .carouselTicker-wrap p,
+  .carouselTicker-wrap h1,
+  .carouselTicker-wrap h2,
+  .carouselTicker-wrap h3,
+  .carouselTicker-wrap h4,
+  .carouselTicker-wrap h5,
+  .carouselTicker-wrap a,
+  .carouselTicker-wrap a:visited
+  {
+  color: #fff !important;
+  display: inline;
+  }
+
+</style>
 </body>
 </html>

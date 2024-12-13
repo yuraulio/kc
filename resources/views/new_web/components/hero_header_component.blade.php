@@ -77,7 +77,13 @@
 
                 <?php
                     if(isset($students_visible['landing']) && $students_visible['landing'] && isset($event['category'][0]['id'])){
-                        $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']] ?? null;
+                        if ($event['category'][0]['id'] === 356) {
+                          $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']] ?? null;
+                          $sumStudents += $sumStudentsByCategory[183] ?? 1429; //TODO: fix
+                        } else {
+                          $sumStudents = $sumStudentsByCategory[$event['category'][0]['id']] ?? null;
+                        }
+
                     }else{
                         $sumStudents = null;
                     }

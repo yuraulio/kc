@@ -849,9 +849,26 @@
                                             </label>
                                         </div>
 
-
                                         @if(count($elearning_events) != 0)
-                                        <div class="free-course-wrapper d-none">
+                                        <div class="col free-course-wrapper d-none">
+                                          <div class="row">
+                                            <div
+                                              class="col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('course.free_courses.release_date_files') ? ' has-danger' : '' }}">
+                                              <label class="form-control-label"
+                                                     for="input-delivery">{{ __('Expiration date') }}</label>
+                                              <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                      <span class="input-group-text"><i
+                                                          class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <input class="form-control datepicker" id="input-release_date_file"
+                                                       name="course[free_courses][expiration_limit]" placeholder="Select date" type="text"
+                                                       @if (old('course.free_courses.expiration_limit')) value="{{ old('course.free_courses.expiration_limit') }}" @endif>
+                                              </div>
+                                            </div>
+                                          </div>
+                                            <div class="row">
+                                                <div>
 
                                             <div class="form-group col-12">
                                                 <label class="form-control-label" for="exampleFormControlSelect3">Please select the courses you want to allow free access</label>
@@ -862,6 +879,9 @@
                                                 </select>
                                                 </div>
 
+                                        </div>
+                                              </div>
+                                            </div>
                                         </div>
                                         @endif
 

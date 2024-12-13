@@ -66,9 +66,11 @@
 <script>
 
     $(document).on('click','.absences',function(){
+        const userId = $(this).data('user_id');
+        const eventId = $(this).data('event_id');
 
+        let url =`/admin/user/absences/${userId}/${eventId}`
 
-        let url =`/admin/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
 
 
         $.ajax({
@@ -81,7 +83,7 @@
             success: function (data) {
 
                 if(data.success == true){
-                    createAbsenceTable(data)
+                    createAbsenceTable(data, userId)
                 }else{
 
                 }
@@ -141,6 +143,8 @@
             return;
         }
 
+        const userId = $(this).data('user-id');
+        const eventId = $(this).data('event-id');
 
         $.ajax({
             headers: {
@@ -148,29 +152,25 @@
             },
             type: 'post',
             url: "{{route('update-absences')}}",
-            data:{'presenceHours':updatePresenceHours, 'user_id':"{{$user['id']}}", "absence":id,'event_id': $(this).data('event-id')},
+            data:{'presenceHours':updatePresenceHours, 'user_id': userId, "absence":id,'event_id': eventId},
             success: function (data) {
-
-                if(data.success == true){
+                if(data.success == true) {
 
                     $(`#absence-input-${id}`).attr("readonly", true);
                     $(`#absence-input-${id}`).removeClass('absence-border');
                     $(`#absence-update-${id}`).addClass('hidden');
 
-                    createAbsenceTable(data)
-
-
-                }else{
-
+                    createAbsenceTable(data, userId)
                 }
-
             }
         });
 
 
     })
 
-    function createAbsenceTable(data){
+    function createAbsenceTable(data, userId) {
+
+      console.log(userId);
 
         absClass = data.data.class;
 
@@ -229,8 +229,8 @@
                             totalUserHours > 0 ? `<i class="ni ni-check-bold"></i>` : '',
                             `<input id="absence-input-${value1['id']}" value=${totalUserHours + '/' +  totalEventHours} readonly>`,
                             (totalEventHours - totalUserHours) + '/' +  totalEventHours,
-                            `<button id="absence-edit" class="btn btn-info btn-sm absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
-                            `<button id="absence-update-${value1['id']}" class="btn btn-info btn-sm absence-update hidden" data-absence-id=${value1['id']} data-event-id=${data.data.event_id}> Update </button>`,
+                            `<button id="absence-edit" type="button" class="btn btn-info btn-sm absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
+                            `<button id="absence-update-${value1['id']}" type="button" class="btn btn-info btn-sm absence-update hidden" data-absence-id=${value1['id']} data-event-id=${data.data.event_id} data-user-id=${userId}> Update </button>`,
                         ]).draw()
 
                     })

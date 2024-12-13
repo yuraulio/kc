@@ -15,6 +15,7 @@ use App\Notifications\CourseInvoice;
 use App\Notifications\ErrorSlack;
 use App\Notifications\SubscriptionWelcome;
 use App\Services\FBPixelService;
+use App\Services\SubscriptionService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,12 @@ use Stripe\Stripe;
 
 class WebhookController extends BaseWebhookController
 {
+    public function __construct(
+        private readonly SubscriptionService $subscriptionService
+    ) {
+        parent::__construct();
+    }
+
     public function handleChargeFailed(array $payload)
     {
         if (isset($payload['data']['object']['metadata']['integration_check']) && $payload['data']['object']['metadata']['integration_check'] == 'sepa_debit_accept_a_payment' && $payload['data']['object']['paid'] === false && $payload['data']['object']['failure_code'] != null) {
@@ -570,6 +577,14 @@ class WebhookController extends BaseWebhookController
             $subscriptionPaymentMethod = $user->subscriptionEvents()->where('subscription_id', $subscription->id)->first();
             $paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
             $eventId = $subscription->event->first()->pivot->event_id;
+
+            // migration to the new e-learning event
+            if ($eventId == 2304) {
+                $user->subscriptionEvents()->wherePivot('event_id', $eventId)->detach();
+                $user->subscriptionEvents()->attach(4724, ['subscription_id' => $subscription->id, 'payment_method' => $paymentMethod->id ?? 2]);
+                $subscription->refresh();
+            }
+
             if (config('app.PAYMENT_PRODUCTION')) {
                 Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
             } else {
@@ -577,6 +592,76 @@ class WebhookController extends BaseWebhookController
             }
             session()->put('payment_method', $subscription->pivot->payment_method);
         }
+
+        $oldEventSubscription = $this->subscriptionService->checkIfUserAlreadyHasSameSubscription(
+            $user,
+            $eventId,
+            $payload['data']['object']['subscription']
+        );
+
+        // cancel subscription
+        if ($oldEventSubscription) {
+            try {
+                $oldSubscription = Subscription::find($oldEventSubscription->pivot->subscription_id);
+                $oldSubscription->cancel();
+            } catch (\Throwable $throwable) {
+                if ($oldSubscription) {
+                    $user->notify(new ErrorSlack(
+                        'Error while trying to cancel old subscription, please cancel this subscription manually: https://dashboard.stripe.com/subscriptions/' . $oldSubscription->stripe_id
+                    ));
+                } else {
+                    $user->notify(new ErrorSlack(
+                        'Error while trying to cancel old subscription, please cancel this subscription manually for user id: ' . $user->id
+                    ));
+                }
+            }
+
+            // detch old event
+            DB::table('subscription_user_event')
+                ->where('user_id', $user->id)
+                ->whereIn('event_id', [2304, 1350, 4724])
+                ->whereNotNull('expiration')
+                ->delete();
+        }
+
+        $oldRegularEvent = $this->subscriptionService->checkIfUserAlreadyHasSameEvent($user, $eventId);
+        if ($oldRegularEvent) {
+            // detch old event
+            DB::table('event_user')
+                ->where('user_id', $user->id)
+                ->whereIn('event_id', [2304, 1350, 4724])
+                ->whereNotNull('expiration')
+                ->delete();
+        }
+
+        if ($oldEventSubscription || $oldRegularEvent) {
+            //calculate offset
+            if ($oldEventSubscription) {
+                $offsetInDays = Carbon::parse($oldEventSubscription->pivot->expiration)->diffInDays(Carbon::now());
+            } else {
+                $offsetInDays = Carbon::parse($oldRegularEvent->pivot->expiration)->diffInDays(Carbon::now());
+            }
+
+            $ends_at = Carbon::parse($ends_at)->addDays($offsetInDays)->timestamp;
+
+            $subscription->update([
+                'ends_at' => date('Y-m-d H:i:s', $ends_at),
+                'must_be_updated' => $ends_at,
+            ]);
+
+            $subscription->updateStripeSubscription([
+                'trial_end' => Carbon::now()->addDays($offsetInDays)->timestamp,
+            ]);
+        }
+
+        // attach new event
+
+        //$invoices = $subscription->event->first()->subscriptionInvoicesByUser($user->id)->get();
+
+        //$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
+
+        //Log::info('has atest');
+        //Log::info(var_export($data['payment_intent'], true));
 
         $charge['payment_intent'] = $data['payment_intent'];
         $charge['status'] = 'succeeded';
@@ -641,6 +726,18 @@ class WebhookController extends BaseWebhookController
             }
 
             $user->events_for_user_list()->updateExistingPivot($eventId, ['expiration' => $ends_at, 'comment' => null, 'payment_method' => 2]);
+            //$user->events()->updateExistingPivot($eventId,['expiration' => $ends_at]);
+            if ($eventId == 2304) {
+                // migration to the new e-learning event
+                $user->events_for_user_list()->wherePivot('event_id', $eventId)->detach();
+                $user->events_for_user_list()->attach(4724, ['paid' => true, 'expiration' => $ends_at, 'comment' => null, 'payment_method' => 2]);
+            } else {
+                $user->events_for_user_list()->updateExistingPivot($eventId, ['expiration' => $ends_at, 'comment' => null, 'payment_method' => 2]);
+            }
+
+            //$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
+            //$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
+            //$user->events()->where('event_id',$eventId)->first()->pivot->save();
         }
 
         $fromSepaPayment = false;

@@ -63,6 +63,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Admin only page.
+     */
+    public function showLoginForm()
+    {
+        if (Auth::user()) {
+            return redirect()->route('home');
+        }
+
+        return view('auth.login');
+    }
+
     protected function studentauth(Request $request)
     {
         $credentials = $request->only('email', 'password');

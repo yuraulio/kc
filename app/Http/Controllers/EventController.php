@@ -26,9 +26,13 @@ use App\Model\Topic;
 use App\Model\Type;
 use App\Model\User;
 use App\Services\CreateCertificatesTrainingEventsService;
+use Carbon\Carbon;
+use DateTime;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
@@ -365,6 +369,12 @@ class EventController extends Controller
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id, $event);
         $this->updateEventInfo($event_info, $event->id);
 
+        if ($request->status === Event::STATUS_COMPLETED) {
+            Event::where('id', $event->id)->update([
+                'completed_at' => Carbon::now(),
+            ]);
+        }
+
         return redirect()->route('events.edit', $event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
@@ -486,6 +496,14 @@ class EventController extends Controller
         $elearning_events_new = Delivery::with('event:id,title,published')->where('id', 143)->first()->toArray()['event'];
 
         foreach ($elearning_events_new as $ev) {
+            if ((isset($data['info']['inclass']['elearning_access'])
+                && is_array($data['info']['inclass']['elearning_access'])
+                && count($data['info']['inclass']['elearning_access'])
+                && in_array($ev['id'], $data['info']['inclass']['elearning_access']))
+            ) {
+                $elearning_events[] = $ev;
+                continue;
+            }
             if ($ev['published'] == 1) {
                 $elearning_events[] = $ev;
             }
@@ -1045,6 +1063,9 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        $eventOldExpiration = $event->event_info()['bonus_access_expiration'];
+        $eventOldStatus = $event->status;
+
         $show_popup = false;
         if ($request->published == 'on') {
             $published = 1;
@@ -1199,17 +1220,32 @@ class EventController extends Controller
         }
 
         if ($request->status == Event::STATUS_COMPLETED) {
+            Log::info('EventController@update $request->status == Event::STATUS_COMPLETED');
+
+            // if the event became completed set the completed_at date
+            if ($event->status !== Event::STATUS_COMPLETED) {
+                // we can't work with exisitng instance of event
+                Event::where('id', $event->id)->update([
+                    'completed_at' => Carbon::now(),
+                ]);
+            }
+
+            $statusChanged = $request->status != $eventOldStatus;
+
             if (isset($infoData['free_courses']['list'])) {
                 // todo parse exams
 
                 if (isset($infoData['free_courses']['exams'])) {
-                    dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], true))->delay(now()->addSeconds(3)));
+                    Log::info('EventController@update dispatch 1');
+                    dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], true, $infoData['free_courses']['expiration_limit'], $eventOldExpiration, $statusChanged))->delay(now()->addSeconds(3)));
                 } else {
-                    dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], false))->delay(now()->addSeconds(3)));
+                    Log::info('EventController@update dispatch 2');
+                    dispatch((new EnrollStudentsToElearningEvents($event->id, $infoData['free_courses']['list'], false, $infoData['free_courses']['expiration_limit'], $eventOldExpiration, $statusChanged))->delay(now()->addSeconds(3)));
                 }
             } else {
                 // todo parse exams
-                dispatch((new EnrollStudentsToElearningEvents($event->id, false, false))->delay(now()->addSeconds(3)));
+                Log::info('EventController@update dispatch 3');
+                dispatch((new EnrollStudentsToElearningEvents($event->id, false, false, $infoData['free_courses']['expiration_limit'], $eventOldExpiration, $statusChanged))->delay(now()->addSeconds(3)));
             }
         }
 
@@ -1536,6 +1572,8 @@ class EventController extends Controller
             $data['course_elearning_access_icon'] = $requestData['free_courses']['icon'];
         }
 
+        $data['bonus_access_expiration'] = $requestData['free_courses']['expiration_limit'] ?? null;
+
         // Payment
 
         if (isset($requestData['payment'])) {
@@ -1740,6 +1778,7 @@ class EventController extends Controller
         $infos->course_students_icon = $event_info['course_students_icon'];
 
         $infos->course_elearning_access = $event_info['course_elearning_access'];
+        $infos->bonus_access_expiration = $event_info['bonus_access_expiration'] ? Carbon::parse($event_info['bonus_access_expiration']) : null;
         $infos->course_elearning_access_icon = $event_info['course_elearning_access_icon'];
 
         if ($info == null || $info == '[]') {

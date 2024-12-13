@@ -21,6 +21,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\CMSFile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Image;
 
 class UserService
 {
@@ -576,5 +581,156 @@ class UserService
         }
 
         return false;
+    }
+
+    public function updateProfileImage(User $user, $file): array
+    {
+        $this->removeProfileImage($user);
+
+        $content = $file;
+
+        $path_name = $file->store('Users', 'uploads');
+
+        $name = array_reverse(explode('/', $path_name))[0];
+        $name_parts = explode('.', $name);
+        $new_name = $name_parts[0] . '.webp';
+
+        // Save image in webp format
+        $image = Image::make($file->path())->orientate();
+        if ($image->width() > $image->height()) {
+            $image->heighten(470)->crop(470, 470);
+        } elseif ($image->width() < $image->height()) {
+            $image->widen(470)->crop(470, 470);
+        } else {
+            $image->resize(470, 470);
+        }
+        $image->save(public_path('/uploads/Users/') . $new_name, 60);
+
+        // Save to new location.
+        $CMSFile = new CMSFile();
+        $CMSFile->name = $new_name;
+        $CMSFile->path = '/Users/' . $new_name;
+        $CMSFile->url = config('app.url') . '/uploads/Users/' . $new_name;
+        $CMSFile->extension = 'webp';
+        $CMSFile->size = $content->getSize();
+        $CMSFile->folder_id = 43;
+        $CMSFile->parent_id = null;
+        $CMSFile->user_id = Auth::id();
+        $CMSFile->full_path = '/uploads/Users/' . $new_name;
+        $CMSFile->alt_text = $new_name;
+        $CMSFile->version = 'original';
+        $CMSFile->link = $new_name;
+        $path = public_path("uploads/Users/{$new_name}");
+        if (File::exists($path)) {
+            $size = getimagesize($path);
+            $CMSFile->height = $size[1];
+            $CMSFile->width = $size[0];
+        }
+        $CMSFile->crop_data = null;
+        $CMSFile->save();
+
+        $name_parts = explode('.', $new_name);
+        $new_name_thumb = $name_parts[0] . '-users.' . $name_parts[1];
+        $image->save(public_path('/uploads/Users/') . $new_name_thumb, 60);
+        $CMSFileThumb = $CMSFile->replicate();
+        $CMSFileThumb->name = $new_name_thumb;
+        $CMSFileThumb->path = '/Users/' . $new_name_thumb;
+        $CMSFileThumb->url = config('app.url') . '/uploads/Users/' . $new_name_thumb;
+        $CMSFileThumb->full_path = '/uploads/Users/' . $new_name_thumb;
+        $CMSFileThumb->alt_text = $new_name_thumb;
+        $CMSFileThumb->version = 'users';
+        $CMSFileThumb->link = $new_name_thumb;
+        $CMSFileThumb->parent_id = $CMSFile->id;
+        $CMSFileThumb->crop_data = [
+            'crop_width' => 470,
+            'crop_height' => 470,
+            'height_offset' => 0,
+            'width_offset' => 0,
+        ];
+        $CMSFileThumb->save();
+
+        $user->profile_image_id = $CMSFileThumb->id;
+        $user->save();
+
+        return [
+            'file'  => $CMSFile,
+            'thumb' => $CMSFileThumb,
+        ];
+    }
+
+    public function removeProfileImage(User $user): void
+    {
+        $media = $user->image;
+        $mediaNew = $user->profile_image;
+
+        if ($media) {
+            $path_crop = explode('.', $media['original_name']);
+            $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
+            $path_crop = substr_replace($path_crop, '', 0, 1);
+            $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
+
+            $path = $media['path'] . $media['original_name'];
+            $path = substr_replace($path, '', 0, 1);
+            $path_webp = str_replace($media['ext'], '.webp', $path);
+
+            if (file_exists($path_crop)) {
+                //unlink crop image
+                unlink($path_crop);
+            }
+
+            if (file_exists($path)) {
+                //unlink crop image
+                unlink($path);
+            }
+
+            if (file_exists($path_webp)) {
+                //unlink crop image
+                unlink($path_webp);
+            }
+
+            if (file_exists($path_crop_webp)) {
+                //unlink crop image
+                unlink($path_crop_webp);
+            }
+
+            //null db image
+            $media->original_name = null;
+            $media->name = null;
+            $media->path = null;
+            $media->ext = null;
+            $media->file_info = null;
+            $media->height = null;
+            $media->width = null;
+            $media->details = null;
+
+            $media->save();
+        }
+
+        if ($mediaNew) {
+            DB::beginTransaction();
+            try {
+                $original = $mediaNew->parent;
+
+                if ($original) {
+                    if (file_exists(public_path($original->full_path))) {
+                        unlink(public_path($original->full_path));
+                    }
+                }
+
+                if (file_exists(public_path($mediaNew->full_path))) {
+                    unlink(public_path($mediaNew->full_path));
+                }
+
+                $user->profile_image_id = null;
+                $user->save();
+
+                $original->delete();
+                $mediaNew->delete();
+            } catch (\Throwable $throwable) {
+                DB::rollBack();
+                throw $throwable;
+            }
+            DB::commit();
+        }
     }
 }

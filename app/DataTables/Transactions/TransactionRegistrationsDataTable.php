@@ -47,6 +47,7 @@ class TransactionRegistrationsDataTable extends AppDataTable
 
                 $item->expiration = $userEvent ? $userEvent->expiration : null;
                 $item->payment_method = $userEvent && isset($paymentMethods[$userEvent->payment_method]) ? $paymentMethods[$userEvent->payment_method] : 'Alpha Bank';
+                $item->amount = $item->amount_per_user;
 
                 return $item;
             });

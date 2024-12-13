@@ -1369,6 +1369,7 @@ class Event extends Model
             $data['students']['title'] = $infos['course_students_title'];
             $data['students']['visible'] = $infos['course_students_visible'] != null ? $infos['course_students_visible'] : null;
             $data['students']['icon'] = $infos['course_students_icon'] != null ? $infos['course_students_icon'] : null;
+            $data['bonus_access_expiration'] = $infos['bonus_access_expiration'] ?? null;
         }
 
         return $data;

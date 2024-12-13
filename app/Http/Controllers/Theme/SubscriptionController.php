@@ -10,8 +10,8 @@ use App\Model\Plan;
 use App\Notifications\SubscriptionWelcome;
 use App\Notifications\WelcomeEmail;
 use App\Services\FBPixelService;
+use App\Services\SubscriptionService;
 use Auth;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Subscription;
 use Mail;
@@ -22,11 +22,11 @@ class SubscriptionController extends Controller
 {
     private $paymentMethod;
 
-    public function __construct(FBPixelService $fbp)
-    {
-        $this->fbp = $fbp;
+    public function __construct(
+        private readonly FBPixelService $fbp,
+        private readonly SubscriptionService $subscriptionService,
+    ) {
         $this->paymentMethod = PaymentMethod::find(2);
-        $this->middleware('event.subscription')->only(['index', 'store']);
     }
 
     public function index($event, $plan)
@@ -234,11 +234,9 @@ class SubscriptionController extends Controller
         return view('theme.cart.new_cart.subscription.checkout', $data);
     }
 
-    public function walletGetTotal(Request $request)
+    public function walletGetTotal(Request $request): float | int
     {
-        $plan = Plan::select('cost')->where('name', $request->plan)->first();
-
-        return $plan->cost * 100;
+        return $this->subscriptionService->walletGetTotal($request->all());
     }
 
     public function walletPay(Request $request)
@@ -247,6 +245,8 @@ class SubscriptionController extends Controller
 
         $plan = Plan::where('name', $request->plan)->first();
         $event = Event::where('title', $request->event)->first();
+
+        $this->subscriptionService->checkMultiplePayments($user, $event);
 
         if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
@@ -443,6 +443,8 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name', $input['plan'])->first();
         $event = Event::where('title', html_entity_decode($input['event']))->first();
 
+        $this->subscriptionService->checkMultiplePayments($user, $event);
+
         if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
         } else {
@@ -461,7 +463,7 @@ class SubscriptionController extends Controller
         $temp = [];
         if (isset($pay_bill_data)) {
             $temp = $pay_bill_data;
-            if ($temp['billing'] == 1) {
+            if (isset($temp['billing']) && $temp['billing'] == 1) {
                 $temp['billing'] = 'Receipt requested';
                 $st_name = $temp['billname'] . ' ' . $temp['billsurname'];
                 $st_tax_id = 'EL' . $temp['billafm'];
@@ -542,8 +544,8 @@ class SubscriptionController extends Controller
 
             $data1 = loadSendEmailsDataSubscription($sub, $user);
 
-            $user->notify(new WelcomeEmail($user, $data1));
-            event(new EmailSent($user->email, 'WelcomeEmail'));
+            //$user->notify(new WelcomeEmail($user, $data1));
+            //event(new EmailSent($user->email, 'WelcomeEmail'));
 
             Session::forget('pay_seats_data');
             Session::forget('transaction_id');
@@ -565,6 +567,8 @@ class SubscriptionController extends Controller
 
         $plan = Plan::where('name', $plan)->first();
         $event = Event::where('title', $event)->first();
+
+        $this->subscriptionService->checkMultiplePayments($user, $event);
 
         if (config('app.PAYMENT_PRODUCTION')) {
             Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
@@ -830,40 +834,10 @@ class SubscriptionController extends Controller
         return view('theme.myaccount.subscription.subscription-success', $data);
     }
 
-    public function change_status(Request $request)
+    public function change_status(Request $request): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::user();
-
-        $subscription = $user->subscriptions()->where('id', $request->sub_id)->first(); //Subscription::where(['id' => $request->sub_id, 'user_id' => $currentuser->id])->first();
-
-        $sub_id_stripe = $subscription['stripe_id'];
-
-        $paymentMethod = PaymentMethod::find(2);
-        if (config('app.PAYMENT_PRODUCTION')) {
-            Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
-        } else {
-            Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
-        }
-        session()->put('payment_method', $paymentMethod->id);
-
-        try {
-            if ($request->status == 'Cancel') {
-                $subscription->status = false;
-                $subscription->stripe_status = 'cancelled';
-                $subscription->save();
-                $subscription = $subscription->cancel();
-            } elseif ($request->status == 'Active') {
-                $subscription->status = true;
-                $subscription->stripe_status = 'active';
-                $subscription->save();
-                $subscription = $subscription->resume();
-            }
-        } catch (\Stripe\Exception\InvalidArgumentException $e) {
-            //dd($subscription);
-            //$subscription->status = false;
-            //$subscription->save();
-        }
-
-        echo json_encode($subscription);
+        return response()->json(
+            $this->subscriptionService->changeSubscriptionStatus(Auth::user(), $request->sub_id, $request->status)
+        );
     }
 }

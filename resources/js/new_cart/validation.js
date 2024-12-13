@@ -34,7 +34,7 @@ $(function () {
   jQuery.validator.addMethod(
     'lettersonlyEmail',
     function (value, element) {
-      var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
+      var regex = /^[a-z0-9][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
       return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '';
     },
     'Please write everything in English.'

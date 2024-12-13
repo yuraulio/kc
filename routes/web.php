@@ -622,7 +622,7 @@ Route::group(['middleware' => ['auth', 'logout.devices'], 'prefix' => 'myaccount
 
         Route::get('/share-twitter', 'Theme\StudentController@parseTwitterToken');
 
-        Route::get('/subscription/{event}/{plan}', 'Theme\SubscriptionController@index');
+        Route::get('/subscription/{event}/{plan}', 'Theme\SubscriptionController@index')->name('subscription.reenroll');
         Route::get('/subscription/checkout/{event}/{plan}', 'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
 
         Route::post('/subscription/store/{event}/{plan}', 'Theme\SubscriptionController@store')->name('subscription.store');

@@ -367,8 +367,8 @@
                   </div>
                </header>
                <!-- ./lesson-header -->
-               <div id="{{$lesson['event_id']}}" class="video-wrapper">
-                  <div id='{{$frame2}}'>
+               <div id="{{$lesson['event_id'] ?? ''}}" class="video-wrapper">
+                  <div id='{{$frame2 ?? ''}}'>
                      <iframe
                         aria-label="lesson video"
                         src='https://player.vimeo.com/video/{{$lastVideoSeen}}?color=efc900&title=0&byline=0&autoplay=1&loop=0&autopause=0'
@@ -387,7 +387,7 @@
                <!-- ./video-wrapper -->
                <div class="lesson-main">
                   <div class="lesson-main-title-wrapper">
-                     <h2 class="lesson-main-title">{!! $lesson['title'] !!}</h2>
+                     <h2 class="lesson-main-title">{!! $lesson['title']?? '' !!}</h2>
                      <!--<div class="lesson-main-info">
                         <img src="theme/assets/img/new/info-information.svg" alt="lesson information" />
                         <span>Live Tutorial</span>

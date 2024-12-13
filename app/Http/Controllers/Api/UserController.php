@@ -28,15 +28,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
-    private UserService $userService;
-
-    public function __construct(UserService $userService, private V1UserServiceAlias $service)
-    {
+    public function __construct(
+        private readonly UserService $userService
+    ) {
         $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
 
         $this->userService = $userService;
@@ -81,7 +81,7 @@ class UserController extends Controller
             if ($user->profile_image) {
                 $user['profileImage'] = $user->profile_image->url;
             } else {
-                $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
+                $user['profileImage'] = asset(get_image('/theme/assets/images/icons/user-profile-placeholder-image.png'));
             }
 
             unset($user['image']);
@@ -989,9 +989,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function updateProfile(Request $request)
@@ -1019,27 +1018,11 @@ class UserController extends Controller
         $receiptDetails['billemail'] = $request->billemail ? $request->billemail : '';
         $receiptDetails['billmobile'] = $request->billmobile ? $request->billmobile : '';
 
-        if ($request->file('photo')) {
-            if (!$user1->image) {
-                $imgProfileEmpty = Media::create([
-                    'original_name' => '',
-                    'name'          => '',
-                    'ext'           => '',
-                    'file_info'     => '',
-                    'size'          => '',
-                    'height'        => '',
-                    'width'         => '',
-                    'dpi'           => '',
-                    // 'mediable_id' => '',
-                    // 'mediable_type' => '',
-                    'details'       => '',
-                    'path'          => '',
-                ]);
-                $user1->image()->save($imgProfileEmpty);
-                $user1->refresh();
-            }
-            (new MediaController)->uploadProfileImage($request, $user1->image);
-        }
+        // $isUpdateImage = $user1->update(
+        //     $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
+        //             ->except([$request->hasFile('photo') ? '' : 'picture'])
+
+        // );
 
         $request->request->remove('billname');
         $request->request->remove('billafm');
@@ -1059,31 +1042,42 @@ class UserController extends Controller
             ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password'])
         );
 
-        $updated_user = User::with('image')->find($user1->id);
+        // if($request->file('photo')){
+        //     $name = explode('profile_user/',$path_name);
+        //     $size = getimagesize('uploads/'.$path_name);
+        //     $media->original_name = $name[1];
+        //     $media->width = $size[0];
+        //     $media->height = $size[1];
+        //     $user1->image()->save($media);
 
-        if (isset($updated_user['image'])) {
-            $updated_user['profileImage'] = asset(get_image($updated_user['image']));
+        //     //delete old image
+        //     //fetch old image
+
+        //     if($old_image != null){
+        //         //delete from folder
+        //         unlink('uploads/profile_user/'.$old_image['original_name']);
+        //         //delete from db
+        //         $old_image->delete();
+        //     }
+        // }
+
+        $updated_user = User::with('profile_image')->find($user1->id);
+
+        if ($request->file('photo')) {
+            $result = $this->userService->updateProfileImage($updated_user, $request->file('photo'));
+
+            $updated_user['profileImage'] = asset(get_image($result['thumb']));
         } else {
-            $updated_user['profileImage'] = null;
+            $updated_user['profileImage'] = $updated_user->profile_image->url ?? null;
         }
-
-        unset($updated_user['image']);
 
         unset($receiptDetails['billing']);
 
-        if ($isUpdateUser == 1) {
-            return response()->json([
-                'message' => 'Update profile successfully',
-                'data'    => $updated_user,
-                'billing' => $receiptDetails,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Update profile failed',
-                'data'    => $updated_user,
-                'billing' => $receiptDetails,
-            ]);
-        }
+        return response()->json([
+            'message' => $isUpdateUser ? 'Update profile successfully' : 'Update profile failed',
+            'data' => $updated_user,
+            'billing' => $receiptDetails,
+        ]);
     }
 
     public function getDropBoxToken()

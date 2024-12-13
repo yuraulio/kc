@@ -37,7 +37,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use PDF;
 
@@ -320,7 +322,7 @@ class UserController extends Controller
                                 </button>
                             </form>
 
-                            <form action="' . route('user.login_as', $row->id) . '" method="post">
+                            <form action="' . route('user.login_as', $row->id) . '" method="post" target="_blank">
                                 ' . $this->csrf_field() . '
 
                                 <button type="button" class="dropdown-item login-as-btn">
@@ -355,6 +357,7 @@ class UserController extends Controller
         return view('users.index_new', compact('data'));
     }
 
+    /** Admin part of the login as feature */
     public function loginAs($token)
     {
         $publicKey = file_get_contents(storage_path('oauth-public.key'));
@@ -637,6 +640,167 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->withStatus(__('User successfully deleted.'));
+    }
+
+    /*public function sendEmails($transaction,$content,$ticket)
+    {
+
+        $user = $transaction->user()->first();//Auth::user();
+
+        $muser = [];
+        $muser['name'] = $user->firstname . ' ' . $user->lastname;
+        $muser['id'] = $user->id;
+        $muser['first'] = $user->firstname;
+        $muser['email'] = $user->email;
+
+        $tickettypedrop = $ticket['ticket']['type'];
+        $tickettypename = $ticket['ticket']['type'];
+        $eventname = $content->title;
+        $date = $content->summary1->first() ? $content->summary1->first()->title : '';
+        $eventcity = '';
+
+        $groupEmailLink = '';
+        if ($content && $content->id == 2068) {
+            $groupEmailLink = 'https://www.facebook.com/groups/846949352547091';
+        }else{
+            $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
+        }
+
+        $today = date('Y/m/d');
+        $expiration_date = '';
+
+        if($content->expiration){
+            $monthsExp = '+' . $content->expiration .'months';
+            $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+        }
+
+        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity,$groupEmailLink,$expiration_date];
+
+        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+        $adminemail = 'info@knowcrunch.com';
+
+        $data = [];
+        $data['user'] = $muser;
+        $data['trans'] = $transaction;
+        $data['extrainfo'] = $extrainfo;
+        $data['helperdetails'] = $helperdetails;
+        $data['eventslug'] = $content->slug;
+
+        if($content->view_tpl == 'elearning_event'){
+
+            $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
+
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+               // $m->attachData($pdf->output(), "invoice.pdf");
+            });
+
+        }else{
+
+            $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail, $muser) {
+
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+            });
+        }
+
+        //send elearning Invoice
+        $transdata = [];
+        $transdata['trans'] = $transaction;
+
+        $transdata['user'] = $muser;
+        $transdata['trans'] = $transaction;
+        $transdata['extrainfo'] = $extrainfo;
+        $transdata['helperdetails'] = $helperdetails;
+        $transdata['coupon'] = $transaction->coupon_code;
+
+        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($adminemail, 'Knowcrunch');
+            $m->subject('Knowcrunch - New Registration');
+        });
+
+    }*/
+
+    private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $transaction, $isNewUser)
+    {
+        $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
+
+        //$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
+        $pdf = $pdf ? $pdf->output() : null;
+
+        $data = [];
+        $muser = [];
+
+        $user = $transaction->user->first();
+
+        $muser['name'] = $transaction->user->first()->firstname;
+        $muser['first'] = $transaction->user->first()->firstname;
+        $muser['email'] = $transaction->user->first()->email;
+        $muser['event_title'] = $transaction->event->first()->title;
+        $data['firstName'] = $transaction->user->first()->firstname;
+        $data['eventTitle'] = $transaction->event->first()->title;
+
+        $data['fbGroup'] = $transaction->event->first()->fb_group;
+        $data['duration'] = ''; //$elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
+        $data['user']['createAccount'] = false;
+        $data['user']['name'] = $transaction->user->first()->firstname;
+
+        if ($isNewUser) {
+            $data['user']['createAccount'] = true;
+        }
+
+        $eventInfo = $transaction->event->first() ? $transaction->event->first()->event_info() : [];
+
+        if (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 143) {
+            $data['duration'] = isset($eventInfo['elearning']['visible']['emails']) && isset($eventInfo['elearning']['expiration']) &&
+                                $eventInfo['elearning']['visible']['emails'] && isset($eventInfo['elearning']['text']) ?
+                                            $eventInfo['elearning']['expiration'] . ' ' . $eventInfo['elearning']['text'] : '';
+        } elseif (isset($eventInfo['delivery']) && $eventInfo['delivery'] == 139) {
+            $data['duration'] = isset($eventInfo['inclass']['dates']['visible']['emails']) && isset($eventInfo['inclass']['dates']['text']) &&
+                                        $eventInfo['inclass']['dates']['visible']['emails'] ? $eventInfo['inclass']['dates']['text'] : '';
+        }
+
+        $data['hours'] = isset($eventInfo['hours']['visible']['emails']) && $eventInfo['hours']['visible']['emails'] && isset($eventInfo['hours']['hour']) &&
+                        isset($eventInfo['hours']['text']) ? $eventInfo['hours']['hour'] . ' ' . $eventInfo['hours']['text'] : '';
+
+        $data['language'] = isset($eventInfo['language']['visible']['emails']) && $eventInfo['language']['visible']['emails'] && isset($eventInfo['language']['text']) ? $eventInfo['language']['text'] : '';
+
+        $data['certificate_type'] = isset($eventInfo['certificate']['visible']['emails']) && $eventInfo['certificate']['visible']['emails'] &&
+                    isset($eventInfo['certificate']['type']) ? $eventInfo['certificate']['type'] : '';
+
+        $eventStudents = get_sum_students_course($transaction->event->first()->category->first());
+        $data['students_number'] = isset($eventInfo['students']['number']) ? $eventInfo['students']['number'] : $eventStudents + 1;
+
+        $data['students'] = isset($eventInfo['students']['visible']['emails']) && $eventInfo['students']['visible']['emails'] &&
+                        isset($eventInfo['students']['text']) && $data['students_number'] >= $eventStudents ? $eventInfo['students']['text'] : '';
+
+        $extrainfo = ['', '', $data['eventTitle']];
+        $data['extrainfo'] = $extrainfo;
+
+        if ($user->cart) {
+            $user->cart->delete();
+        }
+
+        $user->notify(new WelcomeEmail($user, $data));
+        event(new EmailSent($user->email, 'WelcomeEmail'));
+
+        if ($elearningInvoice) {
+            $data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
+
+            $user->notify(new CourseInvoice($data));
+            event(new EmailSent($user->email, 'CourseInvoice'));
+        }
     }
 
     public function createKC(Request $request)

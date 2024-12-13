@@ -11,6 +11,7 @@ use App\Jobs\UploadImageConvertWebp;
 use App\Model\Activation;
 use App\Model\Career;
 use App\Model\Event;
+use App\Model\EventStatistic;
 use App\Model\ExamResult;
 use App\Model\Instructor;
 use App\Model\Invoice;
@@ -27,6 +28,7 @@ use App\Model\User;
 use App\Notifications\ErrorSlack;
 use App\Notifications\SendTopicAutomateMail;
 use App\Services\ELearningService;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +50,8 @@ use Validator;
 class StudentController extends Controller
 {
     public function __construct(
-        private readonly ELearningService $eLearningService
+        private readonly ELearningService $eLearningService,
+        private readonly UserService $userService,
     ) {
         $this->middleware('event.check')->only('elearning');
     }
@@ -238,6 +241,7 @@ class StudentController extends Controller
                 $data['events'][$event['id']]['videos_progress'] = 0;
                 $data['events'][$event['id']]['expiration'] = false;
                 $data['events'][$event['id']]['status'] = $event['status'];
+                $data['events'][$event['id']]['completed_at'] = $event['completed_at'];
 
                 $data['events'][$event['id']]['published_at'] = $event['published_at'];
 
@@ -265,6 +269,7 @@ class StudentController extends Controller
                     $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
                     $data['events'][$event['id']]['plans'] = [];
                     $data['events'][$event['id']]['status'] = $event['status'];
+                    $data['events'][$event['id']]['completed_at'] = $event['completed_at'];
                     $data['events'][$event['id']]['dropbox'] = $event['dropbox'];
                     $data['events'][$event['id']]['published_at'] = $event['published_at'];
 
@@ -322,6 +327,7 @@ class StudentController extends Controller
                 $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
                 $data['events'][$event['id']]['expiration'] = date('d M Y', strtotime($event->pivot->expiration));
                 $data['events'][$event['id']]['status'] = $event['status'];
+                $data['events'][$event['id']]['completed_at'] = $event['completed_at'];
                 $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery']) ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event['id']]['published_at'] = $event['published_at'];
@@ -368,6 +374,7 @@ class StudentController extends Controller
                     $data['events'][$event['id']]['release_date_files'] = $event['release_date_files'];
                     $data['events'][$event['id']]['plans'] = [];
                     $data['events'][$event['id']]['status'] = $event['status'];
+                    $data['events'][$event['id']]['completed_at'] = $event['completed_at'];
                     $data['events'][$event['id']]['dropbox'] = $event['dropbox'];
                     $data['events'][$event['id']]['delivery'] = isset($eventInfo['delivery']) ? $eventInfo['delivery'] : -1;
                     $data['events'][$event['id']]['published_at'] = $event['published_at'];
@@ -503,6 +510,15 @@ class StudentController extends Controller
 
         $data['user'] = $user;
         $statistics = $data['user']['statistic']->groupBy('id'); //$user->statistic()->get()->groupBy('id');
+
+        if (isset($statistics[2304]) && !isset($statistics[4724])) {
+            $replica = EventStatistic::where('user_id', $user->id)->where('event_id', 2304)->first()->replicate();
+            $replica->event_id = 4724;
+            $replica->save();
+
+            $statistics = $user->statistic()->get()->groupBy('id');
+        }
+
         [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent($data['user']['events']);
 
         $data['subscriptionAccess'] = $subscriptionAccess;
@@ -564,6 +580,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['expiration'] = $event->pivot->expiration ? date('d M Y', strtotime($event->pivot->expiration)) : '';
                 $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event->id]['completed_at'] = $event['completed_at'];
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery']) ? $eventInfo['delivery'] : -1;
 
                 $data['events'][$event->id]['summaryDate'] = isset($eventInfo['elearning']['expiration']) ? $eventInfo['elearning']['expiration'] : null;
@@ -600,7 +617,6 @@ class StudentController extends Controller
 
             //$this->updateUserStatistic($event,$statistics,$user);
             } else {
-                //dd($event);
                 $data['elearningAccess'] = false;
                 $data['events'][$event->id]['topics'] = $event->topicsLessonsInstructors(null, $event['topic'], $event['lessons'], $event['instructors'])['topics'];
                 $video_access = false;
@@ -623,6 +639,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event->id]['completed_at'] = $event['completed_at'];
                 $data['events'][$event->id]['dropbox'] = $event->dropbox;
                 $data['events'][$event->id]['delivery'] = isset($eventInfo['delivery']) ? $eventInfo['delivery'] : -1;
 
@@ -651,6 +668,7 @@ class StudentController extends Controller
             if ($event->is_elearning_course()) {
                 $statistic = isset($statistics[$event->id][0]) ? $statistics[$event->id][0] : 'no_videos';
                 //$data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
+                $data['mySubscriptionEvents'][$key]['id'] = $event['id'];
                 $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
                 $data['mySubscriptionEvents'][$key]['videos_progress'] = round($event->progress($user, $statistic), 2);
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user, $statistic);
@@ -725,78 +743,8 @@ class StudentController extends Controller
     public function removeProfileImage(): void
     {
         $user = Auth::user();
-        $media = $user->image;
-        $mediaNew = $user->profile_image;
 
-        if ($media) {
-            $path_crop = explode('.', $media['original_name']);
-            $path_crop = $media['path'] . $path_crop[0] . '-crop' . $media['ext'];
-            $path_crop = substr_replace($path_crop, '', 0, 1);
-            $path_crop_webp = str_replace($media['ext'], '.webp', $path_crop);
-
-            $path = $media['path'] . $media['original_name'];
-            $path = substr_replace($path, '', 0, 1);
-            $path_webp = str_replace($media['ext'], '.webp', $path);
-
-            if (file_exists($path_crop)) {
-                //unlink crop image
-                unlink($path_crop);
-            }
-
-            if (file_exists($path)) {
-                //unlink crop image
-                unlink($path);
-            }
-
-            if (file_exists($path_webp)) {
-                //unlink crop image
-                unlink($path_webp);
-            }
-
-            if (file_exists($path_crop_webp)) {
-                //unlink crop image
-                unlink($path_crop_webp);
-            }
-
-            //null db image
-            $media->original_name = null;
-            $media->name = null;
-            $media->path = null;
-            $media->ext = null;
-            $media->file_info = null;
-            $media->height = null;
-            $media->width = null;
-            $media->details = null;
-
-            $media->save();
-        }
-
-        if ($mediaNew) {
-            DB::beginTransaction();
-            try {
-                $original = $mediaNew->parent;
-
-                if ($original) {
-                    if (file_exists(public_path($original->full_path))) {
-                        unlink(public_path($original->full_path));
-                    }
-                }
-
-                if (file_exists(public_path($mediaNew->full_path))) {
-                    unlink(public_path($mediaNew->full_path));
-                }
-
-                $user->profile_image_id = null;
-                $user->save();
-
-                $original->delete();
-                $mediaNew->delete();
-            } catch (\Throwable $throwable) {
-                DB::rollBack();
-                throw $throwable;
-            }
-            DB::commit();
-        }
+        $this->userService->removeProfileImage($user);
     }
 
     public function uploadProfileImage(Request $request)
@@ -805,81 +753,16 @@ class StudentController extends Controller
             'dp_fileupload' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000',
         ]);
 
-        $this->removeProfileImage();
-
         $user = Auth::user();
 
-        $content = $request->file('dp_fileupload');
-
-        $path_name = $request->dp_fileupload->store('Users', 'uploads');
-
-        $name = array_reverse(explode('/', $path_name))[0];
-        $name_parts = explode('.', $name);
-        $new_name = $name_parts[0] . '.webp';
-
-        // Save image in webp format
-        $image = Image::make($request->dp_fileupload->path())->orientate();
-        if ($image->width() > $image->height()) {
-            $image->heighten(470)->crop(470, 470);
-        } elseif ($image->width() < $image->height()) {
-            $image->widen(470)->crop(470, 470);
-        } else {
-            $image->resize(470, 470);
-        }
-        $image->save(public_path('/uploads/Users/') . $new_name, 60);
-
-        // Save to new location.
-        $CMSFile = new CMSFile();
-        $CMSFile->name = $new_name;
-        $CMSFile->path = '/Users/' . $new_name;
-        $CMSFile->url = config('app.url') . '/uploads/Users/' . $new_name;
-        $CMSFile->extension = 'webp';
-        $CMSFile->size = $content->getSize();
-        $CMSFile->folder_id = 43;
-        $CMSFile->parent_id = null;
-        $CMSFile->user_id = Auth::id();
-        $CMSFile->full_path = '/uploads/Users/' . $new_name;
-        $CMSFile->alt_text = $new_name;
-        $CMSFile->version = 'original';
-        $CMSFile->link = $new_name;
-        $path = public_path("uploads/Users/{$new_name}");
-        if (File::exists($path)) {
-            $size = getimagesize($path);
-            $CMSFile->height = $size[1];
-            $CMSFile->width = $size[0];
-        }
-        $CMSFile->crop_data = null;
-        $CMSFile->save();
-
-        $name_parts = explode('.', $new_name);
-        $new_name_thumb = $name_parts[0] . '-users.' . $name_parts[1];
-        $image->save(public_path('/uploads/Users/') . $new_name_thumb, 60);
-        $CMSFileThumb = $CMSFile->replicate();
-        $CMSFileThumb->name = $new_name_thumb;
-        $CMSFileThumb->path = '/Users/' . $new_name_thumb;
-        $CMSFileThumb->url = config('app.url') . '/uploads/Users/' . $new_name_thumb;
-        $CMSFileThumb->full_path = '/uploads/Users/' . $new_name_thumb;
-        $CMSFileThumb->alt_text = $new_name_thumb;
-        $CMSFileThumb->version = 'users';
-        $CMSFileThumb->link = $new_name_thumb;
-        $CMSFileThumb->parent_id = $CMSFile->id;
-        $CMSFileThumb->crop_data = [
-            'crop_width' => 470,
-            'crop_height' => 470,
-            'height_offset' => 0,
-            'width_offset' => 0,
-        ];
-        $CMSFileThumb->save();
-
-        $user->profile_image_id = $CMSFileThumb->id;
-        $user->save();
+        $result = $this->userService->updateProfileImage($user, $request->file('dp_fileupload'));
 
         return response()->json([
             'message' => 'Change profile photo successfully!!',
-            'data' => $CMSFile->full_path,
+            'data' => $result['file']->full_path,
             'crop_data' => '{"crop_height":470,"crop_width":470,"height_offset":0,"width_offset":0}',
-            'profile_image' => $CMSFileThumb,
-            'profile_image_original' => $CMSFile,
+            'profile_image' => $result['thumb'],
+            'profile_image_original' => $result['file'],
         ]);
     }
 
@@ -1183,7 +1066,7 @@ class StudentController extends Controller
 
         //TODO: move to DTO
         $eventId = $request->event;
-        $videos = $request->videos;
+        $videos = $request->videos ?? [];
         $eventStatistic = $request->event_statistic;
         $lastVideoSeen = $request->lastVideoSeen;
 

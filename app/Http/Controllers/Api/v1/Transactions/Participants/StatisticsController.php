@@ -34,6 +34,16 @@ class StatisticsController extends ApiBaseController
     protected function stats(Request $request)
     {
         $total = $this->getBaseQuery($request)->count(DB::raw('DISTINCT users.id'));
+
+        $uniqueTransaction = $this
+            ->getBaseQuery($request)
+            ->selectRaw('users.id')
+            ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
+            ->where('event_delivery.delivery_id', self::DELIVERY_VIDEO_TRAINING_ID)
+            ->groupBy('transactions.id')
+            ->get()
+            ->pluck('id');
+
         $elearning = $this
             ->getBaseQuery($request)
             ->select([
@@ -42,6 +52,7 @@ class StatisticsController extends ApiBaseController
             ])
             ->join('event_delivery', 'events.id', '=', 'event_delivery.event_id')
             ->where('event_delivery.delivery_id', self::DELIVERY_VIDEO_TRAINING_ID)
+            ->whereIn('users.id', $uniqueTransaction)
             ->first();
         $inClass = $this
             ->getBaseQuery($request)

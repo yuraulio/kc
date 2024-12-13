@@ -23,7 +23,7 @@ class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsE
 
     public function onRow(Row $row)
     {
-        $row = $row->toArray();
+        $row = $this->functionMapColumns(array_values($row->toArray()));
 
         $lesson = Lesson::create(array_merge($this->defaultLessonAttributes, [
             'status' => $row['published'],
@@ -51,6 +51,19 @@ class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsE
         return $lesson;
     }
 
+    private function functionMapColumns(array $rawRow): array
+    {
+        $result = [];
+
+        $columns = array_keys($this->rules());
+
+        foreach ($columns as $index => $column) {
+            $result[$column] = $rawRow[$index] ?? null;
+        }
+
+        return $result;
+    }
+
     public function rules(): array
     {
         return [
@@ -59,12 +72,12 @@ class LessonsImport implements OnEachRow, WithHeadingRow, WithValidation, SkipsE
             'title' => '',
             'type' => 'exists:types,name',
             'vimeo_video' => 'url',
-            'category' => 'required',
+            'category' => 'required|exists:categories,name',
             'topic' => 'required|exists:topics,title',
-            'link_name_1' => '',
-            'link_1' => '',
-            'link_name_2' => '',
-            'link_2' => '',
+            'link_name_1' => 'nullable',
+            'link_1' => 'nullable',
+            'link_name_2' => 'nullable',
+            'link_2' => 'nullable',
         ];
     }
 

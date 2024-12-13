@@ -201,7 +201,7 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                    {{--<h6 class="heading-small text-muted mb-4">{{ __('Topic information') }}</h6>--}}
+                                    
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-email_template">{{ __('Automated Email Template') }}</label>
                                             <select name="email_template[]" multiple id="input-email_template" class="form-control" placeholder="{{ __('Email Template') }}">

@@ -14,11 +14,27 @@ use Illuminate\Support\Facades\Log;
 
 class ELearningService
 {
-    public function saveELearning(User $user, int $eventId, array $userVideos, int $eventStatistic, int $lastVideoSeen): array
+    public function saveELearning(User $user, ?int $eventId, array $userVideos, ?int $eventStatistic, ?int $lastVideoSeen): array
     {
+        if (!$eventId || !$lastVideoSeen) {
+            Log::info('ELearningService@saveELearning: $eventId or $lastVideoSeen is missing.');
+
+            return $userVideos;
+        }
+
         try {
             $eventStatisticModel = EventStatistic::where('event_id', $eventId)->where('user_id', $user->id)->first();
             $event = $user->events()->where('event_id', $eventId)->first();
+
+            if (!$event) {
+                $event = $user->subscriptionEvents()->where('event_id', $eventId)->first();
+            }
+
+            if ($eventId && !$event) {
+                Log::info('ELearningService@saveELearning: incorrect event id: ' . $eventId);
+
+                return $userVideos;
+            }
 
             if ($eventStatisticModel) {
                 $videos = $eventStatisticModel['videos'];
@@ -108,7 +124,7 @@ class ELearningService
                 return $this->checkSendEmailTopic($lastVideoSeen, $event, $eventStatisticModel, $user, $videos);
             }
         } catch (\Throwable $throwable) {
-            $user->notify(new ErrorSlack($throwable));
+            //$user->notify(new ErrorSlack($throwable));
             Log::error($throwable);
         }
 

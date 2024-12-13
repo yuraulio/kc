@@ -47,7 +47,7 @@ class SubscriptionController extends Controller
                 } else {
                     $subEvId = $tra['subscription'][0]['event'][0]['id'];
                     $titleE = $tra['subscription'][0]['event'][0]['title'];
-                    $plId = $tra['subscription'][0]['event'][0]['plans'][0]['id'];
+                    $plId = $tra['subscription'][0]['event'][0]['plans'][0]['id'] ?? -1;
                 }
 
                 if (isset($users[$tra['user'][0]['id']])) {

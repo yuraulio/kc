@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CheckSubscriptionIsPaid;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -30,10 +31,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (config('app.IS_DEMO')) {
-            $schedule->command('db:seed')->daily();
-        }
-
         $schedule->command('publishCheck')->hourly();
         $schedule->command('email:sendNonPayment')->dailyAt('02:00');
         $schedule->command('email:sendSubscriptionNonPayment')->dailyAt('15:00');
@@ -49,6 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('email:courseEndsTriggerEmail')->dailyAt('09:00');
         $schedule->command('email:sendCourseDurationTriggerEmail')->dailyAt('11:00');
         $schedule->command('email:sendAutomateEmailForInstructors')->dailyAt('12:00');
+        $schedule->command(CheckSubscriptionIsPaid::class)->daily();
     }
 
     /**

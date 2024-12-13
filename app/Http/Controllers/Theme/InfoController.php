@@ -836,17 +836,6 @@ class InfoController extends Controller
                 $fn = $invoiceFileName;
 
                 $pdf = $pdf->output();
-                //system-user-admin-all-courses-payment-receipt
-                $first = $muser['first'];
-                SendEmail::dispatch('CourseInvoice', ['email'=>$adminemail,
-                    'firstname'=>$transaction->user->first()->firstname,
-                    'lastname'=>$transaction->user->first()->lastname], 'Knowcrunch | ' . $first . ' – download your receipt', [
-                        'FNAME'=> $first,
-                        'CourseName'=>$data['eventTitle'],
-                        'LINK'=>$this->data['slugInvoice'],
-                    ], ['event_id'=>$data['eventId']]);
-                event(new EmailSent($adminemail, 'elearning_invoice billingEmail ' . $billingEmail));
-
                 $data['user'] = $transaction->user->first();
 
                 if ($billingEmail) {

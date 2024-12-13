@@ -789,6 +789,7 @@
                                                             <thead class="thead-light">
                                                                 <tr>
                                                                     <th scope="col">{{ __('ID') }}</th>
+                                                                    <th scope="col">{{ __('User Paid') }}</th>
                                                                     <th scope="col">{{ __('Amount') }}</th>
                                                                     <th scope="col">{{ __('Created At') }}</th>
 
@@ -801,7 +802,7 @@
                                                                 <tbody>
 
                                                                         <th scope="col"> {{$invoice['id']}} </th>
-                                                                        {{--<th scope="col"> {{$tra['amount']}} </th>--}}
+                                                                        <th scope="col"> <a href="/admin/user/{{ $invoice->user->first()?->id }}/edit">{{ $invoice->user->first()?->firstname }} {{  $invoice->user->first()?->lastname }}</a> </th>
                                                                         <th scope="col"> {{number_format($invoice['amount'] , 2 , '.', '')}} </th>
                                                                         <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
                                                                         <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}">view </a> </th>
@@ -1267,7 +1268,6 @@
                     let tickets = data.data
                     ticketCard = '<div class="row">'
                     $.each( tickets, function(key, value) {
-
                         if(value.pivot.price != null){
                             row = `
                                 <div class="col-12 card ticket-card${value.pivot.quantity == 0 ? 'not_selectable' : ''}">

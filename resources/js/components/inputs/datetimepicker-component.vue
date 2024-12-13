@@ -11,7 +11,12 @@
   <div class="mb-3">
     <label for="projectname" class="form-label">{{ title }} <span v-if="required">*</span> </label>
 
-    <DxDateBox v-model:value="value" type="datetime" @value-changed="$emit('updatevalue', value)" />
+    <DxDateBox
+      v-model:value="value"
+      :displayFormat="'yyyy-MM-dd HH:mm:ss'"
+      type="datetime"
+      @value-changed="$emit('updatevalue', value)"
+    />
   </div>
 </template>
 

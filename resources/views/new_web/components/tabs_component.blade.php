@@ -45,7 +45,7 @@
 <div class="section-course-tabs">
     <div class="content-wrapper">
         <div class="tabs-wrapper fixed-tab-controls">
-            <div class="tab-controls @if(count(get_tickers()) != 0) {{ 'has_ticker'}} @else {{''}} @endif">
+            <div class="tab-controls @if(count(get_tickers()) != 0) {{ 'has_ticker' }} {{ 'has_ticker2' }} @else {{''}} @endif">
                 <div class="container tabs-container">
                             <a href="#" class="mobile-tabs-menu">Details</a>
                             <ul class="clearfix tab-controls-list">

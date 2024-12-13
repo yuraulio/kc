@@ -7,8 +7,10 @@ use App\Model\Option;
 use App\Model\PaymentMethod;
 use App\Model\Transaction;
 use App\Model\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Subscription;
 use PDF;
 
@@ -219,9 +221,103 @@ class Invoice extends Model
             }
         }
 
-        $billing = json_decode($this->transaction()->first()->billing_details, true);
+        $transaction = $this->transaction()->first();
 
-        //dd($this->transaction);
+        if (!$transaction) {
+            $possibleTransactionId = null;
+            // check if transaction id exists
+            $transactionRelation = DB::table('invoiceables')
+                ->where('invoice_id', $this->id)
+                ->where('invoiceable_type', Transaction::class)
+                ->first();
+
+            if ($transactionRelation) {
+                $possibleTransactionId = $transactionRelation->invoiceable_id;
+            }
+
+            if ($possibleTransactionId) {
+                $invoiceUser = $this->user->first();
+
+                Transaction::create([
+                    'id' => $possibleTransactionId,
+                    'payment_method_id' => 100,
+                    'account_id' => 17,
+                    'payment_status' => 2,
+                    'placement_date' => Carbon::now(),
+                    'ip_address' => '127.0.0.1',
+                    'status' => 1,
+                    'status_history' => json_encode([
+                        'datetime' => Carbon::now(),
+                        'status' => 1,
+                        'user' => [
+                            'id' => $invoiceUser->id ?? null,
+                            'email' => $invoiceUser->id ?? null,
+                        ],
+                        'pay_seats_data' => [
+                            'names' => [$invoiceUser->firstname ?? ''],
+                            'surnames' => [$invoiceUser->lastname ?? ''],
+                            'emails' => [$invoiceUser->email ?? ''],
+                            'mobiles' => [$invoiceUser->mobile ?? ''],
+                            'addresses' => [''],
+                            'addressnums' => [''],
+                            'postcodes' => [''],
+                            'cities' => [''],
+                            'jobtitles' => [''],
+                            'companies' => [''],
+                            'students' => [''],
+                            'afms' => [''],
+                        ],
+                        'pay_bill_data' => [
+                            'billing' => 1,
+                            'billname' => ($invoiceUser->firstname ?? '') . ' ' . ($invoiceUser->lastname ?? ''),
+                            'billemail' => $invoiceUser->email ?? '',
+                            'billaddress' => '',
+                            'billaddressnum' => '',
+                            'billpostcode' => '',
+                            'billcity' => '',
+                            'billcountry' => '',
+                            'billstate' => '',
+                            'billafm' => '',
+                        ],
+                        'deree_user_data' => [
+                            $invoiceUser->email ?? '',
+                            '',
+                        ],
+                        'installments' => $this->instalments,
+                    ]),
+                    'is_bonus' => 0,
+                    'billing_details' => json_encode([
+                        'billing' => 1,
+                        'billname' => ($invoiceUser->firstname ?? '') . ' ' . ($invoiceUser->lastname ?? ''),
+                        'billemail' => $invoiceUser->email ?? '',
+                        'billaddress' => $invoiceUser->address ?? '',
+                        'billaddressnum' => $invoiceUser->address_num ?? '',
+                        'billpostcode' => $invoiceUser->postcode ?? '',
+                        'billcity' => $invoiceUser->city ?? '',
+                        'billcountry' => $invoiceUser->city ?? '',
+                        'billstate' => null,
+                        'billafm' => $invoiceUser->afm ?? '',
+                    ]),
+                    'amount' => $this->amount * $this->instalments,
+                    'total_amount' => $this->amount * $this->instalments,
+                ]);
+
+                DB::table('transactionables')->insert([
+                    [
+                        'transaction_id' => $possibleTransactionId,
+                        'transactionable_id' => $this->event->first()->id,
+                        'transactionable_type' => Event::class,
+                    ],
+                    [
+                        'transaction_id' => $possibleTransactionId,
+                        'transactionable_id' => $this->user->first()->id,
+                        'transactionable_type' => User::class,
+                    ],
+                ]);
+            }
+        }
+
+        $billing = json_decode($this->transaction()->first()->billing_details, true);
 
         $billInfo = '';
         $billafm = '';
