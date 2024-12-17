@@ -217,6 +217,7 @@ Route::middleware('auth:api')->group(function () {
         });
         Route::prefix('events')->group(function () {
             Route::post('{event}/clone', [EventController::class, 'duplicateEvent'])->name('api.event.clone');
+            Route::get('{event}/certificates', [EventController::class, 'exportCertificates']);
         });
     });
 });
