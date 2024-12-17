@@ -38,8 +38,6 @@ class UserController extends Controller
         private readonly UserService $userService
     ) {
         $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
-
-        $this->userService = $userService;
     }
 
     /**

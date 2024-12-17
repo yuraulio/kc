@@ -338,7 +338,6 @@ class TopicController extends Controller
 
     public function automateMailStatus(Request $request)
     {
-        dd('Hello', $request->all());
         dispatch(new SetAutomateEmailStatusForTopics($request->all()));
 
         return redirect()->route('topics.edit', [$topic->id])->withStatus(__('Topic successfully updated.'));
