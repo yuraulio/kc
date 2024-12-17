@@ -72,7 +72,7 @@ enum ReportEnum: string
             ['key' => 'user_role', 'label' => 'User Role', 'column_name' => '`roles`.name as role_name'],
             ['key' => 'career_path', 'label' => 'Career paths', 'column_name' => "(SELECT GROUP_CONCAT(career_paths.name, ',') from event_career_paths JOIN career_paths ON career_paths.id = event_career_paths.career_path_id WHERE event_career_paths.event_id = `events`.id) as career_paths"],
             ['key' => 'course_name', 'label' => 'Course name', 'column_name' => '`events`.title as event_title'],
-            ['key' => 'course_audience', 'label' => 'Course target audience', 'column_name' => '`audiences`.name as audience_name'],
+            ['key' => 'course_audience', 'label' => 'Course target audience', 'column_name' => "(SELECT GROUP_CONCAT(audiences.name, '') from event_audiences JOIN audiences ON `event_audiences`.audience_id = `audiences`.id  WHERE `event_audiences`.event_id = `events`.id) as audiences"],
             ['key' => 'delivery', 'label' => 'Course delivery', 'column_name' => '`deliveries`.name as delivery_name'],
             ['key' => 'ticket_type', 'label' => 'Ticket type', 'column_name' => '`tickets`.title as ticket_title'],
             ['key' => 'ticket_price', 'label' => 'Ticket price', 'column_name' => '(SELECT event_tickets.price from event_tickets where event_tickets.ticket_id = `tickets`.id AND event_tickets.event_id = `events`.id LIMIT 1) as ticket_price'],
