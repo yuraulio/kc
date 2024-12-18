@@ -14,13 +14,12 @@ use App\Http\Requests\UserImportRequest;
 use App\Http\Requests\UserRequest;
 use App\Model\Activation;
 use App\Model\Instructor;
-use App\Model\Media;
 use App\Model\Role;
 use App\Model\Setting;
 use App\Model\User;
 use App\Services\QueryString\QueryStringDirector;
 use App\Services\UserService;
-use App\Services\v1\UserService as V1UserServiceAlias;
+use App\Services\v1\UserService as V1UserService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -28,14 +27,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
     public function __construct(
-        private readonly UserService $userService
+        private readonly UserService $userService,
+        private readonly V1UserService $v1UserService
     ) {
         $this->middleware('auth.sms.api')->except('smsVerification', 'getSMSVerification');
     }
@@ -1259,7 +1258,7 @@ class UserController extends Controller
 
     public function export(FilterRequest $request): Response|BinaryFileResponse
     {
-        $query = $this->service->filterQuery($request->validated());
+        $query = $this->v1UserService->filterQuery($request->validated());
 
         $query->with(['statusAccount', 'role']);
 

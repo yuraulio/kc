@@ -59,11 +59,7 @@ class UserService
                         ->pluck('identifier')
                         ->toArray();
 
-                    if ((bool) $data['abandoned'] === true) {
-                        $q->whereIn('id', $listIds);
-                    } else {
-                        $q->whereNotIn('id', $listIds);
-                    }
+                    $q->whereIn('id', $listIds);
                 } elseif ($data['enrolment_status'] === 'completed') {
                     $q->whereHas('eventList', function ($q) {
                         $q->where('status', EventStatusEnum::Completed->value);
