@@ -1,240 +1,260 @@
 <!doctype html>
-<html lang="en" >
-   <head>
-      <meta charset="UTF-8">
-	  <title>{{ $certificate['meta_title'] }}</title>
-      <meta name="author" content="Knowcrunch">
-      <style type="text/css">
-         @font-face {
-         font-family: 'Foco';
-         	/*src: url("{{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
-         	src: url("{{ asset('/fonts/Foco_Lt.ttf') }}") format("truetype");
-         }
-         @page {
-         	margin: 0px;
-         }
-         body {
-         	margin: 0px;
-				background:#2e58a6;
-				color:#fff;
-         }
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ $certificate['meta_title'] }}</title>
+  <meta name="author" content="Knowcrunch">
+  <style type="text/css">
+    @font-face {
+      font-family: 'Foco';
+      /*src: url("
 
-         *{
-         	font-family: 'Foco';
-         }
+    {{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
+      src: url("{{ public_path('/fonts/Foco_Lt.ttf') }}") format("truetype");
+    }
 
+    @page {
+      margin: 0px;
+    }
 
-         table {
-         	font-size: x-small;
-         }
-         tfoot tr td {
-         	font-weight: bold;
-         	font-size: x-small;
-         }
+    body {
+      margin: 0px;
+      background: #2e58a6;
+      color: #fff;
+    }
 
-         .certificate{
-         	margin-top:100px;
-         	padding: 0 70px;
-         }
+    * {
+      font-family: 'Foco';
+    }
 
 
-		.user-info {
-         	margin-top: 52px;
-         	margin-bottom: 10px;
-         }
+    table {
+      font-size: x-small;
+    }
+
+    tfoot tr td {
+      font-weight: bold;
+      font-size: x-small;
+    }
+
+    .certificate {
+      margin-top: 100px;
+      padding: 0 70px;
+    }
 
 
-			.info-title{
-				margin-top:6px!important;
-				margin-left:9px!important;
-		    	font-size:42px;
-		    	letter-spacing:6px;
-				text-transform: uppercase;
-			}
+    .user-info {
+      margin-top: 52px;
+      margin-bottom: 10px;
+    }
 
 
-			.award{
-   				font-size:25px;
-   				line-height:1;
-				letter-spacing:0.4px;
-				margin-top:2.5px!important;
-				margin-left:10px!important;
-			}
+    .info-title {
+      margin-top: 6px !important;
+      margin-left: 9px !important;
+      font-size: 42px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
 
 
-			.certi-title-new{
-				margin-top:10px!important;
-				margin-left:17px!important;
-				line-height:0.9;
-			}
+    .award {
+      font-size: 25px;
+      line-height: 1;
+      letter-spacing: 0.4px;
+      margin-top: 2.5px !important;
+      margin-left: 10px !important;
+    }
 
-			.certi-title-new p{
 
-				font-size:42px;
-				/* text-transform: uppercase; */
-				letter-spacing:6.2px;
+    .certi-title-new {
+      margin-top: 10px !important;
+      margin-left: 17px !important;
+      line-height: 0.9;
+    }
 
-			}
+    .certi-title-new p {
 
-			p{
-				padding: 0!important;
-				margin: 0 !important;;
-			}
+      font-size: 42px;
+      /* text-transform: uppercase; */
+      letter-spacing: 6.2px;
 
-			.knowcrunch-logo{
-				margin-top: 5px;
-				margin-right: 25px;
-				width:195px;
-			}
+    }
 
-			.signature{
-				font-size:17px;
-				letter-spacing:2px;
-				line-height:20px;
+    p {
+      padding: 0 !important;
+      margin: 0 !important;;
+    }
 
-			}
+    .knowcrunch-logo {
+      margin-top: 5px;
+      margin-right: 25px;
+      width: 195px;
+    }
 
-			.name-signature{
-				font-size:22px;
-				letter-spacing:3px;
-				margin-top:-5px!important;
-			}
-			.after-name-signature{
-				margin-top: -3px!important;
-				font-size:14px;;
-			}
-			.signature-table {
+    .signature {
+      font-size: 17px;
+      letter-spacing: 2px;
+      line-height: 20px;
 
-				position: absolute;
-				top: 68%;
-			}
-			.signature-line{
-				margin-top:-2px;
-				padding: 10px 0;
-				max-width: 340px;
-			}
-			.footer {
-				font-size:7px;
-				position: absolute;
-				top: 92%;
-				margin-left:20px!important;
-				margin-top:-13px!important;
+    }
 
-			}
+    .name-signature {
+      font-size: 22px;
+      letter-spacing: 3px;
+      margin-top: -5px !important;
+    }
 
-			.footer p{
-				letter-spacing:2px;
-				text-transform: uppercase;
+    .after-name-signature {
+      margin-top: -3px !important;
+      font-size: 14px;;
+    }
 
-         }
+    .signature-table {
 
-			.footer span{
-				margin:0 0;
-				color:#fff;
-				font-size: 11px;
+      position: absolute;
+      top: 68%;
+    }
 
-         }
+    .signature-line {
+      margin-top: -2px;
+      padding: 10px 0;
+      max-width: 340px;
+    }
 
-			.background-element-left{
-				position: absolute;
-				max-width: 210px;
-				top:13%;
-			}
+    .footer {
+      font-size: 7px;
+      position: absolute;
+      top: 92%;
+      margin-left: 20px !important;
+      margin-top: -13px !important;
 
-			.background-element-right{
-				position: absolute;
-				max-width: 220px;
-				/*transform: rotate(180deg);*/
-				top:12%;
-				left:81%
-			}
+    }
 
-			.signature-img{
-			   max-width:200px;
+    .footer p {
+      letter-spacing: 2px;
+      text-transform: uppercase;
 
-			}
+    }
 
-      </style>
-   </head>
-   <body>
+    .footer span {
+      margin: 0 0;
+      color: #fff;
+      font-size: 11px;
 
-		<img class="background-element-left" src="{{asset('theme/assets/images/certificates2022b/bg-image-left.png')}}">
-		<img class="background-element-right" src="{{asset('theme/assets/images/certificates2022b/bg-image-right.png')}}">
+    }
 
-		<div class="certificate">
+    .background-element-left {
+      position: absolute;
+      max-width: 210px;
+      top: 13%;
+    }
 
-         <table width="100%">
+    .background-element-right {
+      position: absolute;
+      max-width: 220px;
+      /*transform: rotate(180deg);*/
+      top: 12%;
+      left: 81%
+    }
 
-            <tbody>
-               <tr>
-					<td  align="center"> <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2022b/logo-knowcrunch.png')}}"></td>
-				</tr>
+    .signature-img {
+      max-width: 200px;
 
-            </tbody>
-         </table>
+    }
 
-         <table class="user-info" width="100%">
-				<tbody>
-            	<tr class="">
-            	   <td align="center">
-						<p class="info-title"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
-            	   </td>
-            	</tr>
+  </style>
+</head>
+<body>
 
-					<tr>
-            	   <td align="center">
-							<p class="award">
+<img class="background-element-left"
+     src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('theme/assets/images/certificates2022b/bg-image-left.png'))) }}">
+<img class="background-element-left"
+     src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('theme/assets/images/certificates2022b/bg-image-right.png'))) }}">
 
-								has completed our training and is hereby awarded this
+<div class="certificate">
 
-			  				</p>
-            	   </td>
-            	</tr>
+  <table width="100%">
 
-					<tr>
-            	   <td class="certi-title-new" align="center">
-						<p class="certi-title">
+    <tbody>
+    <tr>
+      <td align="center">
+        <img class="background-element-left"
+             src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('theme/assets/images/certificates2022b/logo-knowcrunch.png'))) }}">
+      </td>
+    </tr>
 
-							{!! mb_strtoupper($certificate['certification_title']) !!}
+    </tbody>
+  </table>
 
-			  			</p>
-            	   </td>
-            	</tr>
+  <table class="user-info" width="100%">
+    <tbody>
+    <tr class="">
+      <td align="center">
+        <p class="info-title"> {{$certificate['firstname']}} {{$certificate['lastname']}} </p>
+      </td>
+    </tr>
 
-				</tbody>
-         </table>
+    <tr>
+      <td align="center">
+        <p class="award">
 
-         <table class="signature-table" width="100%">
-            <tbody>
-					<tr>
-						<td  align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2022b/signature-aivalis.png')}}"></td>
-               </tr>
-               <tr>
-						<td  align="center"> <img class="signature-line" src="{{asset('theme/assets/images/certificates2022b/line-signature.png')}}"></td>
-               </tr>
-				<tr>
-					<td  class="signature" align="center"><p class="name-signature">TOLIS AIVALIS</p></td>
-               </tr>
-				<tr>
-					<td class="signature"  align="center"><p class="after-name-signature"> HEAD OF CURRICULUM, KNOWCRUNCH</p> </td>
-               </tr>
-            </tbody>
-         </table>
+          has completed our training and is hereby awarded this
 
-			<table class="footer" width="100%">
-            <tbody>
-               <tr>
-					<td  align="center">
-						<p >
-							ISSUED: {{$certificate['certification_date']}} <span> | </span>    Credential NO.: {{$certificate['credential']}}
-						</p>
-					</td>
-               </tr>
+        </p>
+      </td>
+    </tr>
 
-            </tbody>
-         </table>
+    <tr>
+      <td class="certi-title-new" align="center">
+        <p class="certi-title">
 
-      </div>
+          {!! mb_strtoupper($certificate['certification_title']) !!}
 
-   </body>
+        </p>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <table class="signature-table" width="100%">
+    <tbody>
+    <tr>
+      <td align="center">
+        <img class="background-element-left"
+             src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('theme/assets/images/certificates2022b/signature-aivalis.png'))) }}">
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img class="background-element-left"
+             src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('theme/assets/images/certificates2022b/line-signature.png'))) }}">
+      </td>
+    </tr>
+    <tr>
+      <td class="signature" align="center"><p class="name-signature">TOLIS AIVALIS</p></td>
+    </tr>
+    <tr>
+      <td class="signature" align="center"><p class="after-name-signature"> HEAD OF CURRICULUM, KNOWCRUNCH</p></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table class="footer" width="100%">
+    <tbody>
+    <tr>
+      <td align="center">
+        <p>
+          ISSUED: {{$certificate['certification_date']}} <span> | </span> Credential NO.: {{$certificate['credential']}}
+        </p>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+
+</div>
+
+</body>
 </html>
