@@ -13,7 +13,6 @@ class EventResource extends JsonResource
     {
         return [
             'id'                    => $this->id,
-            'is_paid'               => $this->is_paid,
             'status'                => $this->status,
             'published'             => $this->published,
             'release_date_files'    => $this->release_date_files,
@@ -23,7 +22,6 @@ class EventResource extends JsonResource
             'htmlTitle'             => $this->htmlTitle,
             'subtitle'              => $this->subtitle,
             'header'                => $this->header,
-            'summary'               => $this->summary,
             'body'                  => $this->body,
             'hours'                 => $this->hours,
             'absences_limit'        => $this->absences_limit,

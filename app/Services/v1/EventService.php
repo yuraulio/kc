@@ -41,25 +41,6 @@ class EventService
                     'language_id'           => $data['language_id'] ?? null,
                 ]
             );
-        $event->summary()->createMany([
-            [
-                'section' => 'duration',
-            ],
-            [
-                'section' => 'date',
-            ],
-            [
-                'section' => 'duration',
-            ], [
-                'section' => 'duration',
-            ], [
-                'section' => 'duration',
-            ], [
-                'section' => 'duration',
-            ], [
-                'section' => 'duration',
-            ],
-        ]);
 
         event(
             new ActivityEvent(

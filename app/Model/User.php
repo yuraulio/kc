@@ -992,4 +992,22 @@ class User extends Authenticatable
             return $daysPassed >= $exam->repeat_exam_in_failure;
         }
     }
+
+    public function getAssociatedRegistrations(): array
+    {
+        $data = [];
+
+        foreach ($this->events_for_user_list as $event) {
+            foreach ($event->transactionsByUser($this->id)->get() as $tran) {
+                if (isset($tran['status_history'][0]['installments'])) {
+                    $data[$tran->id]['amount'] = $tran['status_history'][0]['installments'];
+                } else {
+                    $data[$tran->id]['amount'] = null;
+                }
+
+                $data[$tran->id]['users'] = $tran->user()->where('id', '!=', $this->id)->get();
+            }
+        }
+        return $data;
+    }
 }
