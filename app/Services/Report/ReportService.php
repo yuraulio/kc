@@ -66,6 +66,7 @@ class ReportService
     public function getLiveCount(Request $request, $is_user = false)
     {
         $filterCriteria = $request->filter_criteria;
+        $date_filter = null;
         if(isset($request->date_range) && $request->date_range[0]) {
             $date_filter = $request->date_range;
         }
@@ -80,6 +81,7 @@ class ReportService
     public function exportReportResults(Request $request, Report $report)
     {
         $filterCriteria = $report->filter_criteria;
+        $date_filter = null;
         if(isset($report->date_range) && $report->date_range[0]) {
             $date_filter = $report->date_range;
         }
@@ -169,7 +171,7 @@ class ReportService
         }
 
         // Process date filter
-        if (count($date) > 0) {
+        if ($date && count($date) > 0) {
             $where .= " AND `users`.created_at BETWEEN '" . $date[0] . "' AND '" . $date[1] . "'";
         }
         $sql .= implode(' ', array_unique($this->joins)) . $where;
