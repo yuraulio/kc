@@ -14,6 +14,7 @@ use App\Model\Option;
 use App\Model\ShoppingCart;
 use App\Model\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
@@ -164,7 +165,7 @@ class UserService
             } elseif (CMSFile::query()->find($data['photo'])) {
                 $user->profile_image_id = $data['photo'] ?? null;
             } else {
-                throw ValidationException::withMessages(['photo' =>['The selected photo is invalid.']]);
+                throw ValidationException::withMessages(['photo' => ['The selected photo is invalid.']]);
             }
         }
         $user->save();
@@ -569,5 +570,35 @@ class UserService
         $user->tags()->syncWithoutDetaching($tagIds);
 
         return true;
+    }
+
+    public function getUserCourses(User $user, array $data): LengthAwarePaginator
+    {
+        $courses = $user->eventList()->with([
+            'transactions' => function ($q) use ($user) {
+                $q->whereHas('user', function ($query) use ($user) {
+                    $query->where('id', $user);
+                })->orderBy('created_at');
+            },
+            'delivery',
+            'tickets'      => function ($q) use ($user) {
+                $q->where('event_user_ticket.user_id', $user->id);
+            },
+        ])->when(array_key_exists('date_from', $data), function ($q) use ($data) {
+            $q->whereDate('users.created_at', '>=', Carbon::parse($data['date_from']));
+        })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
+            $q->whereDate('users.created_at', '<=', Carbon::parse($data['date_to']));
+        })->when(array_key_exists('query', $data), function ($q) use ($data) {
+            $q->where(function ($q) use ($data) {
+                $q->where('events.title', 'like', '%' . $data['query'] . '%');
+            });
+        })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->paginate($data['per_page'] ?? 25);
+
+        foreach ($courses as $course) {
+            $course->progress = round($course->progress($user));
+        }
+
+        return $courses;
     }
 }

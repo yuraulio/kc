@@ -8,12 +8,14 @@ use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\User\FilterActivityRequest;
+use App\Http\Requests\Api\v1\User\FilterCourseRequest;
 use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\Api\v1\User\StoreRequest;
 use App\Http\Requests\Api\v1\User\UpdateRequest;
 use App\Http\Requests\UserImportRequest;
 use App\Http\Resources\Api\v1\User\UserActivitiesResource;
 use App\Http\Resources\Api\v1\User\UserCollection;
+use App\Http\Resources\Api\v1\User\UserCourseResource;
 use App\Http\Resources\Api\v1\User\UserResource;
 use App\Model\Admin\Page;
 use App\Model\Event;
@@ -164,5 +166,10 @@ class UserController extends Controller
     public function attachToCourse(User $user, Event $event): JsonResponse
     {
         return \response()->json(['success' => $this->service->attachToCourse($user, $event)], Response::HTTP_OK);
+    }
+
+    public function getUserCourses(User $user, FilterCourseRequest $request): AnonymousResourceCollection
+    {
+        return UserCourseResource::collection($this->service->getUserCourses($user, $request->validated()));
     }
 }
