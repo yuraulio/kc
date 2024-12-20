@@ -180,18 +180,6 @@ class EventController extends ApiBaseController
         return response('Duplication event attempt', $status);
     }
 
-    public function userSubscriptions(User $user, Request $request): JsonResponse
-    {
-        $events = $user->subscriptionEvents()
-            ->with('users', function ($q) use ($user) {
-                $q->where('users.id', $user->id);
-            })
-            ->orderBy($request->order_by ?? 'id', $request->order_type ?? 'desc')
-            ->paginate($request->per_page ?? 5);
-
-        return response()->json($events);
-    }
-
     public function getEventProgress(User $user, Request $request): AnonymousResourceCollection
     {
         $events = $user->events_for_user_list1()

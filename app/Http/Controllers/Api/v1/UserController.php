@@ -17,6 +17,7 @@ use App\Http\Resources\Api\v1\User\UserActivitiesResource;
 use App\Http\Resources\Api\v1\User\UserCollection;
 use App\Http\Resources\Api\v1\User\UserCourseResource;
 use App\Http\Resources\Api\v1\User\UserResource;
+use App\Http\Resources\Api\v1\User\UserSubscriptionResource;
 use App\Model\Admin\Page;
 use App\Model\Event;
 use App\Model\User;
@@ -171,5 +172,10 @@ class UserController extends Controller
     public function getUserCourses(User $user, FilterCourseRequest $request): AnonymousResourceCollection
     {
         return UserCourseResource::collection($this->service->getUserCourses($user, $request->validated()));
+    }
+
+    public function getUserSubscriptions(User $user, FilterCourseRequest $request): AnonymousResourceCollection
+    {
+        return UserSubscriptionResource::collection($this->service->getUserSubscriptions($user, $request->validated()));
     }
 }

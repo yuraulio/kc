@@ -585,9 +585,9 @@ class UserService
                 $q->where('event_user_ticket.user_id', $user->id);
             },
         ])->when(array_key_exists('date_from', $data), function ($q) use ($data) {
-            $q->whereDate('users.created_at', '>=', Carbon::parse($data['date_from']));
+            $q->whereDate('events.created_at', '>=', Carbon::parse($data['date_from']));
         })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
-            $q->whereDate('users.created_at', '<=', Carbon::parse($data['date_to']));
+            $q->whereDate('events.created_at', '<=', Carbon::parse($data['date_to']));
         })->when(array_key_exists('query', $data), function ($q) use ($data) {
             $q->where(function ($q) use ($data) {
                 $q->where('events.title', 'like', '%' . $data['query'] . '%');
@@ -600,5 +600,25 @@ class UserService
         }
 
         return $courses;
+    }
+
+    public function getUserSubscriptions(User $user, array $data): LengthAwarePaginator
+    {
+        $subscriptions = $user->eventSubscriptions()
+            ->with([
+                'transactions' => function ($q) use ($user) {
+                    $q->whereHas('user', function ($query) use ($user) {
+                        $query->where('id', $user);
+                    })->orderBy('created_at');
+                },
+            ])->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->paginate($data['per_page'] ?? 25);
+
+        foreach ($subscriptions as $subscription) {
+            $event = $subscription->event()->where('subscription_user_event.user_id', $user->id)->first();
+            $subscription->progress = round($event->progress($user));
+        }
+
+        return $subscriptions;
     }
 }
