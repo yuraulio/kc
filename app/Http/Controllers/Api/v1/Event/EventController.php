@@ -103,7 +103,7 @@ class EventController extends ApiBaseController
      */
     public function destroy(Event $event): JsonResponse
     {
-        event(new ActivityEvent(Auth::user(), ActivityEventEnum::CourseAdded->value, $event->title, Auth::user(), $event));
+        event(new ActivityEvent(Auth::user(), ActivityEventEnum::CourseDeleted->value, $event->title, Auth::user(), $event));
 
         $event->delete();
 

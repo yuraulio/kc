@@ -61,7 +61,9 @@ use App\Http\Controllers\Api\v1\TicketController;
 use App\Http\Controllers\Api\v1\TopicController;
 use App\Http\Controllers\Api\v1\Transactions\Participants\StatisticsController;
 use App\Http\Controllers\Api\v1\TypeController;
-use App\Http\Controllers\Api\v1\UserController as V1UserControllerAlias;
+use App\Http\Controllers\Api\v1\User\UserController as V1UserControllerAlias;
+use App\Http\Controllers\Api\v1\User\UserCountsController;
+use App\Http\Controllers\Api\v1\User\UserEventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -200,11 +202,17 @@ Route::middleware('auth:api')->group(function () {
             Route::get('payments/{user}', [V1UserControllerAlias::class, 'getPayments']);
             Route::get('terms/{user}/generateConsentPdf', [V1UserControllerAlias::class, 'generateConsentPdf']);
             Route::get('{user}/activities', [V1UserControllerAlias::class, 'getUserActivities']);
-            Route::post('{user}/event/{event}', [V1UserControllerAlias::class, 'attachToCourse']);
-            Route::get('{user}/event-list', [V1UserControllerAlias::class, 'getUserCourses']);
-            Route::get('{user}/subscription-list', [V1UserControllerAlias::class, 'getUserSubscriptions']);
+
+            Route::post('{user}/events/{event}/expiration', [UserEventController::class, 'extendExpiration']);
+            Route::post('{user}/events/{event}/delete', [UserEventController::class, 'delete']);
+            Route::post('{user}/events/{event}/move', [UserEventController::class, 'moveUser']);
+            Route::get('{user}/absences/{event}', [UserEventController::class, 'getAbsences']);
+            Route::post('{user}/event/{event}', [UserEventController::class, 'attachToCourse']);
+            Route::get('{user}/event-list', [UserEventController::class, 'getUserCourses']);
+            Route::get('{user}/subscription-list', [UserEventController::class, 'getUserSubscriptions']);
 
             Route::get('{user}/events', [EventController::class, 'getEventProgress']);
+
             Route::get('', [V1UserControllerAlias::class, 'index']);
             Route::get('{user}', [V1UserControllerAlias::class, 'show']);
             Route::post('', [V1UserControllerAlias::class, 'store']);
@@ -212,9 +220,9 @@ Route::middleware('auth:api')->group(function () {
             Route::delete('{user}', [V1UserControllerAlias::class, 'destroy']);
 
             Route::prefix('counts')->group(function () {
-                Route::get('admins', [V1UserControllerAlias::class, 'adminsCounts']);
-                Route::get('students', [V1UserControllerAlias::class, 'studentsCounts']);
-                Route::get('instructors', [V1UserControllerAlias::class, 'instructorsCounts']);
+                Route::get('admins', [UserCountsController::class, 'adminsCounts']);
+                Route::get('students', [UserCountsController::class, 'studentsCounts']);
+                Route::get('instructors', [UserCountsController::class, 'instructorsCounts']);
             });
         });
         Route::prefix('events')->group(function () {

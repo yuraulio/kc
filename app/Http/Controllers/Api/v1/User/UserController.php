@@ -2,24 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v1\User;
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\User\FilterActivityRequest;
-use App\Http\Requests\Api\v1\User\FilterCourseRequest;
 use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\Api\v1\User\StoreRequest;
 use App\Http\Requests\Api\v1\User\UpdateRequest;
 use App\Http\Requests\UserImportRequest;
 use App\Http\Resources\Api\v1\User\UserActivitiesResource;
 use App\Http\Resources\Api\v1\User\UserCollection;
-use App\Http\Resources\Api\v1\User\UserCourseResource;
 use App\Http\Resources\Api\v1\User\UserResource;
 use App\Http\Resources\Api\v1\User\UserSubscriptionResource;
 use App\Model\Admin\Page;
-use App\Model\Event;
 use App\Model\User;
 use App\Services\v1\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -101,21 +98,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function adminsCounts(): JsonResponse
-    {
-        return \response()->json($this->service->adminsCounts(), Response::HTTP_OK);
-    }
-
-    public function studentsCounts(): JsonResponse
-    {
-        return \response()->json(['data' => $this->service->studentsCounts()], Response::HTTP_OK);
-    }
-
-    public function instructorsCounts(): JsonResponse
-    {
-        return \response()->json(['data' => $this->service->getInstructorsByCourse()], Response::HTTP_OK);
-    }
-
     public function importUsers(UserImportRequest $request): JsonResponse
     {
         return \response()->json($this->service->importUsersFromFile($request->file('import_file')), Response::HTTP_OK);
@@ -162,20 +144,5 @@ class UserController extends Controller
             ->paginate($request->per_page ?? 5);
 
         return UserActivitiesResource::collection($activities);
-    }
-
-    public function attachToCourse(User $user, Event $event): JsonResponse
-    {
-        return \response()->json(['success' => $this->service->attachToCourse($user, $event)], Response::HTTP_OK);
-    }
-
-    public function getUserCourses(User $user, FilterCourseRequest $request): AnonymousResourceCollection
-    {
-        return UserCourseResource::collection($this->service->getUserCourses($user, $request->validated()));
-    }
-
-    public function getUserSubscriptions(User $user, FilterCourseRequest $request): AnonymousResourceCollection
-    {
-        return UserSubscriptionResource::collection($this->service->getUserSubscriptions($user, $request->validated()));
     }
 }

@@ -28,5 +28,6 @@ enum ActivityEventEnum: string
     case AccountInactive = 'Account inactive';
     case CourseAdded = 'Course added';
     case CourseDeleted = 'Course deleted';
+    case UserMoved = 'User moved';
     case CourseTicketChanged = 'Course ticket changed';
 }
