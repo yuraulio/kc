@@ -37,7 +37,7 @@ class UpdateRequest extends FormRequest
             'company_url'         => ['sometimes'],
             'meta_title'          => ['sometimes'],
             'meta_description'    => ['sometimes'],
-            'biography'           => ['sometimes', 'max:255'],
+            'biography'           => ['sometimes'],
             'social_links'        => ['sometimes', 'array'],
             'social_links.*'      => ['sometimes', 'string'],
             'profile_status'      => ['sometimes', Rule::in(ProfileStatusEnum::values())],

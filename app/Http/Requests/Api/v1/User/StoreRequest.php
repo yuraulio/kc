@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
             'job_title'           => ['sometimes'],
             'company'             => ['sometimes'],
             'company_url'         => ['sometimes'],
-            'biography'           => ['sometimes', 'max:255'],
+            'biography'           => ['sometimes'],
             'social_links'        => ['sometimes', 'array'],
             'social_links.*'      => ['sometimes', 'string'],
             'profile_status'      => ['sometimes', Rule::in(ProfileStatusEnum::values())],
