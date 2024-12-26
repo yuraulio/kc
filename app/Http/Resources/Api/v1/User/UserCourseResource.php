@@ -29,7 +29,7 @@ class UserCourseResource extends JsonResource
             'price'             => $this->transactions->first()?->amount,
             'installments'      => isset($statusHistory[0]) ? ['installments'] ?? 'Full' : 'Full',
             'access_status'     => Carbon::now()->gt(Carbon::parse($this->pivot->expiration)),
-            'payment_status'    => (bool)$this->pivot->paid,
+            'payment_status'    => (bool) $this->pivot->paid,
             'progress'          => $this->progress,
         ];
     }

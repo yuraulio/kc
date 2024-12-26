@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\CMSFile;
 use App\Events\EmailSent;
 use App\Http\Controllers\ChunkReadFilter;
 use App\Jobs\SendEmail;
@@ -16,16 +17,15 @@ use App\Notifications\WelcomeEmail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Image;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\CMSFile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Image;
 
 class UserService
 {

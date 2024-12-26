@@ -68,8 +68,8 @@ class Event extends Model
         PaginateTable,
         Filterable,
         Sortable {
-        Filterable::scopeFilter insteadof PaginateTable;
-    }
+            Filterable::scopeFilter insteadof PaginateTable;
+        }
 
     const STATUS_OPEN = 0;
     const STATUS_CLOSE = 1;

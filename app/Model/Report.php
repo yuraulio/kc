@@ -27,6 +27,6 @@ class Report extends Model
     protected $casts = [
         'filter_criteria' => 'array',
         'file_export_criteria' => 'array',
-        'date_range' => 'array'
+        'date_range' => 'array',
     ];
 }

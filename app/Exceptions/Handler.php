@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Services\PaymentService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Services\PaymentService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Illuminate\Http\JsonResponse;

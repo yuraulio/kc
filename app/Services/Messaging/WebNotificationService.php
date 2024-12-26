@@ -48,7 +48,8 @@ class WebNotificationService
         return $webNotification->delete();
     }
 
-    public function findTriggerByScreen(Request $reqest, ReportService $reportService) {
+    public function findTriggerByScreen(Request $reqest, ReportService $reportService)
+    {
         // Validate the incoming request
         $request->validate([
             'screen_name' => 'required|string',
@@ -60,7 +61,7 @@ class WebNotificationService
             ->first();
 
         if (!$webNotification) {
-            return null;
+            return;
         }
 
         // Pass necessary data to the ReportService's getLiveCount method
@@ -70,11 +71,11 @@ class WebNotificationService
             $newRequest = new Request($data);
             $reportServiceResult = $reportService->getLiveCount($newRequest, true);
         } catch (\Exception $e) {
-            return null;
+            return;
         }
 
         if (empty($reportServiceResult['user_ids'])) {
-            return null;
+            return;
         }
 
         $userIds = array_column($reportServiceResult['user_ids'], 'id');
@@ -82,6 +83,5 @@ class WebNotificationService
         if (in_array($request->user_id, $userIds)) {
             return $webNotification;
         }
-        return null;
     }
 }

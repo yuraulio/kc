@@ -35,8 +35,7 @@ class EventController extends ApiBaseController
         private readonly EventDuplicationService $eventDuplicationService,
         private readonly EventService $service,
         private readonly ExamService $examService
-    )
-    {
+    ) {
     }
 
     /**
@@ -54,7 +53,7 @@ class EventController extends ApiBaseController
             });
         })->when($notUserId, function ($q) use ($notUserId) {
             $q->whereDoesntHave('users', function ($q) use ($notUserId) {
-                $q->where('users.id', (int)$notUserId);
+                $q->where('users.id', (int) $notUserId);
             });
         });
 
@@ -196,7 +195,8 @@ class EventController extends ApiBaseController
     {
         return \response()->json(
             ['success' => $this->service->changePriority($event, $topic, $request->order)],
-            Response::HTTP_OK);
+            Response::HTTP_OK
+        );
     }
 
     public function exportCertificates(Event $event): BinaryFileResponse

@@ -66,9 +66,10 @@ class WebNotificationController extends ApiBaseController
     public function triggerWebNotification(Request $request, WebNotificationService $webNotificationService)
     {
         $notification = $webNotificationService->findTriggerByScreen($request);
-        if($notification) {
+        if ($notification) {
             return ['data'=>$notification];
-        }        
+        }
+
         return response()->json(['data' => null, 'message' => 'No notification found.']);
     }
 }

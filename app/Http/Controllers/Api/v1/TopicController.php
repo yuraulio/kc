@@ -131,13 +131,15 @@ class TopicController extends ApiBaseController
     {
         return \response()->json(
             ['success' => $this->service->attachLesson($topic, $lesson)],
-            Response::HTTP_OK);
+            Response::HTTP_OK
+        );
     }
 
     public function changeLessonOrder(Topic $topic, Lesson $lesson, ChangeOrderRequest $request): JsonResponse
     {
         return \response()->json(
             ['success' => $this->service->changePriority($topic, $lesson, $request->order)],
-            Response::HTTP_OK);
+            Response::HTTP_OK
+        );
     }
 }

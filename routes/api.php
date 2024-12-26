@@ -348,7 +348,6 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::apiResource('messaging/mobile-notifications', MobileNotificationController::class);
     Route::post('messaging/trigger-mobile-notification', [MobileNotificationController::class, 'triggerMobileNotification']);
 
-
     // Web Notification
     Route::apiResource('messaging/web-notifications', WebNotificationController::class);
     Route::post('messaging/trigger-web-notification', [WebNotificationController::class, 'triggerWebNotification']);

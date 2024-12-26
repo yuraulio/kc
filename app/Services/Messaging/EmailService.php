@@ -87,7 +87,8 @@ class EmailService
         });
     }
 
-    private function getTopicEmailTargetUsers(EmailTrigger $emailTrigger) {
+    private function getTopicEmailTargetUsers(EmailTrigger $emailTrigger)
+    {
         $to = '';
         switch ($emailTrigger->trigger_filters['role_id'] ?? '0') {
             case '7':
@@ -100,6 +101,7 @@ class EmailService
                 $to = '-';
                 break;
         }
+
         return $to;
     }
 

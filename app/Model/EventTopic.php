@@ -10,6 +10,6 @@ class EventTopic extends Model
     use HasFactory;
 
     protected $fillable = [
-        'priority'
+        'priority',
     ];
 }

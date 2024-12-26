@@ -49,7 +49,7 @@ class UserResource extends JsonResource
             'will_work_remote'         => $this->will_work_remote,
             'will_work_in_person'      => $this->will_work_in_person,
             'work_experience'          => $this->work_experience,
-            'terms'                    => (int)$this->terms,
+            'terms'                    => (int) $this->terms,
             'meta_title'               => $this->meta_title,
             'meta_description'         => $this->meta_description,
             'profile_status'           => $this->profile_status,

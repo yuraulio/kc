@@ -1009,6 +1009,7 @@ class User extends Authenticatable
                 $data[$tran->id]['users'] = $tran->user()->where('id', '!=', $this->id)->get();
             }
         }
+
         return $data;
     }
 }

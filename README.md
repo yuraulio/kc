@@ -2,12 +2,12 @@
 This website is built off the Argon Pro Theme found here: http://argon-dashboard-pro-laravel.creative-tim.com/
 
 # Requirements
-Composer: 2
-PHP: 8
-Node Version: 15.10
-Python: 2
+Composer: 2 \
+PHP: 8 \
+Node Version: 15.10 \
+Python: 2 \
 
-# Setting up the project locally
+# Setting up the project locally using native tools
 
 - Clone this project locally using git
 - Configure your `.env` file
@@ -16,6 +16,33 @@ Python: 2
 - Unfortunately the migrations are broken, you'll need to grab a copy of the dev database from a colleague
 
 If you're on a Mac, you can easily get a local web server going using "Laravel Herd".
+
+# Setting up the project locally using ddev
+1. Install the ddev: https://ddev.readthedocs.io/en/stable/
+1. Clone project locally using git;
+2. Configure the `.env` file (use an .env.example and .env.dev as a base);
+3. Run `ddev start`
+4. Run `ddev composer install`
+5. Run `ddev artisan passport:keys`
+6. For importing database use:
+   1. `ddev import-db --file=db.sql` command; 
+   2. Or `gzip -dc db.sql.gz | ddev import-db` for archived dump;
+7. Compile all assets under root and resources directories:
+   1. `ddev npm i`
+   2. `ddev npm run dev`
+   3. `ddev ssh`, and inside of the ssh session `cd resources/admin && npm i && npm run dev`
+8. Quick way to get admin user after importing database:
+   1. `ddev artisan tinker`
+   2. Execute the following php code: ```User::findOrFail(6)->fill(['email'=>'admin@mail.com', 'password' => Hash::make('123123123')])->save()``` (the admin access will be: `admin@mail.com` / `123123123`);
+3. To enable the xdebug: 
+   1. Run the following command `ddev xdebug`;
+   2. Add the server to the Servers (in PHPStorm):
+      1. Server name: `knowcrunch.ddev.site`
+      2. Host: `knowcrunch.ddev.site`
+      3. Port: `80`
+      4. Debugger: `Xdebug`
+      5. Use path mappings: `path/to/your/project/root` to `/var/www/html` 
+   6. For MacUsers maybe useful to add globally the next: `sudo ifconfig en0 alias 10.254.254.254 255.255.255.0 ` 
 
 # Broad architecture
 

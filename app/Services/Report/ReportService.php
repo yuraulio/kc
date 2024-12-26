@@ -67,11 +67,12 @@ class ReportService
     {
         $filterCriteria = $request->filter_criteria;
         $date_filter = null;
-        if(isset($request->date_range) && $request->date_range[0]) {
+        if (isset($request->date_range) && $request->date_range[0]) {
             $date_filter = $request->date_range;
         }
         $sql = $this->buildQuery($filterCriteria, $date_filter);
         $data = \DB::select($sql);
+
         return ['count' => count($data), 'user_ids' => $is_user ? $data : null];
     }
 
@@ -82,11 +83,12 @@ class ReportService
     {
         $filterCriteria = $report->filter_criteria;
         $date_filter = null;
-        if(isset($report->date_range) && $report->date_range[0]) {
+        if (isset($report->date_range) && $report->date_range[0]) {
             $date_filter = $report->date_range;
         }
         $sql = $this->buildQuery($filterCriteria, $date_filter);
         $sql = CustomReportService::getCustomReport($sql, $report);
+
         return $this->runQueryAndReturnArray($sql, $report);
     }
 
@@ -286,7 +288,7 @@ class ReportService
         $sql .= ' LEFT JOIN event_user ON event_user.user_id = users.id LEFT JOIN events ON event_user.event_id = events.id ';
 
         $sql .= ' LEFT JOIN `event_info` ON `event_info`.event_id = `events`.id LEFT JOIN `deliveries` ON `event_info`.course_delivery = `deliveries`.id ';
-        
+
         $sql .= ' LEFT JOIN subscription_user_event ON subscription_user_event.user_id = users.id AND subscription_user_event.event_id = events.id LEFT JOIN (SELECT user_id, id AS subscription_id, stripe_status, stripe_price, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY id DESC) AS rn FROM subscriptions) latest_subscription ON subscription_user_event.subscription_id = latest_subscription.subscription_id AND latest_subscription.rn = 1 ';
         if (strpos(implode(', ', $columnNames), 'giveaway_status') !== false) {
             $sql .= ' LEFT JOIN `give_aways` ON `users`.email = `give_aways`.email ';
@@ -300,10 +302,10 @@ class ReportService
         $sql .= ' ) AS latest_user_event_ticket ON latest_user_event_ticket.user_id = users.id ';
         $sql .= ' LEFT JOIN tickets ON tickets.id = latest_user_event_ticket.event_user_ticket_id ';
 
-        if ($hasTransactionData) { 
+        if ($hasTransactionData) {
             $sql = "WITH latest_event_transactions AS (SELECT t.transactionable_id AS event_id, t2.transactionable_id AS user_id, MAX(t.transaction_id) AS latest_transaction_id FROM transactionables t JOIN transactionables t2 ON t.transaction_id = t2.transaction_id WHERE t.transactionable_type LIKE '%Event' AND t2.transactionable_type LIKE '%User' GROUP BY t.transactionable_id, t2.transactionable_id)" . $sql;
-            $sql .= " LEFT JOIN     latest_event_transactions let ON let.user_id = users.id AND let.event_id = events.id ";
-            $sql .= " LEFT JOIN     transactions ON transactions.id = let.latest_transaction_id ";
+            $sql .= ' LEFT JOIN     latest_event_transactions let ON let.user_id = users.id AND let.event_id = events.id ';
+            $sql .= ' LEFT JOIN     transactions ON transactions.id = let.latest_transaction_id ';
         }
 
         $sql .= ' LEFT JOIN plans ON `plans`.stripe_plan = `latest_subscription`.stripe_price ';
@@ -318,10 +320,12 @@ class ReportService
         return [$sql, $friendlyColumnNames];
     }
 
-    public function getReportWithData($report) {
-        if(in_array($report->title, ReportEnum::getCustomReportTitles())) {
+    public function getReportWithData($report)
+    {
+        if (in_array($report->title, ReportEnum::getCustomReportTitles())) {
             $report->is_custom_report = true;
         }
+
         return $report;
     }
 }

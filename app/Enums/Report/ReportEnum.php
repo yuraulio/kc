@@ -4,8 +4,6 @@ namespace App\Enums\Report;
 
 enum ReportEnum: string
 {
-
-    
     const HIGHEST_SPENDING_STUDENTS = 'Highest spending students';
 
     case Tags = 'tags';
@@ -23,8 +21,8 @@ enum ReportEnum: string
     case UserAccountActivity = '`activations`.completed';
     case CouponName = "`transactionables`.`transactionable_type` LIKE '%User' AND `transactions`.coupon_code";
 
-
-    public static function getCustomReportTitles(){
+    public static function getCustomReportTitles()
+    {
         return [self::HIGHEST_SPENDING_STUDENTS];
     }
 

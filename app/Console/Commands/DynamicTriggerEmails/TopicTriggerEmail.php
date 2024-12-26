@@ -46,15 +46,15 @@ class TopicTriggerEmail extends Command
 
             $statuses = array_column($filters['status'], 'id');
             $topics = [];
-            if(isset($filters['topic_ids'])) {
+            if (isset($filters['topic_ids'])) {
                 $topics = array_column($filters['topic_ids'], 'id');
             }
             $courses = array_column($filters['course_ids'], 'id');
 
             $events = Event::
             where('published', true)->whereHas('lessons', function ($query) use ($dates) {
-                    $query->whereIn('date', $dates);
-                });
+                $query->whereIn('date', $dates);
+            });
             if (count($statuses)) {
                 $events = $events->whereIn('status', $statuses);
             }
@@ -118,7 +118,7 @@ class TopicTriggerEmail extends Command
 
                             event(new EmailSent($user->email, 'SendTopicAutomateMail'));
                         }
-                    } else if (!isset($filters['role_id']) || $filters['role_id'] === '10') {
+                    } elseif (!isset($filters['role_id']) || $filters['role_id'] === '10') {
                         $instructor = Instructor::find($lesson->pivot->instructor_id);
                         $user = $instructor->user[0];
                         $data['firstname'] = $user->firstname;
