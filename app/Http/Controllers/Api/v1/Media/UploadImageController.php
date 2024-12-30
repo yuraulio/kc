@@ -90,6 +90,6 @@ class UploadImageController extends ApiBaseController
 
         array_unshift($data, $mediaFile);
 
-        return $this->responseWithData(MediaFileResource::collection($data));
+        return MediaFileResource::collection($data);
     }
 }
