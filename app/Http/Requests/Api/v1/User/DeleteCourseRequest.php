@@ -11,7 +11,8 @@ class DeleteCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ticket_id' => ['required', 'exists:tickets,id'],
+            'tickets'   => ['sometimes', 'array'],
+            'tickets.*' => ['sometimes', 'exists:tickets,id'],
         ];
     }
 }
