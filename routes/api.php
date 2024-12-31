@@ -185,6 +185,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('', [ReviewController::class, 'index']);
         Route::get('{review}', [ReviewController::class, 'show']);
         Route::post('', [ReviewController::class, 'store']);
+        Route::post('{review}/approve', [ReviewController::class, 'approve']);
         Route::put('{review}', [ReviewController::class, 'update']);
         Route::delete('{review}', [ReviewController::class, 'destroy']);
     });
@@ -208,6 +209,7 @@ Route::middleware('auth:api')->group(function () {
             Route::post('{user}/events/{event}/move', [UserEventController::class, 'moveUser']);
             Route::get('{user}/absences/{event}', [UserEventController::class, 'getAbsences']);
             Route::post('{user}/event/{event}', [UserEventController::class, 'attachToCourse']);
+            Route::post('{user}/subscriptions/{subscription}', [UserEventController::class, 'attachToSubscription']);
             Route::get('{user}/event-list', [UserEventController::class, 'getUserCourses']);
             Route::get('{user}/subscription-list', [UserEventController::class, 'getUserSubscriptions']);
 

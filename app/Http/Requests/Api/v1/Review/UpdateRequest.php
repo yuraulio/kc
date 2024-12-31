@@ -14,7 +14,6 @@ class UpdateRequest extends FormRequest
             'title'    => ['sometimes', 'min:3'],
             'content'  => ['sometimes', 'min:3'],
             'rating'   => ['sometimes', 'integer'],
-            'event_id' => ['sometimes', 'exists:events,id'],
         ];
     }
 }

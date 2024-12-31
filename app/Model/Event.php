@@ -308,11 +308,6 @@ class Event extends Model
             ->withPivot(['exam_accessibility_type', 'exam_accessibility_value', 'exam_repeat_delay', 'whole_amount_should_be_paid']);
     }
 
-    public function exam_result(): BelongsToMany
-    {
-        return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id')->withPivot('total_score');
-    }
-
     public function audiences(): BelongsToMany
     {
         return $this->belongsToMany(Audience::class, 'event_audiences', 'event_id', 'audience_id');

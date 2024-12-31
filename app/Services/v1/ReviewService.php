@@ -59,13 +59,11 @@ class ReviewService
         ];
     }
 
-    public function approve(Review $review)
+    public function approve(Review $review): Review
     {
         $review->status = 'approved';
         $review->save();
 
-        /** @var FacebookService $facebookService */
-        $facebookService = app()->make(FacebookService::class);
-        $facebookService->postReview($review);
+        return $review;
     }
 }

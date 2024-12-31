@@ -11,6 +11,7 @@ use App\Model\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Subscription;
 
 class UserEventService
 {
@@ -21,6 +22,13 @@ class UserEventService
         $tagIds = $event->tags()->pluck('tags.id')->toArray();
 
         $user->tags()->syncWithoutDetaching($tagIds);
+
+        return true;
+    }
+
+    public function attachToSubscription(User $user, Subscription $subscription): bool
+    {
+        $user->eventSubscriptions()->sync($subscription);
 
         return true;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\Review\FilterRequest;
@@ -72,10 +71,10 @@ class ReviewController extends Controller
         return response()->json(['success' => $review->delete()], Response::HTTP_OK);
     }
 
-    public function approve(Review $review)
+    public function approve(Review $review): ReviewResource
     {
         $this->authorize('delete', $review);
 
-        return response()->json(['success' => $this->service->approve($review)], Response::HTTP_OK);
+        return new ReviewResource($this->service->approve($review));
     }
 }

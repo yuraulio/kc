@@ -16,6 +16,7 @@ use App\Model\User;
 use App\Services\v1\UserEventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Laravel\Cashier\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserEventController extends Controller
@@ -27,6 +28,11 @@ class UserEventController extends Controller
     public function attachToCourse(User $user, Event $event): JsonResponse
     {
         return \response()->json(['success' => $this->service->attachToCourse($user, $event)], Response::HTTP_OK);
+    }
+
+    public function attachToSubscription(User $user, Subscription $subscription): JsonResponse
+    {
+        return \response()->json(['success' => $this->service->attachToSubscription($user, $subscription)], Response::HTTP_OK);
     }
 
     public function getUserCourses(User $user, FilterCourseRequest $request): AnonymousResourceCollection
