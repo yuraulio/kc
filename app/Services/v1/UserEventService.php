@@ -94,8 +94,8 @@ class UserEventService
 
         $user->ticket()
             ->wherePivot('event_id', $event->id)
-            ->wherePivotIn('ticket_id', $data['tickets'] ?? null)
-            ->detach($data['tickets']);
+            ->wherePivotIn('ticket_id', $data['tickets'] ?? [])
+            ->detach($data['tickets'] ?? []);
 
         $user->events_for_user_list()
             ->wherePivot('event_id', '=', $event->id)
