@@ -29,5 +29,4 @@ class UserCountsController extends Controller
     {
         return \response()->json(['data' => $this->service->getInstructorsByCourse()], Response::HTTP_OK);
     }
-
 }

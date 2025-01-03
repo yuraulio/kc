@@ -560,5 +560,4 @@ class UserService
             ],
         ];
     }
-
 }

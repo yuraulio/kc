@@ -35,10 +35,10 @@ class UserEventService
 
     public function getUserCourses(User $user, array $data): LengthAwarePaginator
     {
-        $courses = $user->eventList()->with([
+        $courses = $user->events_for_user_list1()->with([
             'transactions' => function ($q) use ($user) {
                 $q->whereHas('user', function ($query) use ($user) {
-                    $query->where('id', $user);
+                    $query->where('id', $user->id);
                 })->orderBy('created_at');
             },
             'delivery',
@@ -85,7 +85,7 @@ class UserEventService
 
     public function extendExpiration(User $user, Event $event, array $data): bool
     {
-        return (bool)$user->eventList()->updateExistingPivot($event, ['expiration' => $data['expiration']]);
+        return (bool) $user->eventList()->updateExistingPivot($event, ['expiration' => $data['expiration']]);
     }
 
     public function removeTicket(User $user, Event $event, array $data): bool
@@ -130,12 +130,14 @@ class UserEventService
 
         $newEvent = Event::find($data['event_id']);
 
-        event(new ActivityEvent(
-                $user,
-                ActivityEventEnum::UserMoved->value,
-                'From ' . $event->title . ' to ' . $newEvent->title,
-                Auth::user(),
-                $newEvent)
+        event(
+            new ActivityEvent(
+            $user,
+            ActivityEventEnum::UserMoved->value,
+            'From ' . $event->title . ' to ' . $newEvent->title,
+            Auth::user(),
+            $newEvent
+        )
         );
 
         return true;
@@ -143,7 +145,6 @@ class UserEventService
 
     public function extendSubscriptionExpiration(User $user, Subscription $subscription, array $data): bool
     {
-        return (bool)$user->eventSubscriptions()->updateExistingPivot($subscription, ['expiration' => $data['expiration']]);
+        return (bool) $user->eventSubscriptions()->updateExistingPivot($subscription, ['expiration' => $data['expiration']]);
     }
-
 }

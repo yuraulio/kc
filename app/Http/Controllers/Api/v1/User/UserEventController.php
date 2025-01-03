@@ -56,7 +56,19 @@ class UserEventController extends Controller
             ->json(
                 [
                     'success' => $this->service->extendExpiration($user, $event, $request->validated()),
-                ], Response::HTTP_OK,
+                ],
+                Response::HTTP_OK,
+            );
+    }
+
+    public function extendSubscriptionExpiration(User $user, Subscription $subscription, ExtendExpirationCourseRequest $request): JsonResponse
+    {
+        return \response()
+            ->json(
+                [
+                    'success' => $this->service->extendSubscriptionExpiration($user, $subscription, $request->validated()),
+                ],
+                Response::HTTP_OK,
             );
     }
 
@@ -76,7 +88,8 @@ class UserEventController extends Controller
             ->json(
                 [
                     'success' => $this->service->removeTicket($user, $event, $request->validated()),
-                ], Response::HTTP_OK,
+                ],
+                Response::HTTP_OK,
             );
     }
 
@@ -86,7 +99,8 @@ class UserEventController extends Controller
             ->json(
                 [
                     'success' => $this->service->moveUser($user, $event, $request->validated()),
-                ], Response::HTTP_OK,
+                ],
+                Response::HTTP_OK,
             );
     }
 }

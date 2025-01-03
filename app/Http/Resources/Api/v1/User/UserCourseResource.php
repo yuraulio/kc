@@ -20,6 +20,10 @@ class UserCourseResource extends JsonResource
     {
         $statusHistory = $this->transactions->first()?->status_history;
 
+        $transactionsCount = $this->transactions->count();
+
+        $instalments = isset($statusHistory[0]) ? (int) $statusHistory[0]['installments'] ?? 'Full' : 'Full';
+
         $user = User::find($this->pivot->user_id);
 
         $examIds = $this->resource->exam()->pluck('exams.id')->toArray();
@@ -32,12 +36,14 @@ class UserCourseResource extends JsonResource
             'delivery'          => $this->delivery,
             'ticket'            => $this->tickets,
             'price'             => $this->transactions->first()?->amount,
-            'installments'      => isset($statusHistory[0]) ? ['installments'] ?? 'Full' : 'Full',
+            'installments'      => $instalments,
             'access_status'     => Carbon::now()->gt(Carbon::parse($this->pivot->expiration)),
-            'payment_status'    => (bool)$this->pivot->paid,
+            'payment_status'    => is_int($instalments) && $transactionsCount != $instalments ? 2 : (int) $this->pivot->paid,
             'progress'          => $this->progress,
-            'exams'             => $this->getExams(),
-            'exam_results'      => $user->examResults()->whereIn('exam_results.exam_id', $examIds)->get(),
+            'exam_results'      => $user->examResults()
+                ->with('examSettings')
+                ->whereIn('exam_results.exam_id', $examIds)
+                ->get(),
         ];
     }
 }
