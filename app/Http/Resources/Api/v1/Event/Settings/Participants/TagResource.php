@@ -10,10 +10,8 @@ class TagResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            $this->attributes([
-                'id',
-                'name',
-            ]),
+            'id'   => $this->id,
+            'name' => $this->name,
         ];
     }
 }

@@ -17,6 +17,14 @@ class ReviewService
                 $q->whereHas('event', function ($q) use ($data) {
                     $q->where('events.id', $data['event_id']);
                 });
+            })->when(array_key_exists('user_id', $data), function ($q) use ($data) {
+                $q->whereHas('user', function ($q) use ($data) {
+                    $q->where('users.id', $data['user_id']);
+                });
+            })->when(array_key_exists('tags', $data), function ($q) use ($data) {
+                $q->whereHas('tags', function ($q) use ($data) {
+                    $q->whereIn('tags.id', array_map('intval', $data['tags']));
+                });
             })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
                 $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
             })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
@@ -35,6 +43,10 @@ class ReviewService
         $review->user()->associate($data['user_id']);
         $review->event()->associate($data['event_id']);
         $review->save();
+
+        if (array_key_exists('tags', $data)) {
+            $review->tags()->sync($data['tags']);
+        }
 
         $review->load($this->getRelations());
 

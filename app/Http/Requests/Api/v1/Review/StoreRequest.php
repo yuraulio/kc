@@ -16,6 +16,8 @@ class StoreRequest extends FormRequest
             'rating'   => ['required', 'integer', 'min:1', 'max:100'],
             'event_id' => ['required', 'exists:events,id'],
             'user_id'  => ['required', 'exists:users,id'],
+            'tags'     => ['sometimes', 'array'],
+            'tags.*'   => ['sometimes', 'integer', 'exists:tags,id'],
         ];
     }
 }

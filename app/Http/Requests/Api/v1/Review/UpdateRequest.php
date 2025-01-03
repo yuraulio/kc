@@ -11,9 +11,11 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'    => ['sometimes', 'min:3'],
-            'content'  => ['sometimes', 'min:3'],
-            'rating'   => ['sometimes', 'integer'],
+            'title'   => ['sometimes', 'min:3'],
+            'content' => ['sometimes', 'min:3'],
+            'rating'  => ['sometimes', 'integer'],
+            'tags'    => ['sometimes', 'array'],
+            'tags.*'  => ['sometimes', 'integer', 'exists:tags,id'],
         ];
     }
 }

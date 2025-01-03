@@ -21,4 +21,9 @@ class Tag extends Model
     {
         return $this->morphedByMany(User::class, 'entity', 'taggables');
     }
+
+    public function events(): MorphToMany
+    {
+        return $this->morphedByMany(Event::class, 'entity', 'taggables');
+    }
 }

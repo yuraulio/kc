@@ -12,13 +12,16 @@ class FilterRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'query'              => ['sometimes', 'min:1'],
-            'event_id'           => ['sometimes', Rule::exists('events', 'id')],
-            'date_from'          => ['sometimes', 'date_format:d-m-Y'],
-            'date_to'            => ['sometimes', 'date_format:d-m-Y'],
-            'order_by'           => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],
-            'order_type'         => ['sometimes', Rule::in(['asc', 'desc'])],
-            'per_page'           => ['sometimes', 'integer'],
+            'query'      => ['sometimes', 'min:1'],
+            'event_id'   => ['sometimes', Rule::exists('events', 'id')],
+            'user_id'   => ['sometimes', Rule::exists('users', 'id')],
+            'date_from'  => ['sometimes', 'date_format:d-m-Y'],
+            'date_to'    => ['sometimes', 'date_format:d-m-Y'],
+            'order_by'   => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],
+            'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],
+            'per_page'   => ['sometimes', 'integer'],
+            'tags'       => ['sometimes', 'array'],
+            'tags.*'     => ['sometimes', 'exists:tags,id'],
         ];
 
         if ($this->filled('from') && $this->filled('to')) {
