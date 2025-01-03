@@ -72,26 +72,6 @@ class UserEventController extends Controller
             );
     }
 
-    public function extendSubscriptionExpiration(User $user, Subscription $subscription, ExtendExpirationCourseRequest $request): JsonResponse
-    {
-        return \response()
-            ->json(
-                [
-                    'success' => $this->service->extendSubscriptionExpiration($user, $subscription, $request->validated()),
-                ], Response::HTTP_OK,
-            );
-    }
-
-    public function extendSubscriptionExpiration(User $user, Subscription $subscription, ExtendExpirationCourseRequest $request): JsonResponse
-    {
-        return \response()
-            ->json(
-                [
-                    'success' => $this->service->extendSubscriptionExpiration($user, $subscription, $request->validated()),
-                ], Response::HTTP_OK,
-            );
-    }
-
     public function delete(User $user, Event $event, DeleteCourseRequest $request): JsonResponse
     {
         return \response()

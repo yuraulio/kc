@@ -132,12 +132,12 @@ class UserEventService
 
         event(
             new ActivityEvent(
-            $user,
-            ActivityEventEnum::UserMoved->value,
-            'From ' . $event->title . ' to ' . $newEvent->title,
-            Auth::user(),
-            $newEvent
-        )
+                $user,
+                ActivityEventEnum::UserMoved->value,
+                'From ' . $event->title . ' to ' . $newEvent->title,
+                Auth::user(),
+                $newEvent
+            )
         );
 
         return true;
@@ -145,6 +145,6 @@ class UserEventService
 
     public function extendSubscriptionExpiration(User $user, Subscription $subscription, array $data): bool
     {
-        return (bool)$user->eventSubscriptions()->updateExistingPivot($subscription, ['expiration' => $data['expiration']]);
+        return (bool) $user->eventSubscriptions()->updateExistingPivot($subscription, ['expiration' => $data['expiration']]);
     }
 }
