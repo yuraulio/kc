@@ -11,8 +11,8 @@ class LessonService implements ILessonService
     public function create(LessonDto $dto)
     {
         $lesson = Lesson::create($dto->getData());
-
-        $lesson->category()->sync($dto->getCategories());
+        $lesson->category()->associate($dto->getCategoryId());
+        $lesson->save();
 
         $courses = $dto->getCourses();
         if (is_array($courses)) {
@@ -26,7 +26,8 @@ class LessonService implements ILessonService
     {
         $lesson->update($dto->getData());
 
-        $lesson->category()->sync($dto->getCategories());
+        $lesson->category()->associate($dto->getCategoryId());
+        $lesson->save();
 
         $courses = $dto->getCourses();
         if (is_array($courses)) {

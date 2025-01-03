@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AbsenceController;
 use App\Http\Controllers\Api\CityAutocompleteController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\ForgotPasswordController;
+use App\Http\Controllers\Api\LessonCategoryController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PassportAuthController;
@@ -204,6 +205,7 @@ Route::middleware('auth:api')->group(function () {
             Route::get('terms/{user}/generateConsentPdf', [V1UserControllerAlias::class, 'generateConsentPdf']);
             Route::get('{user}/activities', [V1UserControllerAlias::class, 'getUserActivities']);
 
+            Route::post('{user}/subscriptions/{subscription}/expiration', [UserEventController::class, 'extendSubscriptionExpiration']);
             Route::post('{user}/events/{event}/expiration', [UserEventController::class, 'extendExpiration']);
             Route::post('{user}/events/{event}/delete', [UserEventController::class, 'delete']);
             Route::post('{user}/events/{event}/move', [UserEventController::class, 'moveUser']);
@@ -278,6 +280,7 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
     Route::prefix('topics')->group(function () {
         Route::get('/', [TopicController::class, 'index']);
         Route::get('/with-event', [TopicController::class, 'topicWithEvent']);
+        Route::get('/orphans', [TopicController::class, 'getOrphans']);
         Route::get('/{topic}', [TopicController::class, 'show']);
         Route::post('/', [TopicController::class, 'store']);
         Route::post('/{topic}/clone', [TopicController::class, 'clone']);
@@ -285,6 +288,14 @@ Route::group(['middleware' => ['auth:api', 'auth.aboveauthor'], 'prefix' => 'v1'
         Route::post('/{topic}/lesson/{lesson}/ordering', [TopicController::class, 'changeLessonOrder']);
         Route::put('/{topic}', [TopicController::class, 'update']);
         Route::delete('/{topic}', [TopicController::class, 'destroy']);
+    });
+
+    Route::prefix('lesson-categories')->group(function () {
+        Route::get('/', [LessonCategoryController::class, 'index']);
+        Route::get('/{category}', [LessonCategoryController::class, 'show']);
+        Route::post('/', [LessonCategoryController::class, 'store']);
+        Route::put('/{category}', [LessonCategoryController::class, 'update']);
+        Route::delete('/{category}', [LessonCategoryController::class, 'destroy']);
     });
 
     Route::prefix('lessons')->group(function () {

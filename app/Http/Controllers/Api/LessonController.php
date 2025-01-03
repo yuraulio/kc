@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LessonController extends ApiBaseController
 {
+    public function __construct(private ILessonService $lessonService)
+    {
+    }
+
     public function index(Request $request)
     {
         $query = Lesson::query()->with('category')->withCount(['event', 'topic']);
@@ -75,17 +79,17 @@ class LessonController extends ApiBaseController
         })->pluck('id')->toArray();
     }
 
-    public function store(CreateLessonRequest $request, ILessonService $lessonService): LessonResource
+    public function store(CreateLessonRequest $request): LessonResource
     {
         return LessonResource::make(
-            $lessonService->create($request->toDto()),
+            $this->lessonService->create($request->toDto()),
         );
     }
 
-    public function update(UpdateLessonRequest $request, Lesson $lesson, ILessonService $lessonService): LessonResource
+    public function update(UpdateLessonRequest $request, Lesson $lesson): LessonResource
     {
         return LessonResource::make(
-            $lessonService->update($lesson, $request->toDto()),
+            $this->lessonService->update($lesson, $request->toDto()),
         );
     }
 

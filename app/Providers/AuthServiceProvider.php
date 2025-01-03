@@ -8,6 +8,7 @@ use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Setting;
 use App\Model\Admin\Template;
+use App\Model\LessonCategory;
 use App\Model\Passport\Token;
 use App\Model\Review;
 use App\Model\Role;
@@ -18,6 +19,7 @@ use App\Policies\AdminPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\ItemPolicy;
+use App\Policies\LessonCategoryPolicy;
 use App\Policies\PagePolicy;
 use App\Policies\ReviewPolicy;
 use App\Policies\RolePolicy;
@@ -38,17 +40,18 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        User::class     => UserPolicy::class,
-        Category::class => CategoryPolicy::class,
-        Template::class => TemplatePolicy::class,
-        Page::class     => PagePolicy::class,
-        Comment::class  => CommentPolicy::class,
-        Admin::class    => AdminPolicy::class,
-        Setting::class  => SettingPolicy::class,
-        Role::class     => RolePolicy::class,
-        Tag::class      => TagPolicy::class,
-        Skill::class    => SkillPolicy::class,
-        Review::class   => ReviewPolicy::class,
+        User::class           => UserPolicy::class,
+        Category::class       => CategoryPolicy::class,
+        Template::class       => TemplatePolicy::class,
+        Page::class           => PagePolicy::class,
+        Comment::class        => CommentPolicy::class,
+        Admin::class          => AdminPolicy::class,
+        Setting::class        => SettingPolicy::class,
+        Role::class           => RolePolicy::class,
+        LessonCategory::class => LessonCategoryPolicy::class,
+        Tag::class            => TagPolicy::class,
+        Skill::class          => SkillPolicy::class,
+        Review::class         => ReviewPolicy::class,
     ];
 
     /**

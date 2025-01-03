@@ -141,4 +141,9 @@ class UserEventService
         return true;
     }
 
+    public function extendSubscriptionExpiration(User $user, Subscription $subscription, array $data): bool
+    {
+        return (bool)$user->eventSubscriptions()->updateExistingPivot($subscription, ['expiration' => $data['expiration']]);
+    }
+
 }

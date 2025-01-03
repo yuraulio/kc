@@ -16,7 +16,7 @@ final readonly class LessonDto implements IDto
     private ?string $vimeoVideo;
     private ?string $vimeoDuration;
     private ?array $courses;
-    private ?array $categories;
+    private ?int $categoryId;
     private ?string $created;
 
     public function __construct(
@@ -38,7 +38,7 @@ final readonly class LessonDto implements IDto
             ($data['video_courses'] ?? []),
             ($data['live_streaming_courses'] ?? [])
         ));
-        $this->categories = $data['categories'] ?? [];
+        $this->categoryId = $data['category_id'] ?? [];
         $this->created = $data['created_at'] ?? now()->toDateTimeString();
     }
 
@@ -124,9 +124,9 @@ final readonly class LessonDto implements IDto
         return $this->courses;
     }
 
-    public function getCategories(): ?array
+    public function getCategoryId(): ?int
     {
-        return $this->categories;
+        return $this->categoryId;
     }
 
     public function getCreated(): ?string

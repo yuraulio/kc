@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Api\v1;
 use App\Contracts\Api\v1\Topic\ITopicService;
 use App\Http\Requests\Api\v1\Topic\ChangeOrderRequest;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
+use App\Http\Requests\Api\v1\Topic\OrphansRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
 use App\Model\Delivery;
 use App\Model\Lesson;
 use App\Model\Topic;
 use App\Services\v1\TopicService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class TopicController extends ApiBaseController
@@ -141,5 +144,28 @@ class TopicController extends ApiBaseController
             ['success' => $this->service->changePriority($topic, $lesson, $request->order)],
             Response::HTTP_OK
         );
+    }
+
+    public function getOrphans(OrphansRequest $request): AnonymousResourceCollection
+    {
+        $data = $request->validated();
+
+        $topics = Topic::query()
+            ->where(function ($q) {
+                $q->whereDoesntHave('lessonList')
+                    ->whereDoesntHave('eventList')
+                    ->whereDoesntHave('events');
+            })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
+                $q->whereDate('events.created_at', '>=', Carbon::parse($data['date_from']));
+            })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
+                $q->whereDate('events.created_at', '<=', Carbon::parse($data['date_to']));
+            })->when(array_key_exists('query', $data), function ($q) use ($data) {
+                $q->where(function ($q) use ($data) {
+                    $q->where('events.title', 'like', '%' . $data['query'] . '%');
+                });
+            })->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->paginate($data['per_page'] ?? 25);
+
+        return TopicResource::collection($topics);
     }
 }

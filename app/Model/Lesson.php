@@ -7,6 +7,7 @@ use App\Services\QueryString\Traits\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -35,9 +36,9 @@ class Lesson extends Model
         return $this->morphToMany(EmailTrigger::class, 'email_triggerables');
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
-        return $this->belongsToMany(Category::class, 'categories_topics_lesson')->withPivot('priority')->orderBy('priority', 'asc');
+        return $this->belongsTo(LessonCategory::class);
     }
 
     public function type()

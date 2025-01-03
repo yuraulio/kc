@@ -30,7 +30,6 @@ class LessonResource extends JsonResource
             ] : [],
             'created_at' => $this->resource->created_at?->toDateTimeString() ?? ($this->resource->updated_at?->toDateTimeString()),
             'category' => $this->resource->category->first()?->name ?? null,
-            'categories' => $this->resource->category?->pluck('id')->toArray() ?? [],
             'classroom_courses' => $this->resource->classroom_courses ?? [],
             'video_courses' => $this->resource->video_courses ?? [],
             'live_streaming_courses' => $this->resource->live_streaming_courses ?? [],
