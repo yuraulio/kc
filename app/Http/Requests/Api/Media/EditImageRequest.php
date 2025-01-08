@@ -18,7 +18,7 @@ class EditImageRequest extends FormRequest
             'version' => 'required|string',
             'id' => 'nullable|numeric',
             'parent_id' => [
-                'nullable',
+                'sometimes',
                 'numeric',
                 Rule::requiredIf(function () {
                     return request()->input('version') !== 'original';

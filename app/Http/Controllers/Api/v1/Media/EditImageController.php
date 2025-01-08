@@ -25,12 +25,12 @@ class EditImageController extends ApiBaseController
             return $this->response(['message' => 'Unknown version'], Response::HTTP_BAD_REQUEST);
         }
 
-        $originalFile = MediaFile::findOrFail($request->input('parent_id'));
-        if ($originalFile->id === $request->input('id') || $version === 'original') {
+        $originalFile = MediaFile::find($request->input('parent_id'));
+        if (($originalFile && $originalFile->id === $request->input('id')) || $version === 'original') {
             $originalFile->update($request->only(['name', 'alt_text', 'link']));
             $service->updateAltTextLink($originalFile, $originalFile->alt_text, $originalFile->link);
 
-            return $this->responseWithData((new MediaFileResource($originalFile))->toArray());
+            return $this->responseWithData($originalFile);
         }
 
         $mediaFolder = MediaFolder::findOrFail($request->input('folder_id'));
