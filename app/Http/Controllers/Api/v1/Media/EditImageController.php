@@ -30,7 +30,7 @@ class EditImageController extends ApiBaseController
             $originalFile->update($request->only(['name', 'alt_text', 'link']));
             $service->updateAltTextLink($originalFile, $originalFile->alt_text, $originalFile->link);
 
-            return $this->responseWithData(new MediaFileResource($originalFile));
+            return $this->responseWithData((new MediaFileResource($originalFile))->toArray());
         }
 
         $mediaFolder = MediaFolder::findOrFail($request->input('folder_id'));
