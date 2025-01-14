@@ -44,6 +44,9 @@ class ReviewService
         $review->event()->associate($data['event_id']);
         $review->save();
 
+        $review->visibility = ['Classroom', 'E-learning'];
+        $review->save();
+
         if (array_key_exists('tags', $data)) {
             $review->tags()->sync($data['tags']);
         }

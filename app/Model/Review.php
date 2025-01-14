@@ -19,6 +19,11 @@ class Review extends Model
         'rating',
         'status',
         'facebook_post_id',
+        'visibility',
+    ];
+
+    protected $casts = [
+        'visibility' => 'array'
     ];
 
     public function user(): BelongsTo
