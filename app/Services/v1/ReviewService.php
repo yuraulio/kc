@@ -70,12 +70,4 @@ class ReviewService
             'event',
         ];
     }
-
-    public function approve(Review $review): Review
-    {
-        $review->status = 'approved';
-        $review->save();
-
-        return $review;
-    }
 }

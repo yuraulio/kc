@@ -13,7 +13,7 @@ class StoreRequest extends FormRequest
         return [
             'title'    => ['required', 'min:3'],
             'content'  => ['required', 'min:3'],
-            'rating'   => ['required', 'integer', 'min:1', 'max:100'],
+            'rating'   => ['required', 'integer', 'min:1', 'max:5'],
             'event_id' => ['required', 'exists:events,id'],
             'user_id'  => ['required', 'exists:users,id'],
             'tags'     => ['sometimes', 'array'],

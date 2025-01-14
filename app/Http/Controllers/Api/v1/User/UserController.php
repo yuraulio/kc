@@ -8,22 +8,25 @@ use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MediaController;
 use App\Http\Requests\Api\v1\User\FilterActivityRequest;
+use App\Http\Requests\Api\v1\User\FilterPaymentsRequest;
 use App\Http\Requests\Api\v1\User\FilterRequest;
 use App\Http\Requests\Api\v1\User\StoreRequest;
 use App\Http\Requests\Api\v1\User\UpdateRequest;
 use App\Http\Requests\UserImportRequest;
 use App\Http\Resources\Api\v1\User\UserActivitiesResource;
 use App\Http\Resources\Api\v1\User\UserCollection;
+use App\Http\Resources\Api\v1\User\UserPaymentsResource;
 use App\Http\Resources\Api\v1\User\UserResource;
-use App\Http\Resources\Api\v1\User\UserSubscriptionResource;
 use App\Model\Admin\Page;
+use App\Model\Invoice;
+use App\Model\Invoiceable;
 use App\Model\User;
 use App\Services\v1\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,11 +106,29 @@ class UserController extends Controller
         return \response()->json($this->service->importUsersFromFile($request->file('import_file')), Response::HTTP_OK);
     }
 
-    public function getPayments(User $user, Request $request): JsonResponse
+    public function getPayments(User $user, FilterPaymentsRequest $request): AnonymousResourceCollection
     {
-        $payments = $user->events_for_user_list()->paginate($request->per_page ?? 10);
+        $data = $request->validated();
 
-        return \response()->json(['payments' => $payments], Response::HTTP_OK);
+        $invoice_ids = Invoiceable::where('invoiceable_type', Model::getActualClassNameForMorph(User::class))
+            ->where('invoiceable_id', $user->id)
+            ->pluck('invoice_id')
+            ->toArray();
+
+        $invoices = Invoice::query()
+            ->with('event')
+            ->when(array_key_exists('query', $data), function ($q) use ($data) {
+                $q->where(function ($q) use ($data) {
+                    $q->where('users.firstname', 'like', '%' . $data['query'] . '%')
+                        ->orWhere('users.lastname', 'like', '%' . $data['query'] . '%')
+                        ->orWhere('users.email', 'like', '%' . $data['query'] . '%');
+                });
+            })
+            ->whereIn('id', $invoice_ids)
+            ->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc')
+            ->paginate($data['per_page'] ?? 25);
+
+        return UserPaymentsResource::collection($invoices);
     }
 
     public function generateConsentPdf(User $user): \Illuminate\Http\Response

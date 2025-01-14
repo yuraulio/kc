@@ -70,11 +70,4 @@ class ReviewController extends Controller
 
         return response()->json(['success' => $review->delete()], Response::HTTP_OK);
     }
-
-    public function approve(Review $review): ReviewResource
-    {
-        $this->authorize('delete', $review);
-
-        return new ReviewResource($this->service->approve($review));
-    }
 }

@@ -15,7 +15,7 @@ class FilterCourseRequest extends FormRequest
             'date_from'  => ['sometimes', 'date_format:d-m-Y'],
             'date_to'    => ['sometimes', 'date_format:d-m-Y'],
             'query'      => ['sometimes', 'min:1'],
-            'order_by'   => ['sometimes', Rule::in(['id', 'title'])],
+            'order_by'   => ['sometimes', Rule::in(['id', 'title', 'event_delivery.delivery_id'])],
             'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],
             'per_page'   => ['sometimes', 'integer'],
         ];

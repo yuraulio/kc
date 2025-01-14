@@ -25,6 +25,8 @@ class ReviewResource extends JsonResource
             'rating'           => $this->rating,
             'status'           => $this->status,
             'facebook_post_id' => $this->facebook_post_id,
+            'created_at'       => $this->created_at,
+            'updated_at'       => $this->updated_at,
             'user'             => UserResource::make($this->user),
             'event'            => EventResource::make($this->event),
         ];

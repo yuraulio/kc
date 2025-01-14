@@ -75,3 +75,4 @@ storage/app/version-commit.txt
 *.sql
 
 bootstrap/cache/*
+/.osp
