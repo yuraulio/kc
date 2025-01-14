@@ -36,7 +36,6 @@ class MediaFileService
 
         $basePath = $mediaFile->mediaFolder->path . '/';
 
-//        $versions = Page::VERSIONS;
         $versions = config('image_versions.versions');
 
         $items = [];
@@ -48,27 +47,27 @@ class MediaFileService
             $path = $basePath . $imageName;
             try {
                 $imageWebP = $this->resize(Image::make($contents), [
-                    'width' => $versionOptions['w'],
+                    'width'  => $versionOptions['w'],
                     'height' => $versionOptions['h'],
-                    'type' => 'fill',
+                    'type'   => 'fill',
                 ]);
                 $this->storeImage($path, $imageWebP, $fileExt, $versionOptions['q']);
 
                 $items[] = MediaFile::create([
-                    'name' => $imageName,
+                    'name'      => $imageName,
                     'extension' => $fileExt,
-                    'path' => $path,
+                    'path'      => $path,
                     'full_path' => '/uploads' . $path,
-                    'url' => Storage::disk('public')->url($path),
+                    'url'       => Storage::disk('public')->url($path),
                     'folder_id' => $mediaFile->folder_id,
                     'parent_id' => $mediaFile->id,
-                    'alt_text' => $mediaFile->alt_text,
-                    'link' => $mediaFile->link,
-                    'size' => Storage::disk('public')->size($path),
-                    'height' => $imageWebP->height(),
-                    'width' => $imageWebP->width(),
-                    'version' => $version,
-                    'user_id' => Auth::user()->id,
+                    'alt_text'  => $mediaFile->alt_text,
+                    'link'      => $mediaFile->link,
+                    'size'      => Storage::disk('public')->size($path),
+                    'height'    => $imageWebP->height(),
+                    'width'     => $imageWebP->width(),
+                    'version'   => $version,
+                    'user_id'   => Auth::user()->id,
                 ]);
             } catch (\Exception $e) {
                 Log::error('FileVersion generating failed . ' . $e->getMessage());
@@ -118,8 +117,9 @@ class MediaFileService
 
     /**
      * @param MediaFile $mediaFile
-     * @param $alttext
-     * @param $link
+     * @param           $alttext
+     * @param           $link
+     *
      * @return void
      */
     public function updateAltTextLink($mediaFile, $alttext, $link)

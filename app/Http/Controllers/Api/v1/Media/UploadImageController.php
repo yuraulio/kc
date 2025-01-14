@@ -19,20 +19,16 @@ class UploadImageController extends ApiBaseController
     public function __invoke(MediaFileService $service, UploadImageRequest $request)
     {
         $image = $request->file('file');
+        $data = $request->validated();
 
-        $mediaFolder = MediaFolder::findOrFail($request->input('folder_id'));
+        $mediaFolder = MediaFolder::find($data['folder_id']);
         $imageOriginalName = $image->getClientOriginalName();
         $imageName = $service->sanitizeFileName($imageOriginalName);
 
         $path = $mediaFolder->path . '/' . $imageName;
         $n = strrpos($imageName, '.');
         $fileBaseName = substr($imageName, 0, $n);
-
-        if ($image->getMimeType() === 'image/svg+xml') {
-            $fileExt = 'svg';
-        } else {
-            $fileExt = 'webp';
-        }
+        $fileExt = $image->getMimeType() === 'image/svg+xml' ? 'svg' : 'webp';
 
         $imageName = $fileBaseName . '.' . $fileExt;
         $i = 1;
@@ -45,8 +41,6 @@ class UploadImageController extends ApiBaseController
         }
 
         try {
-            $width = 0;
-            $height = 0;
             if ($image->getMimeType() === 'image/svg+xml') {
                 preg_match("#viewbox=[\"']\d* \d* (\d*) (\d*)#i", $image->getContent(), $d);
                 $width = $d[1];
@@ -67,21 +61,21 @@ class UploadImageController extends ApiBaseController
         }
 
         $mediaFile = MediaFile::create([
-            'name' => $imageName,
-            'admin_label' => $request->input('admin_label'),
-            'extension' => $fileExt,
-            'path' => $path,
-            'full_path' => '/uploads' . $path,
-            'url' => Storage::disk('public')->url($path),
-            'folder_id' => $mediaFolder->id,
-            'parent_id' => $request->input('parent_id'),
-            'alt_text' => $request->input('alt_text'),
-            'link' => $request->input('link'),
-            'size' => Storage::disk('public')->size($path),
-            'height' => $height,
-            'width' => $width,
-            'version' => 'original',
-            'user_id' => Auth::user()->id,
+            'name'        => $imageName,
+            'admin_label' => $data['admin_label'],
+            'extension'   => $fileExt,
+            'path'        => $path,
+            'full_path'   => '/uploads' . $path,
+            'url'         => Storage::disk('public')->url($path),
+            'folder_id'   => $mediaFolder->id,
+            'parent_id'   => $data['parent_id'],
+            'alt_text'    => $data['alt_text'],
+            'link'        => $data['link'],
+            'size'        => Storage::disk('public')->size($path),
+            'height'      => $height,
+            'width'       => $width,
+            'version'     => 'original',
+            'user_id'     => Auth::user()->id,
         ]);
 
         $data = $service->generateVersions($mediaFile);
