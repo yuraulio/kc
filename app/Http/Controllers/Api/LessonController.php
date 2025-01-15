@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contracts\Api\v1\Lesson\ILessonService;
 use App\Http\Controllers\Api\v1\ApiBaseController;
 use App\Http\Requests\Api\v1\Lesson\CreateLessonRequest;
+use App\Http\Requests\Api\v1\Lesson\FilterRequest;
 use App\Http\Requests\Api\v1\Lesson\UpdateLessonRequest;
 use App\Http\Resources\Api\v1\Event\Lesson\LessonResource;
 use App\Model\Delivery;
@@ -12,6 +13,7 @@ use App\Model\Lesson;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,34 +23,13 @@ class LessonController extends ApiBaseController
     {
     }
 
-    public function index(Request $request)
+    public function index(FilterRequest $request): AnonymousResourceCollection
     {
-        $query = Lesson::query()->with('category')->withCount(['event', 'topic']);
-        $query = $this->applyRequestParametersToQuery($query, $request);
+        $this->authorize('viewAny', Lesson::class);
 
-        if ($delivery = $request->query->get('delivery')) {
-            $query->whereHas('event', function ($query) use ($delivery) {
-                $query->whereHas('deliveries', function ($query) use ($delivery) {
-                    $query->where('deliveries.id', $delivery);
-                });
-            });
-        }
+        $filterQuery = $this->lessonService->filterQuery($request->validated());
 
-        if ($course = $request->query->get('course')) {
-            $query->whereHas('event', function ($query) use ($course) {
-                $query->where('events.id', $course);
-            });
-        }
-
-        if ($topic = $request->query->get('topic')) {
-            $query->whereHas('topic', function ($query) use ($topic) {
-                $query->where('topics.id', $topic);
-            });
-        }
-
-        $lessons = $this->paginateByRequestParameters($query, $request);
-
-        return LessonResource::collection($lessons)->response()->getData(true);
+        return LessonResource::collection($filterQuery->paginate($request->pet_page ?? 25));
     }
 
     public function show(Lesson $lesson): LessonResource

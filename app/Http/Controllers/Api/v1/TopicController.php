@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Contracts\Api\v1\Topic\ITopicService;
 use App\Http\Requests\Api\v1\Topic\ChangeOrderRequest;
 use App\Http\Requests\Api\v1\Topic\CreateTopicRequest;
+use App\Http\Requests\Api\v1\Topic\FilterRequest;
 use App\Http\Requests\Api\v1\Topic\OrphansRequest;
 use App\Http\Requests\Api\v1\Topic\UpdateTopicRequest;
 use App\Http\Resources\Api\v1\Event\Topics\TopicResource;
@@ -25,39 +26,13 @@ class TopicController extends ApiBaseController
     {
     }
 
-    public function index(Request $request)
+    public function index(FilterRequest $request): AnonymousResourceCollection
     {
-        $query = Topic::query()->with('lessons.event')->withCount(['lessons', 'exam']);
-        $query = $this->applyRequestParametersToQuery($query, $request);
+        $this->authorize('viewAny', Topic::class);
 
-        if ($delivery = $request->query->get('delivery')) {
-            $query->whereHas('lessons', function ($query) use ($delivery) {
-                $query->whereHas('event', function ($query) use ($delivery) {
-                    $query->whereHas('deliveries', function ($query) use ($delivery) {
-                        $query->where('deliveries.id', $delivery);
-                    });
-                });
-            });
-        }
+        $filterQuery = $this->service->filterQuery($request->validated());
 
-        if ($course = $request->query->get('course')) {
-            $query->whereHas('lessons', function ($query) use ($course) {
-                $query->whereHas('event', function ($query) use ($course) {
-                    $query->where('events.id', $course);
-                });
-            });
-        }
-
-        $query->latest();
-
-        $topicsData = $this->paginateByRequestParameters($query, $request);
-
-        $topicsData->each(function ($topic) {
-            $coursesIds = $topic->lessons?->pluck('event.id')->toArray() ?? [];
-            $topic->courses_count = count(array_unique($coursesIds));
-        });
-
-        return TopicResource::collection($topicsData)->response()->getData(true);
+        return TopicResource::collection($filterQuery->paginate($request->pet_page ?? 25));
     }
 
     public function show(Topic $topic): TopicResource

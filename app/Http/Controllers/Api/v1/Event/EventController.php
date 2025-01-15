@@ -6,9 +6,11 @@ use App\Contracts\Api\v1\Event\IEventSettingsService;
 use App\Enums\ActivityEventEnum;
 use App\Events\ActivityEvent;
 use App\Http\Controllers\Api\v1\ApiBaseController;
+use App\Http\Requests\Api\v1\Event\FilterRequest;
 use App\Http\Requests\Api\v1\Event\StoreRequest;
 use App\Http\Requests\Api\v1\Event\UpdateEventRequest;
 use App\Http\Requests\Api\v1\Topic\ChangeOrderRequest;
+use App\Http\Resources\Api\v1\Event\EventCollection;
 use App\Http\Resources\Api\v1\Event\EventProgressCollection;
 use App\Http\Resources\Api\v1\Event\EventResource;
 use App\Http\Resources\Api\v1\Event\Settings\CourseSettingsResource;
@@ -41,25 +43,13 @@ class EventController extends ApiBaseController
     /**
      * Display a listing of the events.
      */
-    public function index(Request $request): JsonResponse
+    public function index(FilterRequest $request): AnonymousResourceCollection
     {
-        $query = $this->applyRequestParametersToQuery(Event::query(), $request);
+        $this->authorize('viewAny', Event::class);
 
-        $userId = $request->user_id;
-        $notUserId = $request->not_user_id;
-        $query = $query->when($userId, function ($q) use ($userId) {
-            $q->whereHas('users', function ($q) use ($userId) {
-                $q->where('users.id', $userId);
-            });
-        })->when($notUserId, function ($q) use ($notUserId) {
-            $q->whereDoesntHave('users', function ($q) use ($notUserId) {
-                $q->where('users.id', (int) $notUserId);
-            });
-        });
+        $filterQuery = $this->service->filterQuery($request->validated());
 
-        return new JsonResponse(
-            $this->paginateByRequestParameters($query, $request)
-        );
+        return EventCollection::collection($filterQuery->paginate($request->per_page ?? 25));
     }
 
     /**
