@@ -40,10 +40,8 @@ class EventController extends ApiBaseController
     ) {
     }
 
-    /**
-     * Display a listing of the events.
-     */
-    public function index(FilterRequest $request): AnonymousResourceCollection
+
+    public function index(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Event::class);
 
@@ -51,6 +49,18 @@ class EventController extends ApiBaseController
 
         return EventCollection::collection($filterQuery->paginate($request->per_page ?? 25));
     }
+
+    /**
+     * Display a listing of the events.
+     */
+//    public function index(FilterRequest $request): AnonymousResourceCollection
+//    {
+//        $this->authorize('viewAny', Event::class);
+//
+//        $filterQuery = $this->service->filterQuery($request->validated());
+//
+//        return EventCollection::collection($filterQuery->paginate($request->per_page ?? 25));
+//    }
 
     /**
      * Store a newly created resource in storage.
