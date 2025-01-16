@@ -17,7 +17,7 @@ class FilterRequest extends FormRequest
             'user_id'    => ['sometimes', Rule::exists('users', 'id')],
             'date_from'  => ['sometimes', 'date_format:d-m-Y'],
             'date_to'    => ['sometimes', 'date_format:d-m-Y'],
-            'order_by'   => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],
+            'order_by'   => ['sometimes', Rule::in(['id', 'title', 'created_at'])],
             'order_type' => ['sometimes', Rule::in(['asc', 'desc'])],
             'per_page'   => ['sometimes', 'integer'],
             'tags'       => ['sometimes', 'array'],
