@@ -40,14 +40,25 @@ class EventController extends ApiBaseController
     ) {
     }
 
-
     public function index(Request $request): JsonResponse
     {
-        $this->authorize('viewAny', Event::class);
+        $query = $this->applyRequestParametersToQuery(Event::query(), $request);
 
-        $filterQuery = $this->service->filterQuery($request->validated());
+        $userId = $request->user_id;
+        $notUserId = $request->not_user_id;
+        $query = $query->when($userId, function ($q) use ($userId) {
+            $q->whereHas('users', function ($q) use ($userId) {
+                $q->where('users.id', $userId);
+            });
+        })->when($notUserId, function ($q) use ($notUserId) {
+            $q->whereDoesntHave('users', function ($q) use ($notUserId) {
+                $q->where('users.id', (int) $notUserId);
+            });
+        });
 
-        return EventCollection::collection($filterQuery->paginate($request->per_page ?? 25));
+        return new JsonResponse(
+            $this->paginateByRequestParameters($query, $request)
+        );
     }
 
     /**
