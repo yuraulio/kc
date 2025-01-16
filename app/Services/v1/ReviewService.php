@@ -26,13 +26,13 @@ class ReviewService
                     $q->whereIn('tags.id', array_map('intval', $data['tags']));
                 });
             })->when(array_key_exists('date_from', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '>=', Carbon::parse($data['date_from']));
+                $q->where('reviews.created_at', '>=', Carbon::parse($data['date_from']));
             })->when(array_key_exists('date_to', $data), function ($q) use ($data) {
-                $q->where('users.created_at', '<=', Carbon::parse($data['date_to']));
+                $q->where('reviews.created_at', '<=', Carbon::parse($data['date_to']));
             })->when(array_key_exists('query', $data), function ($q) use ($data) {
                 $q->where(function ($q) use ($data) {
-                    $q->where('users.title', 'like', '%' . $data['query'] . '%')
-                        ->orWhere('users.content', 'like', '%' . $data['query'] . '%');
+                    $q->where('reviews.title', 'like', '%' . $data['query'] . '%')
+                        ->orWhere('reviews.content', 'like', '%' . $data['query'] . '%');
                 });
             })->with($this->getRelations())->orderBy($data['order_by'] ?? 'id', $data['order_type'] ?? 'desc');
     }

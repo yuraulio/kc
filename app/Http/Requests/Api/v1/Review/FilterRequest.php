@@ -14,7 +14,7 @@ class FilterRequest extends FormRequest
         $rules = [
             'query'      => ['sometimes', 'min:1'],
             'event_id'   => ['sometimes', Rule::exists('events', 'id')],
-            'user_id'   => ['sometimes', Rule::exists('users', 'id')],
+            'user_id'    => ['sometimes', Rule::exists('users', 'id')],
             'date_from'  => ['sometimes', 'date_format:d-m-Y'],
             'date_to'    => ['sometimes', 'date_format:d-m-Y'],
             'order_by'   => ['sometimes', Rule::in(['id', 'firstname', 'status', 'created_at', 'role'])],

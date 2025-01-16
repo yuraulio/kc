@@ -32,7 +32,7 @@ class UserCourseResource extends JsonResource
             'id'                => $this->id,
             'title'             => $this->title,
             'registration_date' => $this->transactions->first()?->created_at,
-            'expiration_date'   => Carbon::parse($this->pivot->expiration) ?? null,
+            'expiration_date'   => Carbon::parse($this->pivot->expiration, 'UTC') ?? null,
             'delivery'          => $this->delivery,
             'ticket'            => $this->tickets,
             'price'             => $this->transactions->first()?->amount,
