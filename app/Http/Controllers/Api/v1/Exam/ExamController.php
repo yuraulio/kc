@@ -7,6 +7,7 @@ use App\Model\Exam;
 use App\Services\Exam\ExamService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Resources\Api\v1\Exam\ExamResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExamController extends ApiBaseController
@@ -26,11 +27,9 @@ class ExamController extends ApiBaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, ExamService $examService): JsonResponse
+    public function store(Request $request, ExamService $examService): Response
     {
-        return new JsonResponse(
-            $examService->createOrUpdate($request)
-        );
+        return response()->json($examService->createOrUpdate($request));
     }
 
     /**
